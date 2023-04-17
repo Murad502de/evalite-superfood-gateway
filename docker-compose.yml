@@ -9,6 +9,9 @@ services:
             - ./docker/images/nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./application:/var/www/html
             - ./logs:/var/log/nginx
+            - ./docker/images/certbot/conf:/etc/letsencrypt
+            - ./docker/images/certbot/www:/var/www/certbot
+        restart: always
         networks:
             - host
         links:
@@ -22,6 +25,7 @@ services:
             - host
         volumes:
             - ./application:/var/www/html
+        restart: always
     postgresql:
         image: postgres:15.1
         ports:
@@ -31,10 +35,16 @@ services:
         volumes:
             - ./postgresqldb:/var/lib/postgresql/data
             - ./dumps:/dumps
+        restart: always
         environment:
             POSTGRES_USER: evalite_user
             POSTGRES_PASSWORD: pQLkm8NOkS0gOBox
             POSTGRES_DB: evalite_db
+    certbot:
+        image: certbot/certbot
+        volumes:
+            - ./docker/images/certbot/conf:/etc/letsencrypt
+            - ./docker/images/certbot/www:/var/www/certbot
 networks:
     host:
         driver: bridge
