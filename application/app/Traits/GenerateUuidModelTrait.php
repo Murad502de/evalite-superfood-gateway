@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Traits\Models;
+namespace App\Traits;
 
 use Ramsey\Uuid\Uuid;
 
-trait GenerateUuidByCreationTrait
+trait GenerateUuidModelTrait
 {
     public static function boot()
     {
