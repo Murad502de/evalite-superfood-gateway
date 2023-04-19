@@ -17,9 +17,9 @@ class ConfirmEmailController__1 extends Controller
 
     public function confirm(ConfirmEmailConfirmRequest__1 $request)
     {
-        dump($request->all());
+        ConfirmEmail::whereEmail($request->email)->delete();
 
-        return 'confirm';
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
     public function code(Request $request)
     {
