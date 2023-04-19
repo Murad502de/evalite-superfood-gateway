@@ -21,7 +21,8 @@ class User extends Model
         'password',
         'token',
         'phone',
-        'confirm_code',
+        'invite_code',
+        'individual_code',
     ];
     protected $hidden = [
         'id',
@@ -29,6 +30,5 @@ class User extends Model
         'updated_at',
         'user_role_id',
         'password',
-        'confirm_code',
     ];
 }

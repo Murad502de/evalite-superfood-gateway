@@ -25,7 +25,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('token');
             $table->string('phone');
-            $table->string('confirm_code')->index();
+            $table->string('invite_code')->index();
+            $table->string('individual_code')->index();
         });
     }
 
