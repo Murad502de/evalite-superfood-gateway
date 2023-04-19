@@ -17,7 +17,8 @@ class ConfirmEmailController__1 extends Controller
 
     public function confirm(ConfirmEmailConfirmRequest__1 $request)
     {
-        ConfirmEmail::whereEmail($request->email)->delete();
+        ConfirmEmail::whereEmail($request->email)
+            ->delete();
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
@@ -28,7 +29,8 @@ class ConfirmEmailController__1 extends Controller
             'confirm_code' => $this->generateCode(),
         ]);
 
-        Mail::to($confirmEmail->email)->send(new ConfirmMail($confirmEmail->confirm_code));
+        Mail::to($confirmEmail->email)
+            ->send(new ConfirmMail($confirmEmail->confirm_code)); //FIXME implement as event with queue
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
