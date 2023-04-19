@@ -4,14 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\UserRole;
+use App\Traits\PasswordEncryptTrait;
 use App\Traits\SharedGendersTrait;
+use App\Traits\SharedUserRolesTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use App\Traits\SharedUserRolesTrait;
 
 class UserSeeder extends Seeder
 {
-    use SharedGendersTrait, SharedUserRolesTrait;
+    use SharedGendersTrait, SharedUserRolesTrait, PasswordEncryptTrait;
     /**
      * Run the database seeds.
      */
@@ -25,7 +26,7 @@ class UserSeeder extends Seeder
             'gender'          => self::$GENDER_MALE,
             'birthday'        => Carbon::now(),
             'email'           => '',
-            'password'        => '',
+            'password'        => self::passwordEncrypt(''),
             'token'           => '',
             'phone'           => '',
             'invite_code'     => '',
