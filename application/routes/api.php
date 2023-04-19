@@ -1,27 +1,17 @@
 <?php
 
-// use Illuminate\Http\Request;
+use App\Http\Controllers\API\V1\ConfirmEmailController__1;
+use App\Http\Controllers\API\V1\UserRoleController__1;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
- */
 
 Route::prefix('v1')->group(function () {
     Route::prefix('signup')->group(function () {
-        Route::post('/', []);
+        Route::post('/', [UserRoleController__1::class, 'signup']);
 
         Route::prefix('email')->group(function () {
             Route::prefix('confirm')->group(function () {
-                Route::post('/', []);
-                Route::post('code', []);
+                Route::post('/', [ConfirmEmailController__1::class, 'confirm']);
+                Route::post('code', [ConfirmEmailController__1::class, 'code']);
             });
         });
     });
