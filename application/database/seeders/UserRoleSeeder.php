@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\UserRole;
 use Illuminate\Database\Seeder;
 
 class UserRoleSeeder extends Seeder
@@ -12,6 +12,10 @@ class UserRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        UserRole::create([
+            'code'       => 'admin',
+            'name'       => 'администратор',
+            'is_default' => true,
+        ]);
     }
 }
