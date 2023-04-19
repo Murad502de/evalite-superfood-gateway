@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\ConfirmEmailConfirmRequest__1;
 use App\Mail\User\ConfirmMail;
 use App\Models\ConfirmEmail;
 use App\Traits\GenerateCodeTrait;
@@ -14,7 +15,7 @@ class ConfirmEmailController__1 extends Controller
 {
     use GenerateCodeTrait;
 
-    public function confirm(Request $request)
+    public function confirm(ConfirmEmailConfirmRequest__1 $request)
     {
         dump($request->all());
 
