@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
+// use Illuminate\Http\Request;
 
 class ConfirmEmailController__1 extends Controller
 {
-    //
+    public function confirm()
+    {
+        return 'confirm';
+    }
 }
