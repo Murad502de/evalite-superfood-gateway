@@ -6,7 +6,7 @@ use Ramsey\Uuid\Uuid;
 
 trait GenerateUuidTrait
 {
-    public function generateUuid(): string
+    public static function generateUuid(): string
     {
         return Uuid::uuid4()->toString();
     }
