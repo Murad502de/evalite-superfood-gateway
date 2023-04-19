@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('uuid')->index();
             $table->string('code')->index();
             $table->string('name');
+            $table->boolean('is_default')->default(false);
         });
     }
 

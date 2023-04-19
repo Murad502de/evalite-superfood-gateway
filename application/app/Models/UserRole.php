@@ -13,6 +13,7 @@ class UserRole extends Model
         'uuid',
         'code',
         'name',
+        'is_default',
     ];
     protected $hidden = [
         'id',
