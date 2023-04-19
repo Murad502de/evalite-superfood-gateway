@@ -15,4 +15,14 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::prefix('v1')->group(function () {
+    Route::prefix('signup')->group(function () {
+        Route::post('/', []);
+
+        Route::prefix('email')->group(function () {
+            Route::prefix('confirm')->group(function () {
+                Route::post('/', []);
+                Route::post('code', []);
+            });
+        });
+    });
 });
