@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('uuid')->index();
+            $table->uuid('uuid')->index();
             $table->foreignId('user_role_id')->constrained()->cascadeOnDelete();
             $table->string('first_name');
             $table->string('second_name');
             $table->string('third_name');
             $table->enum('gender', ['male', 'female']);
-            $table->string('birthday');
+            $table->date('birthday');
             $table->string('email')->index();
             $table->string('password');
             $table->string('token');
