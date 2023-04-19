@@ -4,10 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Model
+class User extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
+
+    public const MEDIA_PREFIX = 'user/';
 
     protected $fillable = [
         'uuid',
@@ -31,4 +35,9 @@ class User extends Model
         'user_role_id',
         'password',
     ];
+
+    public static function createNew(array $data)
+    {
+        dump($data); //DELETE
+    }
 }
