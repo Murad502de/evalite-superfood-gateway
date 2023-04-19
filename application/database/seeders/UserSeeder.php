@@ -9,10 +9,11 @@ use App\Traits\SharedGendersTrait;
 use App\Traits\SharedUserRolesTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use App\Traits\GenerateUserTokenTrait;
 
 class UserSeeder extends Seeder
 {
-    use SharedGendersTrait, SharedUserRolesTrait, PasswordEncryptTrait;
+    use SharedGendersTrait, SharedUserRolesTrait, PasswordEncryptTrait, GenerateUserTokenTrait;
     /**
      * Run the database seeds.
      */
@@ -25,9 +26,9 @@ class UserSeeder extends Seeder
             'third_name'      => 'adminThirdName',
             'gender'          => self::$GENDER_MALE,
             'birthday'        => Carbon::now(),
-            'email'           => '',
-            'password'        => self::passwordEncrypt(''),
-            'token'           => '',
+            'email'           => '', //TODO get from config
+            'password'        => self::passwordEncrypt(''), //TODO get from config
+            'token'           => self::generateUserToken(),
             'phone'           => '',
             'invite_code'     => '',
             'individual_code' => '',
