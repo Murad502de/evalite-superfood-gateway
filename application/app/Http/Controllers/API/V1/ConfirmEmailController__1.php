@@ -12,4 +12,8 @@ class ConfirmEmailController__1 extends Controller
     {
         return 'confirm';
     }
+    public function code()
+    {
+        return 'code';
+    }
 }
