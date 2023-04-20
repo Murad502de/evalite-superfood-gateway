@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -59,8 +60,8 @@ class User extends Model implements HasMedia
             'password'        => self::passwordEncrypt($data['user_password']),
             'token'           => self::generateUserToken(),
             'phone'           => $data['user_phone'],
-            'invite_code'     => $data['user_invite_code'],
-            'individual_code' => $data['user_individual_code'],
+            'invite_code'     => Str::upper(Str::random(6)),
+            'individual_code' => Str::upper(Str::random(6)),
             'promo_code'      => $data['user_promo_code'],
         ]);
 
