@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
     Route::prefix('signup')->group(function () {
-        Route::post('/', [UserController__1::class, 'signup']);
+        Route::post('/', [UserController__1::class, 'create']);
 
         Route::prefix('email')->group(function () {
             Route::prefix('confirm')->group(function () {

@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 
 class UserController__1 extends Controller
 {
-    public function signup(Request $request)
+    public function create(Request $request)
     {
         $user = User::createNew($request->all());
 
