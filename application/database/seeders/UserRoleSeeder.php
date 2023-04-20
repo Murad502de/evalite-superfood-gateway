@@ -20,5 +20,10 @@ class UserRoleSeeder extends Seeder
             'name'       => 'администратор',
             'is_default' => true,
         ]);
+        UserRole::create([
+            'code'       => self::$USER_ROLE_USER,
+            'name'       => 'пользователь',
+            'is_default' => false,
+        ]);
     }
 }
