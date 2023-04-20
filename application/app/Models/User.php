@@ -99,4 +99,8 @@ class User extends Model implements HasMedia
     {
         return $this->hasOne(Passport::class);
     }
+    public function paymentDetailsIndividualEntrepreneur(): HasOne
+    {
+        return $this->hasOne(PaymentDetailsIndividualEntrepreneur::class);
+    }
 }
