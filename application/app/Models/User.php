@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Traits\GenerateUserTokenTrait;
 use App\Traits\GenerateUuidModelTrait;
-use App\Traits\ModalAddMediaTrait;
+use App\Traits\ModelAddMediaTrait;
 use App\Traits\PasswordEncryptTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,8 +22,9 @@ class User extends Model implements HasMedia
     GenerateUuidModelTrait,
     GenerateUserTokenTrait,
     PasswordEncryptTrait,
-        ModalAddMediaTrait;
+        ModelAddMediaTrait;
 
+    public const MEDIA_NAME_AVATAR   = 'user_avatar';
     public const MEDIA_PREFIX_AVATAR = 'user_avatar/';
 
     protected $fillable = [
@@ -70,7 +71,7 @@ class User extends Model implements HasMedia
             'promo_code'      => $data['user_promo_code'],
         ]);
 
-        $user->modalAddMedia('user_avatar', self::MEDIA_PREFIX_AVATAR . $user->uuid);
+        $user->modalAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $user->uuid);
         $user->passport()->create([
             'full_name'       => $data['pass_full_name'],
             'series'          => $data['pass_series'],

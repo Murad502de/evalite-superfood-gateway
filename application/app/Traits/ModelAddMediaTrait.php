@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-trait ModalAddMediaTrait
+trait ModelAddMediaTrait
 {
     private function modalAddMedia(string $mediaFromRequest, string $mediaCollection): void
     {
