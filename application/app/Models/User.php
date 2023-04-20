@@ -86,35 +86,39 @@ class User extends Model implements HasMedia
         $user->passport->addMainSpreadMedia();
         $user->passport->addRegistrationSpreadMedia();
         $user->passport->addVerificationSpreadMedia();
-        $user->paymentDetailsIndividualEntrepreneur()->create([
-            'full_name'                  => $data['ie_full_name'],
-            'organization_legal_address' => $data['ie_organization_legal_address'],
-            'inn'                        => $data['ie_inn'],
-            'ogrn'                       => $data['ie_ogrn'],
-            'transaction_account'        => $data['ie_transaction_account'],
-            'bank'                       => $data['ie_bank'],
-            'bank_inn'                   => $data['ie_bank_inn'],
-            'bank_bic'                   => $data['ie_bank_bic'],
-            'bank_correspondent_account' => $data['ie_bank_correspondent_account'],
-            'bank_legal_address'         => $data['ie_bank_legal_address'],
-        ]);
-        $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
-            PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
-            PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
-        );
-        $user->paymentDetailsSelfEmployed()->create([
-            'full_name'             => $data['se_full_name'],
-            'transaction_account'   => $data['se_transaction_account'],
-            'bank'                  => $data['se_bank'],
-            'bic'                   => $data['se_bic'],
-            'correspondent_account' => $data['se_correspondent_account'],
-            'bank_inn'              => $data['se_bank_inn'],
-            'bank_kpp'              => $data['se_bank_kpp'],
-        ]);
-        $user->paymentDetailsSelfEmployed->modelAddMedia(
-            PaymentDetailsSelfEmployed::MEDIA_NAME,
-            PaymentDetailsSelfEmployed::MEDIA_PREFIX . $user->paymentDetailsSelfEmployed->uuid
-        );
+
+        if ($user->employment_type === self::$INDIVIDUAL_ENTREPRENEUR) {
+            $user->paymentDetailsIndividualEntrepreneur()->create([
+                'full_name'                  => $data['ie_full_name'],
+                'organization_legal_address' => $data['ie_organization_legal_address'],
+                'inn'                        => $data['ie_inn'],
+                'ogrn'                       => $data['ie_ogrn'],
+                'transaction_account'        => $data['ie_transaction_account'],
+                'bank'                       => $data['ie_bank'],
+                'bank_inn'                   => $data['ie_bank_inn'],
+                'bank_bic'                   => $data['ie_bank_bic'],
+                'bank_correspondent_account' => $data['ie_bank_correspondent_account'],
+                'bank_legal_address'         => $data['ie_bank_legal_address'],
+            ]);
+            $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+                PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+                PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
+            );
+        } else if ($user->employment_type === self::$SELF_EMPLOYED) {
+            $user->paymentDetailsSelfEmployed()->create([
+                'full_name'             => $data['se_full_name'],
+                'transaction_account'   => $data['se_transaction_account'],
+                'bank'                  => $data['se_bank'],
+                'bic'                   => $data['se_bic'],
+                'correspondent_account' => $data['se_correspondent_account'],
+                'bank_inn'              => $data['se_bank_inn'],
+                'bank_kpp'              => $data['se_bank_kpp'],
+            ]);
+            $user->paymentDetailsSelfEmployed->modelAddMedia(
+                PaymentDetailsSelfEmployed::MEDIA_NAME,
+                PaymentDetailsSelfEmployed::MEDIA_PREFIX . $user->paymentDetailsSelfEmployed->uuid
+            );
+        }
 
         return $user;
     }
