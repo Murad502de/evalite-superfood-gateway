@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('confirm_emails', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('uuid')->index();
+            $table->uuid('uuid')->index();
             $table->string('email')->index();
             $table->integer('confirm_code')->index();
         });

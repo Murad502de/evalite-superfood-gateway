@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id()->index();
             $table->timestamps();
-            $table->string('uuid')->index();
+            $table->uuid('uuid')->index();
             $table->string('code')->index();
             $table->string('name');
             $table->boolean('is_default')->default(false);
