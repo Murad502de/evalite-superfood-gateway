@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\GenerateUuidModelTrait;
 
 class User extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, GenerateUuidModelTrait;
 
     public const MEDIA_PREFIX = 'user/';
 
