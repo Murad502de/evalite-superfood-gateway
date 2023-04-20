@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -50,7 +51,7 @@ class User extends Model implements HasMedia
     public static function createNew(array $data)
     {
         $user = self::create([
-            'role_id'    => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
+            'role_id'         => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
             'first_name'      => $data['user_first_name'],
             'second_name'     => $data['user_second_name'],
             'third_name'      => $data['user_third_name'],
@@ -71,11 +72,29 @@ class User extends Model implements HasMedia
             })
             ->toMediaCollection(self::MEDIA_PREFIX_AVATAR . $user->uuid);
 
+        $user->passport()->create([
+            'full_name'       => $data['pass_full_name'],
+            'series'          => $data['pass_series'],
+            'number'          => $data['pass_number'],
+            'issue_date'      => Carbon::parse($data['pass_issue_date']),
+            'validity'        => Carbon::parse($data['pass_validity']),
+            'issue_by'        => $data['pass_issue_by'],
+            'department_code' => $data['pass_department_code'],
+        ]);
+
+        $user->passport->addMainSpreadMedia();
+        $user->passport->addRegistrationSpreadMedia();
+        $user->passport->addVerificationSpreadMedia();
+
         return $user;
     }
 
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+    public function passport(): HasOne
+    {
+        return $this->hasOne(Passport::class);
     }
 }
