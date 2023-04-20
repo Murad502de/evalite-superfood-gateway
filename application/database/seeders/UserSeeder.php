@@ -30,8 +30,8 @@ class UserSeeder extends Seeder
             'password'        => self::passwordEncrypt(config('app.admin_password')),
             'token'           => self::generateUserToken(),
             'phone'           => '',
-            'invite_code'     => '',
-            'individual_code' => '',
+            'invite_code'     => 'ADMIN_INVITE_CODE',
+            'individual_code' => 'ADMIN_INDIVIDUAL_CODE',
             'promo_code'      => '',
         ]);
     }
