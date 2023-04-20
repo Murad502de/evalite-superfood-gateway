@@ -17,8 +17,16 @@ class UserController__1 extends Controller
     }
     public function delete(User $user)
     {
-        $user->passport->delete();
-        $user->paymentDetailsIndividualEntrepreneur->delete();
+        if ($user->passport) {
+            $user->passport->delete();
+        }
+        if ($user->paymentDetailsIndividualEntrepreneur) {
+            $user->paymentDetailsIndividualEntrepreneur->delete();
+        }
+        if ($user->paymentDetailsSelfEmployed) {
+            $user->paymentDetailsSelfEmployed->delete();
+        }
+
         $user->delete();
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);

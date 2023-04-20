@@ -6,6 +6,7 @@ use App\Traits\GenerateUserTokenTrait;
 use App\Traits\GenerateUuidModelTrait;
 use App\Traits\ModelAddMediaTrait;
 use App\Traits\PasswordEncryptTrait;
+use App\Traits\SharedEmploymentTypesTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +23,8 @@ class User extends Model implements HasMedia
     GenerateUuidModelTrait,
     GenerateUserTokenTrait,
     PasswordEncryptTrait,
-        ModelAddMediaTrait;
+    ModelAddMediaTrait,
+        SharedEmploymentTypesTrait;
 
     public const MEDIA_NAME_AVATAR   = 'user_avatar';
     public const MEDIA_PREFIX_AVATAR = 'user_avatar/';
@@ -100,6 +102,19 @@ class User extends Model implements HasMedia
             PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
             PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
         );
+        $user->paymentDetailsSelfEmployed()->create([
+            'full_name'             => $data['se_full_name'],
+            'transaction_account'   => $data['se_transaction_account'],
+            'bank'                  => $data['se_bank'],
+            'bic'                   => $data['se_bic'],
+            'correspondent_account' => $data['se_correspondent_account'],
+            'bank_inn'              => $data['se_bank_inn'],
+            'bank_kpp'              => $data['se_bank_kpp'],
+        ]);
+        $user->paymentDetailsSelfEmployed->modelAddMedia(
+            PaymentDetailsSelfEmployed::MEDIA_NAME,
+            PaymentDetailsSelfEmployed::MEDIA_PREFIX . $user->paymentDetailsSelfEmployed->uuid
+        );
 
         return $user;
     }
@@ -115,5 +130,9 @@ class User extends Model implements HasMedia
     public function paymentDetailsIndividualEntrepreneur(): HasOne
     {
         return $this->hasOne(PaymentDetailsIndividualEntrepreneur::class);
+    }
+    public function paymentDetailsSelfEmployed(): HasOne
+    {
+        return $this->hasOne(PaymentDetailsSelfEmployed::class);
     }
 }
