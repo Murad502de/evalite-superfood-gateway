@@ -5,7 +5,7 @@ use App\Http\Controllers\API\V1\UserController__1;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::prefix('signup')->group(function () {
+    Route::prefix('users')->group(function () {
         Route::post('/', [UserController__1::class, 'create']);
 
         Route::prefix('email')->group(function () {
