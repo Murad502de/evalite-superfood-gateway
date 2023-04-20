@@ -71,7 +71,7 @@ class User extends Model implements HasMedia
             'promo_code'      => $data['user_promo_code'],
         ]);
 
-        $user->modalAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $user->uuid);
+        $user->modelAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $user->uuid);
         $user->passport()->create([
             'full_name'       => $data['pass_full_name'],
             'series'          => $data['pass_series'],
@@ -84,6 +84,22 @@ class User extends Model implements HasMedia
         $user->passport->addMainSpreadMedia();
         $user->passport->addRegistrationSpreadMedia();
         $user->passport->addVerificationSpreadMedia();
+        $user->paymentDetailsIndividualEntrepreneur()->create([
+            'full_name'                  => $data['ie_full_name'],
+            'organization_legal_address' => $data['ie_organization_legal_address'],
+            'inn'                        => $data['ie_inn'],
+            'ogrn'                       => $data['ie_ogrn'],
+            'transaction_account'        => $data['ie_transaction_account'],
+            'bank'                       => $data['ie_bank'],
+            'bank_inn'                   => $data['ie_bank_inn'],
+            'bank_bic'                   => $data['ie_bank_bic'],
+            'bank_correspondent_account' => $data['ie_bank_correspondent_account'],
+            'bank_legal_address'         => $data['ie_bank_legal_address'],
+        ]);
+        $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+            PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+            PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
+        );
 
         return $user;
     }

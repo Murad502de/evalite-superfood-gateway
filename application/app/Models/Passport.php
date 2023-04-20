@@ -48,14 +48,14 @@ class Passport extends Model implements HasMedia
 
     public function addMainSpreadMedia(): void
     {
-        $this->modalAddMedia(self::MEDIA_NAME_MAIN_SPREAD, self::MEDIA_PREFIX_MAIN_SPREAD . $this->uuid);
+        $this->modelAddMedia(self::MEDIA_NAME_MAIN_SPREAD, self::MEDIA_PREFIX_MAIN_SPREAD . $this->uuid);
     }
     public function addRegistrationSpreadMedia(): void
     {
-        $this->modalAddMedia(self::MEDIA_NAME_REGISTRATION_SPREAD, self::MEDIA_PREFIX_REGISTRATION_SPREAD . $this->uuid);
+        $this->modelAddMedia(self::MEDIA_NAME_REGISTRATION_SPREAD, self::MEDIA_PREFIX_REGISTRATION_SPREAD . $this->uuid);
     }
     public function addVerificationSpreadMedia(): void
     {
-        $this->modalAddMedia(self::MEDIA_NAME_VERIFICATION_SPREAD, self::MEDIA_PREFIX_VERIFICATION_SPREAD . $this->uuid);
+        $this->modelAddMedia(self::MEDIA_NAME_VERIFICATION_SPREAD, self::MEDIA_PREFIX_VERIFICATION_SPREAD . $this->uuid);
     }
 }

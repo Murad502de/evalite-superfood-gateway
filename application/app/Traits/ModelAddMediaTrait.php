@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait ModelAddMediaTrait
 {
-    private function modalAddMedia(string $mediaFromRequest, string $mediaCollection): void
+    public function modelAddMedia(string $mediaFromRequest, string $mediaCollection): void
     {
         $this->addMediaFromRequest($mediaFromRequest)
             ->sanitizingFileName(function ($fileName) {

@@ -18,6 +18,7 @@ class UserController__1 extends Controller
     public function delete(User $user)
     {
         $user->passport->delete();
+        $user->paymentDetailsIndividualEntrepreneur->delete();
         $user->delete();
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
