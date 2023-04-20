@@ -15,4 +15,10 @@ class UserController__1 extends Controller
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
+    public function delete(User $user)
+    {
+        $user->delete();
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
+    }
 }

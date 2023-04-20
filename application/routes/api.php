@@ -14,5 +14,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('code', [ConfirmEmailController__1::class, 'code']);
             });
         });
+
+        Route::delete('/{user:uuid}', [UserController__1::class, 'delete']);
     });
 });
