@@ -61,6 +61,7 @@ class User extends Model implements HasMedia
             'phone'           => $data['user_phone'],
             'invite_code'     => $data['user_invite_code'],
             'individual_code' => $data['user_individual_code'],
+            'promo_code'      => $data['user_promo_code'],
         ]);
 
         $user->addMediaFromRequest('user_avatar')
