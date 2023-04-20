@@ -2,25 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\UserRole;
-use App\Traits\SharedUserRolesTrait;
+use App\Models\Role;
+use App\Traits\SharedRolesTrait;
 use Illuminate\Database\Seeder;
 
-class UserRoleSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
-    use SharedUserRolesTrait;
+    use SharedRolesTrait;
 
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        UserRole::create([
+        Role::create([
             'code'       => self::$USER_ROLE_ADMIN,
             'name'       => 'администратор',
             'is_default' => false,
         ]);
-        UserRole::create([
+        Role::create([
             'code'       => self::$USER_ROLE_USER,
             'name'       => 'пользователь',
             'is_default' => true,

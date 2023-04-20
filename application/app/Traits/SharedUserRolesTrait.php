@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-trait SharedUserRolesTrait
+trait SharedRolesTrait
 {
     public static $USER_ROLE_ADMIN = 'admin';
     public static $USER_ROLE_USER  = 'user';

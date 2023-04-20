@@ -25,7 +25,7 @@ class User extends Model implements HasMedia
 
     protected $fillable = [
         'uuid',
-        'user_role_id',
+        'role_id',
         'first_name',
         'second_name',
         'third_name',
@@ -43,14 +43,14 @@ class User extends Model implements HasMedia
         'id',
         'created_at',
         'updated_at',
-        'user_role_id',
+        'role_id',
         'password',
     ];
 
     public static function createNew(array $data)
     {
         $user = self::create([
-            'user_role_id'    => $data['user_role_uuid'] ?? UserRole::whereIsDefault(true)->first()->id,
+            'role_id'    => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
             'first_name'      => $data['user_first_name'],
             'second_name'     => $data['user_second_name'],
             'third_name'      => $data['user_third_name'],
@@ -76,6 +76,6 @@ class User extends Model implements HasMedia
 
     public function role(): BelongsTo
     {
-        return $this->belongsTo(UserRole::class);
+        return $this->belongsTo(Role::class);
     }
 }

@@ -3,24 +3,24 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\UserRole;
+use App\Models\Role;
 use App\Traits\GenerateUserTokenTrait;
 use App\Traits\PasswordEncryptTrait;
 use App\Traits\SharedGendersTrait;
-use App\Traits\SharedUserRolesTrait;
+use App\Traits\SharedRolesTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    use SharedGendersTrait, SharedUserRolesTrait, PasswordEncryptTrait, GenerateUserTokenTrait;
+    use SharedGendersTrait, SharedRolesTrait, PasswordEncryptTrait, GenerateUserTokenTrait;
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
         User::create([
-            'user_role_id'    => UserRole::whereCode(self::$USER_ROLE_ADMIN)->first()->id,
+            'role_id'    => Role::whereCode(self::$USER_ROLE_ADMIN)->first()->id,
             'first_name'      => 'adminFirstName',
             'second_name'     => 'adminSecondName',
             'third_name'      => 'adminThirdName',

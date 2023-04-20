@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->uuid('uuid')->index();
-            $table->foreignId('user_role_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('role_id')->constrained()->cascadeOnDelete();
             $table->string('first_name');
             $table->string('second_name');
             $table->string('third_name');

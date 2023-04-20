@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Traits\GenerateUuidModelTrait;
 
-class UserRole extends Model
+class Role extends Model
 {
     use HasFactory, GenerateUuidModelTrait;
 
