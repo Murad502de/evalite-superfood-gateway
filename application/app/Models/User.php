@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\GenerateUserTokenTrait;
 use App\Traits\GenerateUuidModelTrait;
+use App\Traits\ModalAddMediaTrait;
 use App\Traits\PasswordEncryptTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,7 +21,8 @@ class User extends Model implements HasMedia
     InteractsWithMedia,
     GenerateUuidModelTrait,
     GenerateUserTokenTrait,
-        PasswordEncryptTrait;
+    PasswordEncryptTrait,
+        ModalAddMediaTrait;
 
     public const MEDIA_PREFIX_AVATAR = 'user_avatar/';
 
@@ -68,12 +70,7 @@ class User extends Model implements HasMedia
             'promo_code'      => $data['user_promo_code'],
         ]);
 
-        $user->addMediaFromRequest('user_avatar')
-            ->sanitizingFileName(function ($fileName) {
-                return strtolower($fileName);
-            })
-            ->toMediaCollection(self::MEDIA_PREFIX_AVATAR . $user->uuid);
-
+        $user->modalAddMedia('user_avatar', self::MEDIA_PREFIX_AVATAR . $user->uuid);
         $user->passport()->create([
             'full_name'       => $data['pass_full_name'],
             'series'          => $data['pass_series'],
@@ -83,7 +80,6 @@ class User extends Model implements HasMedia
             'issue_by'        => $data['pass_issue_by'],
             'department_code' => $data['pass_department_code'],
         ]);
-
         $user->passport->addMainSpreadMedia();
         $user->passport->addRegistrationSpreadMedia();
         $user->passport->addVerificationSpreadMedia();
