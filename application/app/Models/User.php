@@ -14,7 +14,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, GenerateUuidModelTrait, GenerateUserTokenTrait, PasswordEncryptTrait;
+    use HasFactory,
+    InteractsWithMedia,
+    GenerateUuidModelTrait,
+    GenerateUserTokenTrait,
+        PasswordEncryptTrait;
 
     public const MEDIA_PREFIX_AVATAR = 'user_avatar/';
 
@@ -32,6 +36,7 @@ class User extends Model implements HasMedia
         'phone',
         'invite_code',
         'individual_code',
+        'promo_code',
     ];
     protected $hidden = [
         'id',

@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('invite_code')->index();
             $table->string('individual_code')->index();
+            $table->string('promo_code')->index();
         });
     }
 

@@ -32,6 +32,7 @@ class UserSeeder extends Seeder
             'phone'           => '',
             'invite_code'     => '',
             'individual_code' => '',
+            'promo_code'      => '',
         ]);
     }
 }
