@@ -15,6 +15,10 @@ class UserController__1 extends Controller
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
+    public function check(User $user)
+    {
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
+    }
     public function delete(User $user)
     {
         if ($user->passport) {

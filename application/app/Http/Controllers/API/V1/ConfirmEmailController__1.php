@@ -24,10 +24,10 @@ class ConfirmEmailController__1 extends Controller
     }
     public function code(Request $request)
     {
-        $confirmEmail = ConfirmEmail::create([
-            'email'        => $request->email,
-            'confirm_code' => $this->generateCode(),
-        ]);
+        $confirmEmail = ConfirmEmail::updateOrCreate(
+            ['email' => $request->email],
+            ['confirm_code' => $this->generateCode()],
+        );
 
         Mail::to($confirmEmail->email)
             ->send(new ConfirmMail($confirmEmail->confirm_code)); //FIXME implement as event with queue

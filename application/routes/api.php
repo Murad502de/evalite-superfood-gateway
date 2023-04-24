@@ -15,6 +15,12 @@ Route::prefix('v1')->group(function () {
             });
         });
 
+        Route::prefix('check')->group(function () {
+            Route::prefix('invite-code')->group(function () {
+                Route::get('/{user:invite_code}', [UserController__1::class, 'check']);
+            });
+        });
+
         Route::delete('/{user:uuid}', [UserController__1::class, 'delete']);
     });
 });
