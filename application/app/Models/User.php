@@ -52,6 +52,7 @@ class User extends Model implements HasMedia
         'updated_at',
         'role_id',
         'password',
+        'token',
     ];
 
     public static function createNew(array $data)

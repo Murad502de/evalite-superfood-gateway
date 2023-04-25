@@ -9,8 +9,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::post('signin', [AdminAuthController__1::class, 'signin']);
     });
+
     Route::prefix('users')->group(function () {
         Route::post('/', [UserController__1::class, 'create']);
+        Route::get('my', [UserController__1::class, 'my'])->middleware('user.token');
 
         Route::prefix('email')->group(function () {
             Route::prefix('confirm')->group(function () {

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\API\V1\UsersMyResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Config;
 
 class UserController__1 extends Controller
 {
@@ -14,6 +16,10 @@ class UserController__1 extends Controller
         $user = User::createNew($request->all());
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
+    }
+    public function my()
+    {
+        return new UsersMyResource(Config::get('user'));
     }
     public function check(User $user)
     {
