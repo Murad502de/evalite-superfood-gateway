@@ -11,7 +11,7 @@ services:
             - ./logs:/var/log/nginx
             - ./docker/images/certbot/conf:/etc/letsencrypt
             - ./docker/images/certbot/www:/var/www/certbot
-        restart: always
+        restart: unless-stopped
         networks:
             - host
         links:
@@ -25,7 +25,7 @@ services:
             - host
         volumes:
             - ./application:/var/www/html
-        restart: always
+        restart: unless-stopped
     postgresql:
         image: postgres:15.1
         ports:
@@ -35,11 +35,24 @@ services:
         volumes:
             - ./postgresqldb:/var/lib/postgresql/data
             - ./dumps:/dumps
-        restart: always
+        restart: unless-stopped
         environment:
             POSTGRES_USER: evalite_user
             POSTGRES_PASSWORD: pQLkm8NOkS0gOBox
             POSTGRES_DB: evalite_db
+    supervisor:
+        build: ./docker/images/supervisor
+        working_dir: /var/www/html
+        depends_on:
+            - postgresql
+        links:
+            - postgresql
+        networks:
+            - host
+        volumes:
+            - ./application:/var/www/html
+            # - ./docker/images/supervisor/files:/etc/supervisor/conf.d/
+        restart: unless-stopped
     certbot:
         image: certbot/certbot
         volumes:
