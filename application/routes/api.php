@@ -20,7 +20,10 @@ Route::prefix('v1')->group(function () {
         });
         Route::prefix('password')->group(function () {
             Route::put('/', [UserController__1::class, 'passwordUpdate']);
-            Route::post('reset', [UserController__1::class, 'passwordReset']);
+            Route::prefix('reset')->group(function () {
+                Route::post('/', [UserController__1::class, 'passwordReset']);
+                Route::post('confirm', [UserController__1::class, 'passwordResetConfirm']);
+            });
         });
         Route::prefix('check')->group(function () {
             Route::prefix('invite-code')->group(function () {
@@ -28,6 +31,9 @@ Route::prefix('v1')->group(function () {
             });
             Route::prefix('uuid')->group(function () {
                 Route::get('{user:uuid}', [UserController__1::class, 'check']);
+            });
+            Route::prefix('email')->group(function () {
+                Route::get('{user:email}', [UserController__1::class, 'check']);
             });
         });
         Route::delete('{user:uuid}', [UserController__1::class, 'delete']);
