@@ -9,24 +9,27 @@ Route::prefix('v1')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::post('signin', [AdminAuthController__1::class, 'signin']);
     });
-
     Route::prefix('users')->group(function () {
         Route::post('/', [UserController__1::class, 'create']);
         Route::get('my', [UserController__1::class, 'my'])->middleware('user.token');
-
         Route::prefix('email')->group(function () {
             Route::prefix('confirm')->group(function () {
                 Route::post('/', [ConfirmEmailController__1::class, 'confirm']);
                 Route::post('code', [ConfirmEmailController__1::class, 'code']);
             });
         });
-
+        Route::prefix('password')->group(function () {
+            Route::put('/', [UserController__1::class, 'passwordUpdate']);
+            Route::post('reset', [UserController__1::class, 'passwordReset']);
+        });
         Route::prefix('check')->group(function () {
             Route::prefix('invite-code')->group(function () {
-                Route::get('/{user:invite_code}', [UserController__1::class, 'check']);
+                Route::get('{user:invite_code}', [UserController__1::class, 'check']);
+            });
+            Route::prefix('uuid')->group(function () {
+                Route::get('{user:uuid}', [UserController__1::class, 'check']);
             });
         });
-
-        Route::delete('/{user:uuid}', [UserController__1::class, 'delete']);
+        Route::delete('{user:uuid}', [UserController__1::class, 'delete']);
     });
 });

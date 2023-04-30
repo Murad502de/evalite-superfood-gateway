@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ConfirmMail extends Mailable implements ShouldQueue
+class PasswordResetCodeMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -29,7 +29,7 @@ class ConfirmMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject:'Confirm Mail',
+            subject: 'Password Reset Code Mail',
         );
     }
 
@@ -39,7 +39,7 @@ class ConfirmMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown:'mail.user.confirm',
+            markdown: 'mail.user.password_reset_code',
         );
     }
 
