@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -55,8 +56,10 @@ class User extends Model implements HasMedia
         'token',
     ];
 
-    public static function createNew(array $data)
+    public static function createNew(Request $request)
     {
+        $data = $request->all();
+
         $user = self::create([
             'role_id'         => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
             'first_name'      => $data['user_first_name'],
@@ -74,13 +77,16 @@ class User extends Model implements HasMedia
             'promo_code'      => $data['user_promo_code'],
         ]);
 
-        $user->modelAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $user->uuid);
+        if ($request->file(self::MEDIA_NAME_AVATAR)) {
+            $user->modelAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $user->uuid);
+        }
+
         $user->passport()->create([
             'full_name'       => $data['pass_full_name'],
             'series'          => $data['pass_series'],
             'number'          => $data['pass_number'],
             'issue_date'      => Carbon::parse($data['pass_issue_date']),
-            'validity'        => Carbon::parse($data['pass_validity']),
+            // 'validity'        => Carbon::parse($data['pass_validity']),
             'issue_by'        => $data['pass_issue_by'],
             'department_code' => $data['pass_department_code'],
         ]);

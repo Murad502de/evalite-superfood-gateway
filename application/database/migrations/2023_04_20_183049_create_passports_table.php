@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('series')->index();
             $table->integer('number')->index();
             $table->date('issue_date');
-            $table->date('validity');
+            // $table->date('validity');
             $table->string('issue_by');
             $table->string('department_code');
         });

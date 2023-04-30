@@ -21,7 +21,7 @@ class UserController__1 extends Controller
 
     public function create(Request $request)
     {
-        $user = User::createNew($request->all());
+        $user = User::createNew($request);
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
