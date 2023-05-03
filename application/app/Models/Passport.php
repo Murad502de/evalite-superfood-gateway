@@ -30,7 +30,7 @@ class Passport extends Model implements HasMedia
         'series',
         'number',
         'issue_date',
-        // 'validity',
+        'registration_address',
         'issue_by',
         'department_code',
     ];

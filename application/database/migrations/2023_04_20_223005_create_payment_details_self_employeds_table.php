@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('full_name');
             $table->string('transaction_account');
+            $table->string('inn');
+            $table->string('swift');
+            $table->string('mailing_address');
             $table->string('bank');
             $table->string('bic');
             $table->string('correspondent_account');

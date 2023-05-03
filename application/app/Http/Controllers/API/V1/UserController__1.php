@@ -11,13 +11,16 @@ use App\Http\Resources\API\V1\UsersMyResource;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
+use App\Traits\PdfTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
+//DELETE
+
 class UserController__1 extends Controller
 {
-    use GenerateCodeTrait;
+    use GenerateCodeTrait, PdfTrait;
 
     public function create(Request $request)
     {
@@ -76,5 +79,14 @@ class UserController__1 extends Controller
     public function passwordResetConfirm(UserPasswordResetConfirmRequest__1 $request)
     {
         return response()->json(['message' => 'success'], Response::HTTP_OK);
+    }
+
+    public function test()
+    {
+        $user = User::whereUuid('37b624ff-0b31-4f98-9c8c-3db95911c42a')->first();
+        // $user = User::whereUuid('0018b00d-87ec-48eb-9fba-1642f92aff77')->first();
+        // event(new UserRegisteredEvent($user));
+        $data = $user->getAgencyContractData();
+        return $this->loadPdfFromView('agency_contract', $data)->stream();
     }
 }

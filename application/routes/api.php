@@ -37,5 +37,7 @@ Route::prefix('v1')->group(function () {
             });
         });
         Route::delete('{user:uuid}', [UserController__1::class, 'delete']);
+
+        Route::get('/test', [UserController__1::class, 'test']); //DELETE
     });
 });

@@ -11,18 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('passports', function (Blueprint $table) {
+        Schema::create('agency_contracts', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->uuid('uuid')->index();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('full_name');
-            $table->integer('series')->index();
-            $table->integer('number')->index();
-            $table->date('issue_date');
-            $table->string('registration_address');
-            $table->string('issue_by');
-            $table->string('department_code');
         });
     }
 
@@ -31,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('passports');
+        Schema::dropIfExists('agency_contracts');
     }
 };
