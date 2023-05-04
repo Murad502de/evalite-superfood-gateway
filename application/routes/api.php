@@ -11,7 +11,6 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('users')->group(function () {
         Route::post('/', [UserController__1::class, 'create']);
-        Route::get('my', [UserController__1::class, 'my'])->middleware('user.token');
         Route::prefix('email')->group(function () {
             Route::prefix('confirm')->group(function () {
                 Route::post('/', [ConfirmEmailController__1::class, 'confirm']);
@@ -37,7 +36,13 @@ Route::prefix('v1')->group(function () {
             });
         });
         Route::delete('{user:uuid}', [UserController__1::class, 'delete']);
-
-        Route::get('/test', [UserController__1::class, 'test']); //DELETE
+        Route::middleware(['user.token'])->group(function () {
+            Route::get('my', [UserController__1::class, 'my']);
+            Route::prefix('{user:uuid}')->group(function () {
+                Route::prefix('docs')->group(function () {
+                    Route::get('agency-contract', [UserController__1::class, 'getAgencyContract']);
+                });
+            });
+        });
     });
 });

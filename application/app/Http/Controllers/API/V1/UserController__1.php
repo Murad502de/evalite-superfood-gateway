@@ -78,14 +78,8 @@ class UserController__1 extends Controller
     {
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
-
-    //DELETE
-    public function test()
+    public function getAgencyContract(User $user)
     {
-        $user = User::whereUuid('37b624ff-0b31-4f98-9c8c-3db95911c42a')->first();
-        // $user = User::whereUuid('0018b00d-87ec-48eb-9fba-1642f92aff77')->first();
-        // event(new UserRegisteredEvent($user));
-        $data = $user->getAgencyContractData();
-        return $this->loadPdfFromView('agency_contract', $data)->stream();
+        return $this->loadPdfFromView('agency_contract', $user->getAgencyContractData())->stream();
     }
 }
