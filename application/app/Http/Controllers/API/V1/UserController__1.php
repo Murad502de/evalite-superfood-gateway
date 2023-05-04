@@ -11,14 +11,13 @@ use App\Http\Resources\API\V1\UsersMyResource;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
-use App\Traits\PdfTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
 class UserController__1 extends Controller
 {
-    use GenerateCodeTrait, PdfTrait;
+    use GenerateCodeTrait;
 
     public function create(Request $request)
     {
@@ -80,6 +79,6 @@ class UserController__1 extends Controller
     }
     public function getAgencyContract(User $user)
     {
-        return $this->loadPdfFromView('agency_contract', $user->getAgencyContractData())->stream();
+        return $user->generateAgencyContract()->stream();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use App\Traits\PdfTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -52,12 +53,8 @@ class UserRegisteredMail extends Mailable implements ShouldQueue
      */
     public function attachments(): array
     {
-
-        $data = $this->user->getAgencyContractData();
-        $pdf  = $this->loadPdfFromView('agency_contract', $data);
-
         return [
-            Attachment::fromData(fn() => $pdf->output(), 'Агентский договор на поиск клиентов.pdf')
+            Attachment::fromData(fn() => $this->user->generateAgencyContract()->output(), User::AGENCY_CONTRACT_FILE_NAME)
                 ->withMime('application/pdf'),
         ];
     }

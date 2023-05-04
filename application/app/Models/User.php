@@ -8,6 +8,7 @@ use App\Traits\GenerateUserTokenTrait;
 use App\Traits\GenerateUuidModelTrait;
 use App\Traits\ModelAddMediaTrait;
 use App\Traits\PasswordEncryptTrait;
+use App\Traits\PdfTrait;
 use App\Traits\SharedEmploymentTypesTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,10 +29,13 @@ class User extends Model implements HasMedia
     GenerateUserTokenTrait,
     PasswordEncryptTrait,
     ModelAddMediaTrait,
-        SharedEmploymentTypesTrait;
+    SharedEmploymentTypesTrait,
+        PdfTrait;
 
-    public const MEDIA_NAME_AVATAR   = 'user_avatar';
-    public const MEDIA_PREFIX_AVATAR = 'user_avatar/';
+    public const MEDIA_NAME_AVATAR         = 'user_avatar';
+    public const MEDIA_PREFIX_AVATAR       = 'user_avatar/';
+    public const AGENCY_CONTRACT_VIEW_NAME = 'agency_contract';
+    public const AGENCY_CONTRACT_FILE_NAME = 'Агентский договор на поиск клиентов.pdf';
 
     protected $fillable = [
         'uuid',
@@ -202,7 +206,12 @@ class User extends Model implements HasMedia
             'se_bank_kpp'                   => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->bank_kpp : null,
         ];
     }
+    public function generateAgencyContract()
+    {
+        return $this->loadPdfFromView(self::AGENCY_CONTRACT_VIEW_NAME, $this->getAgencyContractData());
+    }
 
+    /* RELATIONS */
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
