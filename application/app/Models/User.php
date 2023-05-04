@@ -88,8 +88,8 @@ class User extends Model implements HasMedia
             'series'               => $data['pass_series'],
             'number'               => $data['pass_number'],
             'issue_date'           => Carbon::parse($data['pass_issue_date']),
-            'registration_address' => $data['pass_registration_address'], //TODO
-            'issue_by' => $data['pass_issue_by'],
+            'registration_address' => $data['pass_registration_address'],
+            'issue_by'             => $data['pass_issue_by'],
             'department_code'      => $data['pass_department_code'],
         ]);
         $user->passport->addMainSpreadMedia();
@@ -117,10 +117,10 @@ class User extends Model implements HasMedia
             $user->paymentDetailsSelfEmployed()->create([
                 'full_name'             => $data['se_full_name'],
                 'transaction_account'   => $data['se_transaction_account'],
-                'inn'                   => $data['se_inn'], //TODO
-                'swift' => $data['se_swift'], //TODO
-                'mailing_address' => $data['se_mailing_address'], //TODO
-                'bank' => $data['se_bank'],
+                'inn'                   => $data['se_inn'],
+                'swift'                 => $data['se_swift'],
+                'mailing_address'       => $data['se_mailing_address'],
+                'bank'                  => $data['se_bank'],
                 'bic'                   => $data['se_bic'],
                 'correspondent_account' => $data['se_correspondent_account'],
                 'bank_inn'              => $data['se_bank_inn'],

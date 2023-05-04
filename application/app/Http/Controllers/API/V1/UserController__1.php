@@ -16,8 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
-//DELETE
-
 class UserController__1 extends Controller
 {
     use GenerateCodeTrait, PdfTrait;
@@ -81,6 +79,7 @@ class UserController__1 extends Controller
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 
+    //DELETE
     public function test()
     {
         $user = User::whereUuid('37b624ff-0b31-4f98-9c8c-3db95911c42a')->first();
