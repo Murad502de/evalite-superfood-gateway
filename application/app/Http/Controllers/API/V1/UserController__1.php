@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\V1;
 
 use App\Events\passwordResetCodeRequested;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\UserCreateRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetConfirmRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetRequest__1;
 use App\Http\Requests\API\V1\UserPasswordUpdateRequest__1;
@@ -11,10 +12,8 @@ use App\Http\Resources\API\V1\UsersMyResource;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
-use App\Http\Requests\API\V1\UserCreateRequest__1;
 
 class UserController__1 extends Controller
 {
