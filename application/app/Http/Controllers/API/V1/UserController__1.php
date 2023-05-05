@@ -14,12 +14,13 @@ use App\Traits\GenerateCodeTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
+use App\Http\Requests\API\V1\UserCreateRequest__1;
 
 class UserController__1 extends Controller
 {
     use GenerateCodeTrait;
 
-    public function create(Request $request)
+    public function create(UserCreateRequest__1 $request)
     {
         $user = User::createNew($request);
 
