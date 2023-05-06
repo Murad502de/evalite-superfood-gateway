@@ -1,6 +1,6 @@
 <?php
 return [
-    'months' => [
+    'months'  => [
         'ru' => [
             'ordinals' => [
                 1  => 'января',
@@ -21,7 +21,14 @@ return [
     'payouts' => [
         'statuses' => [
             'processing' => 'processing',
-            'completed' => 'completed',
-        ]
+            'completed'  => 'completed',
+        ],
+    ],
+    'sales'   => [
+        'statuses' => [
+            'waiting'    => 'waiting',
+            'processing' => 'processing',
+            'closed'     => 'closed',
+        ],
     ],
 ];
