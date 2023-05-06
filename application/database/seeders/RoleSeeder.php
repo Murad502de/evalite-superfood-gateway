@@ -21,8 +21,8 @@ class RoleSeeder extends Seeder
             'is_default' => false,
         ]);
         Role::create([
-            'code'       => self::$USER_ROLE_USER,
-            'name'       => 'пользователь',
+            'code'       => self::$USER_ROLE_REFERRAL,
+            'name'       => 'реферал',
             'is_default' => true,
         ]);
     }

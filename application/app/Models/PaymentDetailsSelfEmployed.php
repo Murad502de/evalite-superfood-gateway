@@ -24,9 +24,9 @@ class PaymentDetailsSelfEmployed extends Model implements HasMedia
         'uuid',
         'full_name',
         'transaction_account',
-        'inn', //TODO
-        'swift', //TODO
-        'mailing_address', //TODO
+        'inn',
+        'swift',
+        'mailing_address',
         'bank',
         'bic',
         'correspondent_account',
