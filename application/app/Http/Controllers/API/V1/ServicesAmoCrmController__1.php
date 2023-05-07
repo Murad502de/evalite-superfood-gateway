@@ -39,4 +39,7 @@ class ServicesAmoCrmController__1 extends Controller
         Amocrm::signout();
         return response(['OK'], 200);
     }
+    public function webhookLead() {
+        return response(['OK'], 200);
+    }
 }

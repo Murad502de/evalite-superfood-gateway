@@ -52,6 +52,11 @@ Route::prefix('v1')->group(function () {
                 Route::get('signin', [ServicesAmoCrmController__1::class, 'signin']);
                 Route::get('signout', [ServicesAmoCrmController__1::class, 'signout']);
             });
+            Route::prefix('webhooks')->group(function () {
+                Route::prefix('leads')->group(function () {
+                    Route::post('/', [ServicesAmoCrmController__1::class, 'webhookLead']);
+                });
+            });
         });
     });
     Route::middleware(['user.token'])->group(function () {});
