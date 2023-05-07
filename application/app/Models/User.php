@@ -52,6 +52,7 @@ class User extends Model implements HasMedia
         'invite_code',
         'individual_code',
         'promo_code',
+        'verification_status',
     ];
     protected $hidden = [
         'id',
@@ -66,20 +67,21 @@ class User extends Model implements HasMedia
     {
         $data = $request->all();
         $user = self::create([
-            'role_id'         => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
-            'first_name'      => $data['user_first_name'],
-            'second_name'     => $data['user_second_name'],
-            'third_name'      => $data['user_third_name'],
-            'gender'          => $data['user_gender'],
-            'birthday'        => Carbon::parse($data['user_birthday']),
-            'employment_type' => $data['user_employment_type'],
-            'email'           => $data['user_email'],
-            'password'        => self::passwordEncrypt($data['user_password']),
-            'token'           => self::generateUserToken(),
-            'phone'           => $data['user_phone'],
-            'invite_code'     => Str::upper(Str::random(6)),
-            'individual_code' => Str::upper(Str::random(6)),
-            'promo_code'      => $data['user_promo_code'],
+            'role_id'             => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
+            'first_name'          => $data['user_first_name'],
+            'second_name'         => $data['user_second_name'],
+            'third_name'          => $data['user_third_name'],
+            'gender'              => $data['user_gender'],
+            'birthday'            => Carbon::parse($data['user_birthday']),
+            'employment_type'     => $data['user_employment_type'],
+            'email'               => $data['user_email'],
+            'password'            => self::passwordEncrypt($data['user_password']),
+            'token'               => self::generateUserToken(),
+            'phone'               => $data['user_phone'],
+            'invite_code'         => Str::upper(Str::random(6)),
+            'individual_code'     => Str::upper(Str::random(6)),
+            'promo_code'          => $data['user_promo_code'],
+            'verification_status' => config('constants.user.verification_statuses.waiting'),
         ]);
 
         if ($request->file(self::MEDIA_NAME_AVATAR)) {

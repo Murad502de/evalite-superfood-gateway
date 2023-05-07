@@ -31,4 +31,11 @@ return [
             'closed'     => 'closed',
         ],
     ],
+    'user'    => [
+        'verification_statuses' => [
+            'waiting'    => 'waiting',
+            'processing' => 'processing',
+            'completed'  => 'completed',
+        ],
+    ],
 ];

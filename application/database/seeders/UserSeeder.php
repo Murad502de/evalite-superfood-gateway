@@ -25,20 +25,21 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'role_id'         => Role::whereCode(self::$USER_ROLE_ADMIN)->first()->id,
-            'first_name'      => 'adminFirstName',
-            'second_name'     => 'adminSecondName',
-            'third_name'      => 'adminThirdName',
-            'gender'          => self::$GENDER_MALE,
-            'birthday'        => Carbon::now(),
-            'employment_type' => self::$INDIVIDUAL_ENTREPRENEUR,
-            'email'           => config('app.admin_email'),
-            'password'        => self::passwordEncrypt(config('app.admin_password')),
-            'token'           => self::generateUserToken(),
-            'phone'           => '',
-            'invite_code'     => 'ADMIN_INVITE_CODE',
-            'individual_code' => 'ADMIN_INDIVIDUAL_CODE',
-            'promo_code'      => '',
+            'role_id'             => Role::whereCode(self::$USER_ROLE_ADMIN)->first()->id,
+            'first_name'          => 'adminFirstName',
+            'second_name'         => 'adminSecondName',
+            'third_name'          => 'adminThirdName',
+            'gender'              => self::$GENDER_MALE,
+            'birthday'            => Carbon::now(),
+            'employment_type'     => self::$INDIVIDUAL_ENTREPRENEUR,
+            'email'               => config('app.admin_email'),
+            'password'            => self::passwordEncrypt(config('app.admin_password')),
+            'token'               => self::generateUserToken(),
+            'phone'               => '',
+            'invite_code'         => 'ADMIN_INVITE_CODE',
+            'individual_code'     => 'ADMIN_INDIVIDUAL_CODE',
+            'promo_code'          => '',
+            'verification_status' => config('constants.user.verification_statuses.completed'),
         ]);
     }
 }

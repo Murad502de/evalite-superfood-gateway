@@ -16,7 +16,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        $verification_statuses = [
+            config('constants.user.verification_statuses.waiting'),
+            config('constants.user.verification_statuses.processing'),
+            config('constants.user.verification_statuses.completed'),
+        ];
+
+        Schema::create('users', function (Blueprint $table) use ($verification_statuses) {
             $table->id();
             $table->timestamps();
             $table->uuid('uuid')->index();
@@ -34,6 +40,7 @@ return new class extends Migration
             $table->string('invite_code')->index();
             $table->string('individual_code')->index();
             $table->string('promo_code')->index();
+            $table->enum('verification_status', $verification_statuses)->index();
         });
     }
 
