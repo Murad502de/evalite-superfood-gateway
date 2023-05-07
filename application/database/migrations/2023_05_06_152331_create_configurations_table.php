@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('amocrm_subdomain');
             $table->string('amocrm_redirect_uri');
             $table->string('amocrm_client_secret');
+            $table->unsignedInteger('amocrm_utm_source_id');
             $table->unsignedBigInteger('min_payout');
             $table->string('personal_link_host');
         });

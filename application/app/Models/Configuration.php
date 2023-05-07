@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\GenerateUuidModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\GenerateUuidModelTrait;
 
 class Configuration extends Model
 {
@@ -15,6 +15,7 @@ class Configuration extends Model
         'amocrm_subdomain',
         'amocrm_redirect_uri',
         'amocrm_client_secret',
+        'amocrm_utm_source_id',
         'min_payout',
         'personal_link_host',
     ];
