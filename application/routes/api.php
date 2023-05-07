@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\V1\AdminAuthController__1;
 use App\Http\Controllers\API\V1\ConfirmEmailController__1;
+use App\Http\Controllers\API\V1\ServicesAmoCrmController__1;
 use App\Http\Controllers\API\V1\UserController__1;
 use Illuminate\Support\Facades\Route;
 
@@ -45,4 +46,13 @@ Route::prefix('v1')->group(function () {
             });
         });
     });
+    Route::prefix('services')->group(function () {
+        Route::prefix('amocrm')->group(function () {
+            Route::prefix('auth')->group(function () {
+                Route::get('signin', [ServicesAmoCrmController__1::class, 'signin']);
+                Route::get('signout', [ServicesAmoCrmController__1::class, 'signout']);
+            });
+        });
+    });
+    Route::middleware(['user.token'])->group(function () {});
 });
