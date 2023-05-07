@@ -37,5 +37,9 @@ return [
             'processing' => 'processing',
             'completed'  => 'completed',
         ],
+        'roles'                 => [
+            'admin'    => 'admin',
+            'referral' => 'referral',
+        ],
     ],
 ];

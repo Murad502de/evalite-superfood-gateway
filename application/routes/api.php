@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\V1\AdminAuthController__1;
+use App\Http\Controllers\API\V1\ConfigurationController__1;
 use App\Http\Controllers\API\V1\ConfirmEmailController__1;
 use App\Http\Controllers\API\V1\ServicesAmoCrmController__1;
 use App\Http\Controllers\API\V1\UserController__1;
@@ -59,5 +60,12 @@ Route::prefix('v1')->group(function () {
             });
         });
     });
-    Route::middleware(['user.token'])->group(function () {});
+    Route::middleware(['user.token'])->group(function () {
+        Route::prefix('configurations')->group(function () {
+            Route::post('/', [ConfigurationController__1::class, 'create']);
+            Route::get('/', [ConfigurationController__1::class, 'read']);
+            Route::put('/', [ConfigurationController__1::class, 'update']);
+            Route::delete('/', [ConfigurationController__1::class, 'delete']);
+        });
+    });
 });
