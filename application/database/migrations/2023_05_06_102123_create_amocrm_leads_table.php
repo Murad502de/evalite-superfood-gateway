@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->uuid('uuid')->index();
             $table->unsignedInteger('amo_id')->index();
-            $table->date('last_modified');
+            $table->unsignedBigInteger('last_modified');
             $table->json('data');
         });
     }
