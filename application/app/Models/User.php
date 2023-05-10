@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -232,5 +233,9 @@ class User extends Model implements HasMedia
     public function agencyContract(): HasOne
     {
         return $this->hasOne(AgencyContract::class);
+    }
+    public function sales(): HasMany
+    {
+        return $this->hasMany(Sale::class);
     }
 }

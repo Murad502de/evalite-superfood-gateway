@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\GenerateUuidModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Sale extends Model
 {
@@ -23,4 +24,18 @@ class Sale extends Model
         'created_at',
         'updated_at',
     ];
+
+    /* RELATIONS */
+    public function payout(): BelongsTo
+    {
+        return $this->belongsTo(Payout::class);
+    }
+    public function lead(): BelongsTo
+    {
+        return $this->belongsTo(Lead::class);
+    }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
