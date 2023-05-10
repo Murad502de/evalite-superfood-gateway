@@ -22,6 +22,6 @@ class sendUserRegisteredMailListener implements ShouldQueue
      */
     public function handle(UserRegisteredEvent $event): void
     {
-        Mail::to('rassulovmurad@gmail.com')->send(new UserRegisteredMail($event->user));
+        Mail::to($event->user->email)->send(new UserRegisteredMail($event->user));
     }
 }

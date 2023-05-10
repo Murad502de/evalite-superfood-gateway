@@ -20,8 +20,6 @@ class amoAPIHub
 
     public function __construct($amoData)
     {
-        //echo 'const amoCRM<br>';
-
         $this->client = new amoClient();
 
         $this->pageItemLimit = 250;
@@ -171,7 +169,7 @@ class amoAPIHub
 
     public function findLeadById($id)
     {
-        $url = "https://" . config('services.amoCRM.subdomain') . ".amocrm.ru/api/v4/leads/$id?with=contacts";
+        $url = "https://" . $this->amoData['subdomain'] . ".amocrm.ru/api/v4/leads/$id?with=contacts";
 
         try {
             $response = $this->client->sendRequest(
@@ -731,5 +729,20 @@ class amoAPIHub
 
             return null;
         }
+    }
+
+    public function getLeadCustomFieldValueById($lead, $id):  ? string
+    {
+        if (!$lead['custom_fields_values']) {
+            return null;
+        }
+
+        foreach ($lead['custom_fields_values'] as $customField) {
+            if ($customField['field_id'] === $id) {
+                return $customField['values'][0]['value'];
+            }
+        }
+
+        return null;
     }
 }

@@ -50,7 +50,7 @@ class Amocrm extends Model
     }
     public static function getAuthData()
     {
-        $authData = self::all()->first();
+        $authData = self::first();
 
         if (!$authData) {
             return false;

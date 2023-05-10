@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->uuid('uuid')->index();
-            $table->enum('status', $statuses)->index();
+            $table->enum('status', $statuses)->index()->default(config('constants.sales.statuses.waiting')); //FIXME set default value
             $table->string('percent')->index();
             $table->foreignId('lead_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

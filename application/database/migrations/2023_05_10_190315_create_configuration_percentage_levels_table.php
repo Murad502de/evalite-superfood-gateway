@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('configurations', function (Blueprint $table) {
+        Schema::create('configuration_percentage_levels', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->uuid('uuid')->index();
-            $table->string('amocrm_subdomain');
-            $table->string('amocrm_redirect_uri');
-            $table->string('amocrm_client_secret');
-            $table->unsignedInteger('amocrm_utm_source_id');
-            $table->unsignedBigInteger('min_payout');
-            $table->string('personal_link_host');
             $table->integer('percentage');
+            $table->foreignId('configuration_id')->constrained()->cascadeOnDelete();
         });
     }
 
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('configurations');
+        Schema::dropIfExists('configuration_percentage_levels');
     }
 };
