@@ -9,12 +9,13 @@ use App\Http\Requests\API\V1\UserPasswordResetConfirmRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetRequest__1;
 use App\Http\Requests\API\V1\UserPasswordUpdateRequest__1;
 use App\Http\Resources\API\V1\UsersMyResource;
+use App\Http\Resources\API\V1\UsersSalesResource;
 use App\Models\PasswordReset;
+use App\Models\Payout;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
-use App\Http\Resources\API\V1\UsersSalesResource;
 
 class UserController__1 extends Controller
 {
@@ -85,5 +86,34 @@ class UserController__1 extends Controller
     public function getSales(User $user)
     {
         return new UsersSalesResource($user);
+    }
+    public function payoutSales(User $user)
+    {
+        $sales       = $user->sales()->whereStatus(config('constants.sales.statuses.waiting'))->get();
+        $total_price = 0;
+
+        foreach ($sales as $sale) {
+            $total_price += ($sale->lead->price / 100) * $sale->percent;
+        }
+
+        if (!($total_price >= 30000)) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'The minimum total price for payout has not been reached',
+            ], Response::HTTP_OK);
+        }
+
+        $payout = Payout::create([
+            'status' => config('constants.payouts.statuses.processing'),
+        ]);
+
+        foreach ($sales as $sale) {
+            $sale->update([
+                'status'    => config('constants.sales.statuses.processing'),
+                'payout_id' => $payout->id,
+            ]);
+        }
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 }

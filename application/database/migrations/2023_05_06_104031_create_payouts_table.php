@@ -20,7 +20,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->uuid('uuid')->index();
-            $table->enum('status', $statuses)->index();
+            $table->enum('status', $statuses)->index(); //FIXME set default value as processing
         });
     }
 

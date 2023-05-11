@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
                 });
                 Route::prefix('sales')->group(function () {
                     Route::get('/', [UserController__1::class, 'getSales']);
+                    Route::post('payout', [UserController__1::class, 'payoutSales']);
                 });
             });
         });
