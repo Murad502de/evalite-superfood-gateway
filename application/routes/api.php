@@ -42,7 +42,10 @@ Route::prefix('v1')->group(function () {
             Route::prefix('{user:uuid}')->group(function () {
                 Route::delete('/', [UserController__1::class, 'delete']);
                 Route::prefix('docs')->group(function () {
-                    Route::get('agency-contract', [UserController__1::class, 'getAgencyContract'])->withoutMiddleware('user.token');
+                    Route::get('agency-contract', [UserController__1::class, 'getAgencyContract'])->withoutMiddleware('user.token'); //FIXME with middleware
+                });
+                Route::prefix('sales')->group(function () {
+                    Route::get('/', [UserController__1::class, 'getSales']);
                 });
             });
         });

@@ -23,6 +23,9 @@ class Sale extends Model
         'id',
         'created_at',
         'updated_at',
+        'lead_id',
+        'user_id',
+        'payout_id',
     ];
 
     /* RELATIONS */

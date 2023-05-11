@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Traits\GenerateCodeTrait;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
+use App\Http\Resources\API\V1\UsersSalesResource;
 
 class UserController__1 extends Controller
 {
@@ -80,5 +81,9 @@ class UserController__1 extends Controller
     public function getAgencyContract(User $user)
     {
         return $user->generateAgencyContract()->stream();
+    }
+    public function getSales(User $user)
+    {
+        return new UsersSalesResource($user);
     }
 }
