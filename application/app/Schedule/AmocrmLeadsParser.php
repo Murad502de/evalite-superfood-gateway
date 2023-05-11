@@ -9,11 +9,19 @@ use App\Models\Lead;
 use App\Models\Sale;
 use App\Models\User;
 use App\Services\amoAPI\amoAPIHub;
+use App\Traits\ServicesAmocrmTokenTrait;
 use Illuminate\Support\Facades\Log;
 
 class AmocrmLeadsParser
 {
+    use ServicesAmocrmTokenTrait;
+
     private const PARSE_COUNT = 20;
+
+    public function __construct()
+    {
+        self::checkAmocrmToken();
+    }
 
     public function __invoke()
     {
