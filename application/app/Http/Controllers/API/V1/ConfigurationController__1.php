@@ -14,7 +14,8 @@ class ConfigurationController__1 extends Controller
     public function create(ConfigurationCreateRequset__1 $request)
     {
         Configuration::truncate();
-        Configuration::create($request->all());
+        $configuration = Configuration::create($request->all());
+        $configuration->configurationPercentageLevels()->createMany($request->percentage_levels);
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
     public function read()

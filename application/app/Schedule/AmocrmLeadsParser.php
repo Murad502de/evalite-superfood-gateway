@@ -21,16 +21,14 @@ class AmocrmLeadsParser
         $AMO_API           = new amoAPIHub(Amocrm::getAuthData());
         $configuration     = Configuration::first();
         $percentage        = $configuration->percentage;
-        $percentage_levels = [
-            [
-                'level'      => 1,
-                'percentage' => 10,
-            ],
-            [
-                'level'      => 2,
-                'percentage' => 5,
-            ],
-        ];
+        $percentage_levels = [];
+
+        foreach ($configuration->configurationPercentageLevels as $configurationPercentageLevel) {
+            $percentage_levels[] = [
+                'level'      => $configurationPercentageLevel['id'],
+                'percentage' => $configurationPercentageLevel['percentage'],
+            ];
+        }
 
         foreach ($amocrm_leads as $amocrm_lead) {
             Log::info(__METHOD__, ['amocrm_lead->amo_id: ' . $amocrm_lead->amo_id]); //DELETE

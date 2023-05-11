@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\GenerateUuidModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Configuration extends Model
 {
@@ -25,4 +26,10 @@ class Configuration extends Model
         'created_at',
         'updated_at',
     ];
+
+    /* RELATIONS */
+    public function configurationPercentageLevels(): HasMany
+    {
+        return $this->hasMany(ConfigurationPercentageLevel::class);
+    }
 }
