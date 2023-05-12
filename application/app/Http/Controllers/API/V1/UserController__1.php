@@ -8,6 +8,7 @@ use App\Http\Requests\API\V1\UserCreateRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetConfirmRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetRequest__1;
 use App\Http\Requests\API\V1\UserPasswordUpdateRequest__1;
+use App\Http\Resources\API\V1\PayoutsResource;
 use App\Http\Resources\API\V1\UsersMyResource;
 use App\Http\Resources\API\V1\UsersSalesResource;
 use App\Models\PasswordReset;
@@ -115,5 +116,19 @@ class UserController__1 extends Controller
         }
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
+    }
+    public function getPayouts(User $user)
+    {
+        $payouts = [];
+        $sales   = $user->sales()
+            ->whereStatus(config('constants.sales.statuses.processing'))
+            ->distinct('payout_id')
+            ->get();
+
+        foreach ($sales as $sale) {
+            $payouts[] = $sale->payout;
+        }
+
+        return PayoutsResource::collection($payouts);
     }
 }

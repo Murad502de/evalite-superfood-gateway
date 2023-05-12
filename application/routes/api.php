@@ -48,6 +48,9 @@ Route::prefix('v1')->group(function () {
                     Route::get('/', [UserController__1::class, 'getSales']);
                     Route::post('payout', [UserController__1::class, 'payoutSales']);
                 });
+                Route::prefix('payouts')->group(function () {
+                    Route::get('/', [UserController__1::class, 'getPayouts']);
+                });
             });
         });
     });
