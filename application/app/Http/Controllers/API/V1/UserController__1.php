@@ -84,11 +84,11 @@ class UserController__1 extends Controller
     {
         return $user->generateAgencyContract()->stream();
     }
-    public function getSales(User $user)
+    public function getUserSales(User $user)
     {
         return new UsersSalesResource($user);
     }
-    public function payoutSales(User $user)
+    public function payoutUserSales(User $user)
     {
         $sales       = $user->sales()->whereStatus(config('constants.sales.statuses.waiting'))->get();
         $total_price = 0;
@@ -118,18 +118,14 @@ class UserController__1 extends Controller
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
-    public function getPayouts(User $user)
+    public function getUserPayouts(User $user)
     {
         return $user->role->code === config('constants.user.roles.admin')
         ? PayoutsResource::collection(Payout::all())
         : PayoutsResource::collection($user->payouts);
     }
-    public function getPayout(User $user, Payout $payout)
+    public function getUserPayout(User $user, Payout $payout)
     {
         return new PayoutsResource($payout);
-    }
-    public function payout(User $user, Payout $payout)
-    {
-        return $payout;
     }
 }

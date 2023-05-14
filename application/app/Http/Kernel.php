@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\API\V1\UserRoleAdminMiddleware__1;
 use App\Http\Middleware\API\V1\UserTokenMiddleware__1;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -65,5 +66,6 @@ class Kernel extends HttpKernel
         'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'user.token'       => UserTokenMiddleware__1::class,
+        'user.role.admin'  => UserRoleAdminMiddleware__1::class,
     ];
 }

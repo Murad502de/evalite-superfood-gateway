@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\V1\AdminAuthController__1;
 use App\Http\Controllers\API\V1\ConfigurationController__1;
 use App\Http\Controllers\API\V1\ConfirmEmailController__1;
+use App\Http\Controllers\API\V1\PayoutController__1;
 use App\Http\Controllers\API\V1\ServicesAmoCrmController__1;
 use App\Http\Controllers\API\V1\UserController__1;
 use Illuminate\Support\Facades\Route;
@@ -45,14 +46,22 @@ Route::prefix('v1')->group(function () {
                     Route::get('agency-contract', [UserController__1::class, 'getAgencyContract'])->withoutMiddleware('user.token'); //FIXME with middleware
                 });
                 Route::prefix('sales')->group(function () {
-                    Route::get('/', [UserController__1::class, 'getSales']);
-                    Route::post('payout', [UserController__1::class, 'payoutSales']);
+                    Route::get('/', [UserController__1::class, 'getUserSales']);
+                    Route::post('payout', [UserController__1::class, 'payoutUserSales']);
                 });
                 Route::prefix('payouts')->group(function () {
-                    Route::get('/', [UserController__1::class, 'getPayouts']);
+                    Route::get('/', [UserController__1::class, 'getUserPayouts']);
                     Route::prefix('{payout:uuid}')->group(function () {
-                        Route::get('/', [UserController__1::class, 'getPayout']);
-                        Route::put('payout', [UserController__1::class, 'payout']);
+                        Route::get('/', [UserController__1::class, 'getUserPayout']);
+                    });
+                });
+            });
+            Route::middleware(['user.role.admin'])->group(function () {
+                Route::prefix('payouts')->group(function () {
+                    Route::get('/', [PayoutController__1::class, 'getPayouts']);
+                    Route::prefix('{payout:uuid}')->group(function () {
+                        Route::get('/', [PayoutController__1::class, 'getPayout']);
+                        Route::put('payout', [PayoutController__1::class, 'payout']);
                     });
                 });
             });
