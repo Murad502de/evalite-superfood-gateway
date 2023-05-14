@@ -238,4 +238,8 @@ class User extends Model implements HasMedia
     {
         return $this->hasMany(Sale::class);
     }
+    public function payouts(): HasMany
+    {
+        return $this->hasMany(Payout::class);
+    }
 }

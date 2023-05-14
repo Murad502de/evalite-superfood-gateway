@@ -50,6 +50,10 @@ Route::prefix('v1')->group(function () {
                 });
                 Route::prefix('payouts')->group(function () {
                     Route::get('/', [UserController__1::class, 'getPayouts']);
+                    Route::prefix('{payout:uuid}')->group(function () {
+                        Route::get('/', [UserController__1::class, 'getPayout']);
+                        Route::put('payout', [UserController__1::class, 'payout']);
+                    });
                 });
             });
         });

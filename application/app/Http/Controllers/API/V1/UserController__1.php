@@ -105,7 +105,8 @@ class UserController__1 extends Controller
         }
 
         $payout = Payout::create([
-            'status' => config('constants.payouts.statuses.processing'),
+            'user_id' => $user->id,
+            'status'  => config('constants.payouts.statuses.processing'),
         ]);
 
         foreach ($sales as $sale) {
@@ -119,16 +120,16 @@ class UserController__1 extends Controller
     }
     public function getPayouts(User $user)
     {
-        $payouts = [];
-        $sales   = $user->sales()
-            ->whereStatus(config('constants.sales.statuses.processing'))
-            ->distinct('payout_id')
-            ->get();
-
-        foreach ($sales as $sale) {
-            $payouts[] = $sale->payout;
-        }
-
-        return PayoutsResource::collection($payouts);
+        return $user->role->code === config('constants.user.roles.admin')
+        ? PayoutsResource::collection(Payout::all())
+        : PayoutsResource::collection($user->payouts);
+    }
+    public function getPayout(User $user, Payout $payout)
+    {
+        return new PayoutsResource($payout);
+    }
+    public function payout(User $user, Payout $payout)
+    {
+        return $payout;
     }
 }

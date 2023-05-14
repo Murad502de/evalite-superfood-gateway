@@ -35,7 +35,7 @@ trait ServicesAmocrmTokenTrait
                         'when_expires'  => time() + (int) $response['body']['expires_in'] - 400,
                     ];
 
-                    Amocrm::auth($accountData);
+                    Amocrm::signin($accountData);
 
                     // Log::info(__METHOD__, ['amocrm access token updated']); //DELETE
 
