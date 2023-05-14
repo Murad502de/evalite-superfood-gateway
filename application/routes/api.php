@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
             });
         });
         Route::middleware(['user.token'])->group(function () {
+            Route::get('/', [UserController__1::class, 'users']);
             Route::get('my', [UserController__1::class, 'my']);
             Route::prefix('{user:uuid}')->group(function () {
                 Route::delete('/', [UserController__1::class, 'delete']);

@@ -15,6 +15,7 @@ use App\Models\PasswordReset;
 use App\Models\Payout;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 
@@ -22,6 +23,22 @@ class UserController__1 extends Controller
 {
     use GenerateCodeTrait;
 
+    public function users(Request $request)
+    {
+        $requestParams = $request->all();
+        $filterStatus  = isset($requestParams['filters']) && isset($requestParams['filters']['status'])
+        ? $requestParams['filters']['status']
+        : null;
+        $users = User::whereHas('role', function ($query) {
+            $query->whereNot(function ($query) {
+                $query->where('code', config('constants.user.roles.admin'));
+            });
+        })->when($filterStatus, function ($query) use ($filterStatus) {
+            $query->whereVerificationStatus($filterStatus);
+        })->get();
+
+        return UsersMyResource::collection($users);
+    }
     public function create(UserCreateRequest__1 $request)
     {
         $user = User::createNew($request);
