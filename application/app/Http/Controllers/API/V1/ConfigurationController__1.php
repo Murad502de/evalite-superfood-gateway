@@ -20,7 +20,15 @@ class ConfigurationController__1 extends Controller
     }
     public function read()
     {
-        return new ConfigurationReadResource__1(Configuration::first());
+        return new ConfigurationReadResource__1(Configuration::first() ?? Configuration::create([
+            'amocrm_subdomain'     => '',
+            'amocrm_redirect_uri'  => '',
+            'amocrm_client_secret' => '',
+            'amocrm_utm_source_id' => 0,
+            'min_payout'           => 0,
+            'personal_link_host'   => '',
+            'percentage'           => 0,
+        ]));
     }
     public function update(ConfigurationUpdateRequset__1 $request)
     {
