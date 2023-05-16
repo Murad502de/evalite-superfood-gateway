@@ -87,6 +87,7 @@ class AmocrmLeadsParser
             }
 
             //TODO delete amocrm_lead
+            // $amocrm_lead->delete();
         }
     }
 
