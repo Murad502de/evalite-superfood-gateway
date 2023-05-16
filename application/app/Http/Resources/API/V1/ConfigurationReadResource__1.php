@@ -17,12 +17,14 @@ class ConfigurationReadResource__1 extends JsonResource
     {
         $percentage_levels = [];
 
-        foreach ($this->configurationPercentageLevels as $configurationPercentageLevel) {
-            $percentage_levels[] = [
-                'uuid'       => $configurationPercentageLevel['uuid'],
-                'level'      => $configurationPercentageLevel['id'],
-                'percentage' => $configurationPercentageLevel['percentage'],
-            ];
+        if ($this->configurationPercentageLevels) {
+            foreach ($this->configurationPercentageLevels as $configurationPercentageLevel) {
+                $percentage_levels[] = [
+                    'uuid'       => $configurationPercentageLevel['uuid'],
+                    'level'      => $configurationPercentageLevel['id'],
+                    'percentage' => $configurationPercentageLevel['percentage'],
+                ];
+            }
         }
 
         return Arr::except(array_merge(parent::toArray($request), [
