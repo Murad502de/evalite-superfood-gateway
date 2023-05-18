@@ -12,11 +12,11 @@ class PayoutController__1 extends Controller
 {
     public function getPayouts(Request $request)
     {
-        $requestParams = $request->all();
-        $filterStatus  = isset($requestParams['filters']) && isset($requestParams['filters']['status']) ? $requestParams['filters']['status'] : null;
-        $payouts       = Payout::when($filterStatus, function ($query) use ($filterStatus) {
-            $query->whereStatus($filterStatus);
-        })->get();
+        $request_params = $request->all();
+        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $payouts        = Payout::when($filter_status, function ($query) use ($filter_status) {
+            $query->whereStatus($filter_status);
+        })->paginate($request->per_page ?? 5);
 
         return PayoutsResource::collection($payouts);
     }
