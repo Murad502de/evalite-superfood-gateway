@@ -25,17 +25,15 @@ class UserController__1 extends Controller
 
     public function users(Request $request)
     {
-        $requestParams = $request->all();
-        $filterStatus  = isset($requestParams['filters']) && isset($requestParams['filters']['status'])
-        ? $requestParams['filters']['status']
-        : null;
-        $users = User::whereHas('role', function ($query) {
+        $request_params = $request->all();
+        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $users          = User::whereHas('role', function ($query) {
             $query->whereNot(function ($query) {
                 $query->where('code', config('constants.user.roles.admin'));
             });
-        })->when($filterStatus, function ($query) use ($filterStatus) {
-            $query->whereVerificationStatus($filterStatus);
-        })->get();
+        })->when($filter_status, function ($query) use ($filter_status) {
+            $query->whereVerificationStatus($filter_status);
+        })->paginate($request->per_page ?? 5);
 
         return UsersMyResource::collection($users);
     }

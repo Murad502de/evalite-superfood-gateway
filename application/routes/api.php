@@ -57,15 +57,6 @@ Route::prefix('v1')->group(function () {
                     });
                 });
             });
-            Route::middleware(['user.role.admin'])->group(function () {
-                Route::prefix('payouts')->group(function () {
-                    Route::get('/', [PayoutController__1::class, 'getPayouts']);
-                    Route::prefix('{payout:uuid}')->group(function () {
-                        Route::get('/', [PayoutController__1::class, 'getPayout']);
-                        Route::put('payout', [PayoutController__1::class, 'payout']);
-                    });
-                });
-            });
         });
     });
     Route::prefix('services')->group(function () {
@@ -82,11 +73,20 @@ Route::prefix('v1')->group(function () {
         });
     });
     Route::middleware(['user.token'])->group(function () {
-        Route::prefix('configurations')->group(function () {
-            Route::post('/', [ConfigurationController__1::class, 'create']);
-            Route::get('/', [ConfigurationController__1::class, 'read']);
-            Route::put('/', [ConfigurationController__1::class, 'update']);
-            Route::delete('/', [ConfigurationController__1::class, 'delete']);
+        Route::middleware(['user.role.admin'])->group(function () {
+            Route::prefix('payouts')->group(function () {
+                Route::get('/', [PayoutController__1::class, 'getPayouts']);
+                Route::prefix('{payout:uuid}')->group(function () {
+                    Route::get('/', [PayoutController__1::class, 'getPayout']);
+                    Route::put('payout', [PayoutController__1::class, 'payout']);
+                });
+            });
+            Route::prefix('configurations')->group(function () {
+                Route::post('/', [ConfigurationController__1::class, 'create']);
+                Route::get('/', [ConfigurationController__1::class, 'read']);
+                Route::put('/', [ConfigurationController__1::class, 'update']);
+                Route::delete('/', [ConfigurationController__1::class, 'delete']);
+            });
         });
     });
 });

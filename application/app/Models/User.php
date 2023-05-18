@@ -57,7 +57,7 @@ class User extends Model implements HasMedia
     ];
     protected $hidden = [
         'id',
-        'created_at',
+        // 'created_at',
         'updated_at',
         'role_id',
         'password',
