@@ -6,7 +6,7 @@ use App\Models\PaymentDetailsIndividualEntrepreneur;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UsersPaymentDetailsIndividualEntrepreneur__1 extends JsonResource
+class UsersPaymentDetailsIndividualEntrepreneurResource__1 extends JsonResource
 {
     /**
      * Transform the resource into an array.

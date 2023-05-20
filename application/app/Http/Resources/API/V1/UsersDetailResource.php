@@ -16,8 +16,8 @@ class UsersDetailResource extends JsonResource
     public function toArray(Request $request): array
     {
         $passport                             = $this->passport ? new UsersPassportResource__1($this->passport) : null;
-        $paymentDetailsIndividualEntrepreneur = $this->paymentDetailsIndividualEntrepreneur ? new UsersPaymentDetailsIndividualEntrepreneur__1($this->paymentDetailsIndividualEntrepreneur) : null;
-        $paymentDetailsSelfEmployed           = $this->paymentDetailsSelfEmployed ? new UsersPaymentDetailsSelfEmployed__1($this->paymentDetailsSelfEmployed) : null;
+        $paymentDetailsIndividualEntrepreneur = $this->paymentDetailsIndividualEntrepreneur ? new UsersPaymentDetailsIndividualEntrepreneurResource__1($this->paymentDetailsIndividualEntrepreneur) : null;
+        $paymentDetailsSelfEmployed           = $this->paymentDetailsSelfEmployed ? new UsersPaymentDetailsSelfEmployedResource__1($this->paymentDetailsSelfEmployed) : null;
         $agencyContract                       = $this->agencyContract;
 
         return array_merge(parent::toArray($request), [

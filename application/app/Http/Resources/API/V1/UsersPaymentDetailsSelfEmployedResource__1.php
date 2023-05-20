@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\API\V1;
 
-use App\Models\PaymentDetailsSelfEmployed;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\PaymentDetailsSelfEmployed;
 
-class UsersPaymentDetailsSelfEmployed__1 extends JsonResource
+class UsersPaymentDetailsSelfEmployedResource__1 extends JsonResource
 {
     /**
      * Transform the resource into an array.
