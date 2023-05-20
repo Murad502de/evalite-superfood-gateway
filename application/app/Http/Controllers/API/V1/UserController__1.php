@@ -9,7 +9,8 @@ use App\Http\Requests\API\V1\UserPasswordResetConfirmRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetRequest__1;
 use App\Http\Requests\API\V1\UserPasswordUpdateRequest__1;
 use App\Http\Resources\API\V1\PayoutsResource;
-use App\Http\Resources\API\V1\UsersMyResource;
+use App\Http\Resources\API\V1\UsersDetailResource;
+use App\Http\Resources\API\V1\UsersResource;
 use App\Http\Resources\API\V1\UsersSalesResource;
 use App\Models\PasswordReset;
 use App\Models\Payout;
@@ -35,7 +36,7 @@ class UserController__1 extends Controller
             $query->whereVerificationStatus($filter_status);
         })->paginate($request->per_page ?? 5);
 
-        return UsersMyResource::collection($users);
+        return UsersResource::collection($users);
     }
     public function create(UserCreateRequest__1 $request)
     {
@@ -45,7 +46,7 @@ class UserController__1 extends Controller
     }
     public function my()
     {
-        return new UsersMyResource(Config::get('user'));
+        return new UsersDetailResource(Config::get('user'));
     }
     public function check(User $user)
     {
