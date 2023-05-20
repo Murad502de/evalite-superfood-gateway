@@ -17,7 +17,7 @@ class UsersDetailResource extends JsonResource
     {
         $passport                             = $this->passport ? new UsersPassportResource__1($this->passport) : null;
         $paymentDetailsIndividualEntrepreneur = $this->paymentDetailsIndividualEntrepreneur ? new UsersPaymentDetailsIndividualEntrepreneur__1($this->paymentDetailsIndividualEntrepreneur) : null;
-        $paymentDetailsSelfEmployed           = $this->paymentDetailsSelfEmployed;
+        $paymentDetailsSelfEmployed           = $this->paymentDetailsSelfEmployed ? new UsersPaymentDetailsSelfEmployed__1($this->paymentDetailsSelfEmployed) : null;
         $agencyContract                       = $this->agencyContract;
 
         return array_merge(parent::toArray($request), [
