@@ -48,6 +48,10 @@ class UserController__1 extends Controller
     {
         return new UsersDetailResource(Config::get('user'));
     }
+    public function userDetail(User $user)
+    {
+        return new UsersDetailResource($user);
+    }
     public function check(User $user)
     {
         return response()->json(['message' => 'success'], Response::HTTP_OK);

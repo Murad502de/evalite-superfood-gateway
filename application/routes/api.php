@@ -42,6 +42,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [UserController__1::class, 'users']);
             Route::get('my', [UserController__1::class, 'my']);
             Route::prefix('{user:uuid}')->group(function () {
+                Route::get('/', [UserController__1::class, 'userDetail']);
                 Route::delete('/', [UserController__1::class, 'delete']);
                 Route::prefix('docs')->group(function () {
                     Route::get('agency-contract', [UserController__1::class, 'getAgencyContract'])->withoutMiddleware('user.token'); //FIXME with middleware
