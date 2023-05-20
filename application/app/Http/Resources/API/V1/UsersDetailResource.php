@@ -15,13 +15,18 @@ class UsersDetailResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $passport                             = $this->passport ? new UsersPassportResource__1($this->passport) : null;
+        $paymentDetailsIndividualEntrepreneur = $this->paymentDetailsIndividualEntrepreneur ? new UsersPaymentDetailsIndividualEntrepreneur__1($this->paymentDetailsIndividualEntrepreneur) : null;
+        $paymentDetailsSelfEmployed           = $this->paymentDetailsSelfEmployed;
+        $agencyContract                       = $this->agencyContract;
+
         return array_merge(parent::toArray($request), [
             'avatar'                                  => $this->getMedia(User::MEDIA_PREFIX_AVATAR . $this->uuid)->first()->getUrl(),
             'role'                                    => $this->role->code,
-            'passport'                                => $this->passport ? new UsersPassportResource__1($this->passport) : null,
-            'payment_details_individual_entrepreneur' => $this->paymentDetailsIndividualEntrepreneur,
-            'payment_details_self_employed'           => $this->paymentDetailsSelfEmployed,
-            'agency_contract'                         => $this->agencyContract,
+            'passport'                                => $passport,
+            'payment_details_individual_entrepreneur' => $paymentDetailsIndividualEntrepreneur,
+            'payment_details_self_employed'           => $paymentDetailsSelfEmployed,
+            'agency_contract'                         => $agencyContract,
         ]);
     }
 }
