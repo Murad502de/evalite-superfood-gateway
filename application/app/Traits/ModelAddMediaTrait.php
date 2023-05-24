@@ -8,7 +8,7 @@ trait ModelAddMediaTrait
     {
         $this->addMediaFromRequest($mediaFromRequest)
             ->sanitizingFileName(function ($fileName) {
-                return strtolower($fileName);
+                return str_replace(' ', '', strtolower($fileName));
             })
             ->toMediaCollection($mediaCollection);
     }
