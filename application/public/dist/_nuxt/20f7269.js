@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[24],{600:function(t,e,n){"use strict";n.r(e),e.default={components:{},props:{dialog:{type:Boolean,default:!1},title:{type:String,default:""}},data:function(){return{}},computed:{},watch:{},methods:{close:function(){this.$emit("close")},save:function(){this.$emit("save")}},created:function(){},mounted:function(){}}}}]);
