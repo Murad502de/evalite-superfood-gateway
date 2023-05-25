@@ -88,6 +88,13 @@ Route::prefix('v1')->group(function () {
                 Route::put('/', [ConfigurationController__1::class, 'update']);
                 Route::delete('/', [ConfigurationController__1::class, 'delete']);
             });
+            Route::prefix('users')->group(function () {
+                Route::prefix('{user:uuid}')->group(function () {
+                    Route::prefix('status')->group(function () {
+                        Route::post('verification', [UserController__1::class, 'setUserStatusVerification']);
+                    });
+                });
+            });
         });
     });
 });

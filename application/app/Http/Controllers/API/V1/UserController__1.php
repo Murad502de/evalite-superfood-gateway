@@ -8,6 +8,7 @@ use App\Http\Requests\API\V1\UserCreateRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetConfirmRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetRequest__1;
 use App\Http\Requests\API\V1\UserPasswordUpdateRequest__1;
+use App\Http\Requests\API\V1\UserStatusVerificationSet__1;
 use App\Http\Resources\API\V1\PayoutsResource;
 use App\Http\Resources\API\V1\UsersDetailResource;
 use App\Http\Resources\API\V1\UsersResource;
@@ -147,5 +148,13 @@ class UserController__1 extends Controller
     public function getUserPayout(User $user, Payout $payout)
     {
         return new PayoutsResource($payout);
+    }
+    public function setUserStatusVerification(User $user, UserStatusVerificationSet__1 $request)
+    {
+        $user->update([
+            'verification_status' => $request->verification_status,
+        ]);
+
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 }
