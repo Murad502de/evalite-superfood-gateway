@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-class UserStatusVerificationSet__1 extends FormRequest
+class UserStatusVerificationSetRequest__1 extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
