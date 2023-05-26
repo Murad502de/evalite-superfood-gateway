@@ -42,13 +42,11 @@ class UserController__1 extends Controller
     public function create(UserCreateRequest__1 $request)
     {
         $user = User::createNew($request);
-
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
-    public function update(UserCreateRequest__1 $request)
+    public function update(User $user, Request $request)
     {
-        $user = User::createNew($request);
-
+        $user->updateUser($request);
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
     public function my()

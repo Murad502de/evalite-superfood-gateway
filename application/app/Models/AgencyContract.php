@@ -18,8 +18,8 @@ class AgencyContract extends Model implements HasMedia
     InteractsWithMedia,
         ModelAddMediaTrait;
 
-    public const MEDIA_NAME_AGENCY_CONTRACT   = 'agency_contracts';
-    public const MEDIA_PREFIX_AGENCY_CONTRACT = 'agency_contracts/';
+    public const MEDIA_NAME_AGENCY_CONTRACT   = 'agency_contract';
+    public const MEDIA_PREFIX_AGENCY_CONTRACT = 'agency_contract/';
 
     protected $fillable = [
         'uuid',

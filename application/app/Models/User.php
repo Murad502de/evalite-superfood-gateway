@@ -141,6 +141,168 @@ class User extends Model implements HasMedia
         event(new UserRegisteredEvent($user));
         return $user;
     }
+
+    public function updateUser(Request $request)
+    {
+        $data = $request->all();
+        $this->update([
+            'first_name'      => $data['user_first_name'] ?? $this->first_name,
+            'second_name'     => $data['user_second_name'] ?? $this->second_name,
+            'third_name'      => $data['user_third_name'] ?? $this->third_name,
+            'gender'          => $data['user_gender'] ?? $this->gender,
+            'birthday'        => $data['user_birthday'] ? Carbon::parse($data['user_birthday']) : $this->birthday,
+            'employment_type' => $data['user_employment_type'] ?? $this->employment_type,
+            'email'           => $data['user_email'] ?? $this->email,
+            'phone'           => $data['user_phone'] ?? $this->phone,
+        ]);
+
+        if (isset($data['user_avatar'])) {
+            $avatar = $this->getMedia(self::MEDIA_PREFIX_AVATAR . $this->uuid)->first();
+
+            if ($avatar) {
+                $avatar->delete();
+            }
+
+            if ($request->file(self::MEDIA_NAME_AVATAR)) {
+                $this->modelAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $this->uuid);
+            }
+        }
+
+        if ($this->passport) {
+            $this->passport->update([
+                'full_name'            => $data['pass_full_name'] ?? $this->passport->full_name,
+                'series'               => $data['pass_series'] ?? $this->passport->series,
+                'number'               => $data['pass_number'] ?? $this->passport->number,
+                'issue_date'           => $data['pass_issue_date'] ? Carbon::parse($data['pass_issue_date']) : $this->passport->issue_date,
+                'registration_address' => $data['pass_registration_address'] ?? $this->passport->registration_address,
+                'issue_by'             => $data['pass_issue_by'] ?? $this->passport->issue_by,
+                'department_code'      => $data['pass_department_code'] ?? $this->passport->department_code,
+            ]);
+
+            if (isset($data['passport_main_spread'])) {
+                $passportMainSpread = $this->passport->getMedia(Passport::MEDIA_PREFIX_MAIN_SPREAD . $this->passport->uuid)->first();
+
+                if ($passportMainSpread) {
+                    $passportMainSpread->delete();
+                }
+
+                $this->passport->addMainSpreadMedia();
+            }
+
+            if (isset($data['passport_registration_spread'])) {
+                $passportRegistrationSpread = $this->passport->getMedia(Passport::MEDIA_PREFIX_REGISTRATION_SPREAD . $this->passport->uuid)->first();
+
+                if ($passportRegistrationSpread) {
+                    $passportRegistrationSpread->delete();
+                }
+
+                $this->passport->addRegistrationSpreadMedia();
+            }
+
+            if (isset($data['passport_verification_spread'])) {
+                $passportVerificationSpread = $this->passport->getMedia(Passport::MEDIA_PREFIX_VERIFICATION_SPREAD . $this->passport->uuid)->first();
+
+                if ($passportVerificationSpread) {
+                    $passportVerificationSpread->delete();
+                }
+
+                $this->passport->addVerificationSpreadMedia();
+            }
+        }
+
+        if ($this->paymentDetailsIndividualEntrepreneur) {
+            $this->paymentDetailsIndividualEntrepreneur->update([
+                'full_name'                  => $data['ie_full_name'] ?? $this->full_name,
+                'organization_legal_address' => $data['ie_organization_legal_address'] ?? $this->organization_legal_address,
+                'inn'                        => $data['ie_inn'] ?? $this->inn,
+                'ogrn'                       => $data['ie_ogrn'] ?? $this->ogrn,
+                'transaction_account'        => $data['ie_transaction_account'] ?? $this->transaction_account,
+                'bank'                       => $data['ie_bank'] ?? $this->bank,
+                'bank_inn'                   => $data['ie_bank_inn'] ?? $this->bank_inn,
+                'bank_bic'                   => $data['ie_bank_bic'] ?? $this->bank_bic,
+                'bank_correspondent_account' => $data['ie_bank_correspondent_account'] ?? $this->bank_correspondent_account,
+                'bank_legal_address'         => $data['ie_bank_legal_address'] ?? $this->bank_legal_address,
+            ]);
+
+            if (isset($data['ie_confirm_doc'])) {
+                $confirmDocIE = $this->paymentDetailsIndividualEntrepreneur->getMedia(PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $this->paymentDetailsIndividualEntrepreneur->uuid)->first();
+
+                if ($confirmDocIE) {
+                    $confirmDocIE->delete();
+                }
+
+                $this->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+                    PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+                    PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $this->paymentDetailsIndividualEntrepreneur->uuid
+                );
+            }
+        }
+
+        if ($this->paymentDetailsSelfEmployed) {
+            $this->paymentDetailsSelfEmployed->update([
+                'full_name'             => $data['se_full_name'] ?? $this->full_name,
+                'transaction_account'   => $data['se_transaction_account'] ?? $this->transaction_account,
+                'inn'                   => $data['se_inn'] ?? $this->inn,
+                'swift'                 => $data['se_swift'] ?? $this->swift,
+                'mailing_address'       => $data['se_mailing_address'] ?? $this->mailing_address,
+                'bank'                  => $data['se_bank'] ?? $this->bank,
+                'bic'                   => $data['se_bic'] ?? $this->bic,
+                'correspondent_account' => $data['se_correspondent_account'] ?? $this->correspondent_account,
+                'bank_inn'              => $data['se_bank_inn'] ?? $this->bank_inn,
+                'bank_kpp'              => $data['se_bank_kpp'] ?? $this->bank_kpp,
+            ]);
+
+            if (isset($data['se_confirm_doc'])) {
+                $confirmDocSE = $this->paymentDetailsSelfEmployed->getMedia(PaymentDetailsSelfEmployed::MEDIA_PREFIX . $this->paymentDetailsSelfEmployed->uuid)->first();
+
+                if ($confirmDocSE) {
+                    $confirmDocSE->delete();
+                }
+
+                $this->paymentDetailsSelfEmployed->modelAddMedia(
+                    PaymentDetailsSelfEmployed::MEDIA_NAME,
+                    PaymentDetailsSelfEmployed::MEDIA_PREFIX . $this->paymentDetailsSelfEmployed->uuid
+                );
+            }
+        }
+
+        if (isset($data[AgencyContract::MEDIA_NAME_AGENCY_CONTRACT])) {
+            if ($this->agencyContract) {
+                // dump('update'); //DELETE
+                // dump(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $this->agencyContract->uuid); //DELETE
+
+                $agencyContractMedia = $this->agencyContract->getMedia(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $this->agencyContract->uuid)->first();
+
+                // dump($agencyContractMedia); //DELETE
+
+                if ($agencyContractMedia) {
+                    $agencyContractMedia->delete();
+                }
+
+                if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT)) {
+                    $this->agencyContract->modelAddMedia(
+                        AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
+                        AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $this->agencyContract->uuid
+                    );
+                }
+            } else {
+                // dump('create'); //DELETE
+
+                $agencyContract = $this->agencyContract()->create();
+                $agencyContract->modelAddMedia(
+                    AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
+                    AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
+                );
+            }
+        } else {
+            // dump('delete'); //DELETE
+
+            // if ($this->agencyContract) {
+            //     $this->agencyContract->delete();
+            // }
+        }
+    }
+
     public function getAgencyContractData(): array
     {
         $petrovich = new Petrovich(Petrovich::GENDER_MALE);
