@@ -24,7 +24,7 @@ class PayoutsResource extends JsonResource
         return Arr::except(array_merge(parent::toArray($request), [
             'price'      => $price,
             'created_at' => $this->created_at,
-            'user'       => $this->user,
+            'user'       => new UsersDetailResource($this->user),
         ]), ['sales']);
     }
 }
