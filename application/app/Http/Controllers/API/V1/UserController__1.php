@@ -107,7 +107,7 @@ class UserController__1 extends Controller
     }
     public function getAgencyContract(User $user)
     {
-        return $user->generateAgencyContract()->stream();
+        return $user->generateAgencyContract()->output();
     }
     public function getUserSales(User $user)
     {
