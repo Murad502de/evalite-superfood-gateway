@@ -46,7 +46,10 @@ Route::prefix('v1')->group(function () {
                 Route::post('/', [UserController__1::class, 'update']);
                 Route::delete('/', [UserController__1::class, 'delete']);
                 Route::prefix('docs')->group(function () {
-                    Route::get('agency-contract', [UserController__1::class, 'getAgencyContract'])->withoutMiddleware('user.token'); //FIXME with middleware
+                    Route::prefix('agency-contract')->group(function () {
+                        Route::get('/', [UserController__1::class, 'getAgencyContract']);
+                        Route::post('/', [UserController__1::class, 'addAgencyContract']);
+                    });
                 });
                 Route::prefix('sales')->group(function () {
                     Route::get('/', [UserController__1::class, 'getUserSales']);

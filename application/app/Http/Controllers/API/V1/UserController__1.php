@@ -109,6 +109,11 @@ class UserController__1 extends Controller
     {
         return $user->generateAgencyContract()->output();
     }
+    public function addAgencyContract(User $user, Request $request)
+    {
+        $user->addAgencyContract($request);
+        return response()->json(['message' => 'success'], Response::HTTP_OK);
+    }
     public function getUserSales(User $user)
     {
         return new UsersSalesResource($user);

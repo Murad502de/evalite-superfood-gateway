@@ -17,11 +17,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-
-use Illuminate\Support\Facades\Log; //DELETE
+//DELETE
 
 class User extends Model implements HasMedia
 {
@@ -268,6 +268,7 @@ class User extends Model implements HasMedia
             }
         }
 
+        //FIXME must refactored
         if (isset($data[AgencyContract::MEDIA_NAME_AGENCY_CONTRACT])) {
             Log::info(__METHOD__, ['MEDIA_NAME_AGENCY_CONTRACT']); //DELETE
             Log::info(__METHOD__, [$data[AgencyContract::MEDIA_NAME_AGENCY_CONTRACT]]); //DELETE
@@ -318,6 +319,20 @@ class User extends Model implements HasMedia
             //     $this->agencyContract->delete();
             // }
         }
+    }
+    public function addAgencyContract(Request $request)
+    {
+        if ($this->agencyContract) {
+            $this->agencyContract->delete();
+        }
+
+        Log::info(__METHOD__, ['Create AGENCY_CONTRACT']); //DELETE
+
+        $agencyContract = $this->agencyContract()->create();
+        $agencyContract->modelAddMedia(
+            AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
+            AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
+        );
     }
 
     public function getAgencyContractData(): array
