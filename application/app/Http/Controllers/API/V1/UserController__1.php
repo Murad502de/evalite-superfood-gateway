@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Events\passwordResetCodeRequested;
+use App\Events\UserApprovedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\UserCreateRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetConfirmRequest__1;
@@ -160,9 +161,12 @@ class UserController__1 extends Controller
     }
     public function setUserStatusVerification(User $user, UserStatusVerificationSetRequest__1 $request)
     {
-        $user->update([
-            'verification_status' => $request->verification_status,
-        ]);
+        $user->update(['verification_status' => $request->verification_status]);
+        $isApproved = $request->verification_status === config('constants.user.verification_statuses.completed');
+
+        if ($isApproved) {
+            event(new UserApprovedEvent($user));
+        }
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }

@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Events\emailVerificationCodeRequested;
 use App\Events\passwordResetCodeRequested;
+use App\Events\UserApprovedEvent;
 use App\Events\UserRegisteredEvent;
 use App\Listeners\sendEmailVerificationCode;
 use App\Listeners\sendPasswordResetCode;
 use App\Listeners\sendUserRegisteredMailListener;
+use App\Listeners\UserApprovedListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserRegisteredEvent::class            => [
             sendUserRegisteredMailListener::class,
+        ],
+        UserApprovedEvent::class              => [
+            UserApprovedListener::class,
         ],
     ];
 
