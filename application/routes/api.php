@@ -41,6 +41,18 @@ Route::prefix('v1')->group(function () {
         Route::middleware(['user.token'])->group(function () {
             Route::get('/', [UserController__1::class, 'users']);
             Route::get('my', [UserController__1::class, 'my']);
+            Route::prefix('sales')->group(function () {
+                Route::get('/', [UserController__1::class, 'getUserSales']);
+                Route::get('directs', [UserController__1::class, 'getUserSalesDirects']);
+                Route::get('bonusses', [UserController__1::class, 'getUserSalesBonusses']);
+                Route::post('payout', [UserController__1::class, 'payoutUserSales']);
+            });
+            Route::prefix('payouts')->group(function () {
+                Route::get('/', [UserController__1::class, 'getUserPayouts']);
+                Route::prefix('{payout:uuid}')->group(function () {
+                    Route::get('/', [UserController__1::class, 'getUserPayout']);
+                });
+            });
             Route::prefix('{user:uuid}')->group(function () {
                 Route::get('/', [UserController__1::class, 'userDetail']);
                 Route::post('/', [UserController__1::class, 'update']);
@@ -51,16 +63,18 @@ Route::prefix('v1')->group(function () {
                         Route::post('/', [UserController__1::class, 'addAgencyContract']);
                     });
                 });
-                Route::prefix('sales')->group(function () {
-                    Route::get('/', [UserController__1::class, 'getUserSales']);
-                    Route::post('payout', [UserController__1::class, 'payoutUserSales']);
-                });
-                Route::prefix('payouts')->group(function () {
-                    Route::get('/', [UserController__1::class, 'getUserPayouts']);
-                    Route::prefix('{payout:uuid}')->group(function () {
-                        Route::get('/', [UserController__1::class, 'getUserPayout']);
-                    });
-                });
+                // Route::prefix('sales')->group(function () { //DELETE//FIXME
+                //     Route::get('/', [UserController__1::class, 'getUserSales']);
+                //     Route::get('directs', [UserController__1::class, 'getUserSalesDirect']);
+                //     Route::get('bonusses', [UserController__1::class, 'getUserSalesBonus']);
+                //     Route::post('payout', [UserController__1::class, 'payoutUserSales']);
+                // });
+                // Route::prefix('payouts')->group(function () { //DELETE//FIXME
+                //     Route::get('/', [UserController__1::class, 'getUserPayouts']);
+                //     Route::prefix('{payout:uuid}')->group(function () {
+                //         Route::get('/', [UserController__1::class, 'getUserPayout']);
+                //     });
+                // });
             });
         });
     });
@@ -77,26 +91,24 @@ Route::prefix('v1')->group(function () {
             });
         });
     });
-    Route::middleware(['user.token'])->group(function () {
-        Route::middleware(['user.role.admin'])->group(function () {
-            Route::prefix('payouts')->group(function () {
-                Route::get('/', [PayoutController__1::class, 'getPayouts']);
-                Route::prefix('{payout:uuid}')->group(function () {
-                    Route::get('/', [PayoutController__1::class, 'getPayout']);
-                    Route::put('payout', [PayoutController__1::class, 'payout']);
-                });
+    Route::middleware(['user.token', 'user.role.admin'])->group(function () {
+        Route::prefix('payouts')->group(function () {
+            Route::get('/', [PayoutController__1::class, 'getPayouts']);
+            Route::prefix('{payout:uuid}')->group(function () {
+                Route::get('/', [PayoutController__1::class, 'getPayout']);
+                Route::put('payout', [PayoutController__1::class, 'payout']);
             });
-            Route::prefix('configurations')->group(function () {
-                Route::post('/', [ConfigurationController__1::class, 'create']);
-                Route::get('/', [ConfigurationController__1::class, 'read']);
-                Route::put('/', [ConfigurationController__1::class, 'update']);
-                Route::delete('/', [ConfigurationController__1::class, 'delete']);
-            });
-            Route::prefix('users')->group(function () {
-                Route::prefix('{user:uuid}')->group(function () {
-                    Route::prefix('status')->group(function () {
-                        Route::post('verification', [UserController__1::class, 'setUserStatusVerification']);
-                    });
+        });
+        Route::prefix('configurations')->group(function () {
+            Route::post('/', [ConfigurationController__1::class, 'create']);
+            Route::get('/', [ConfigurationController__1::class, 'read']);
+            Route::put('/', [ConfigurationController__1::class, 'update']);
+            Route::delete('/', [ConfigurationController__1::class, 'delete']);
+        });
+        Route::prefix('users')->group(function () {
+            Route::prefix('{user:uuid}')->group(function () {
+                Route::prefix('status')->group(function () {
+                    Route::post('verification', [UserController__1::class, 'setUserStatusVerification']);
                 });
             });
         });

@@ -11,11 +11,13 @@ use App\Http\Requests\API\V1\UserPasswordResetRequest__1;
 use App\Http\Requests\API\V1\UserPasswordUpdateRequest__1;
 use App\Http\Requests\API\V1\UserStatusVerificationSetRequest__1;
 use App\Http\Resources\API\V1\PayoutsResource;
+use App\Http\Resources\API\V1\SalesResource;
 use App\Http\Resources\API\V1\UsersDetailResource;
 use App\Http\Resources\API\V1\UsersResource;
-use App\Http\Resources\API\V1\UsersSalesResource;
+use App\Models\Configuration;
 use App\Models\PasswordReset;
 use App\Models\Payout;
+use App\Models\Sale;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
 use Illuminate\Http\Request;
@@ -115,20 +117,59 @@ class UserController__1 extends Controller
         $user->addAgencyContract($request);
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
-    public function getUserSales(User $user)
+
+    // public function getUserSales(User $user, Request $request)
+    // {
+    //     $sales = Sale::whereUserId($user->id)->paginate($request->per_page ?? 5);
+    //     return SalesResource::collection($sales);
+    // }
+    // public function getUserSalesDirect(User $user)
+    // {
+    //     return new UsersSalesResource($user);
+    // }
+    // public function getUserSalesBonus(User $user)
+    // {
+    //     return new UsersSalesResource($user);
+    // }
+
+    public function getUserSales(Request $request)
     {
-        return new UsersSalesResource($user);
+        $sales = Sale::whereUserId(Config::get('user')->id)->paginate($request->per_page ?? 5);
+        return SalesResource::collection($sales);
     }
-    public function payoutUserSales(User $user)
+    public function getUserSalesDirects(Request $request)
     {
-        $sales       = $user->sales()->whereStatus(config('constants.sales.statuses.waiting'))->get();
-        $total_price = 0;
+        $configuration = Configuration::first();
+        $sales         = Sale::whereUserId(Config::get('user')->id)
+            ->wherePercent($configuration->percentage)
+            ->paginate($request->per_page ?? 5);
+
+        return SalesResource::collection($sales);
+    }
+    public function getUserSalesBonusses(Request $request)
+    {
+        $configuration = Configuration::first();
+        $sales         = Sale::whereUserId(Config::get('user')->id)
+            ->whereNot(function ($query) use ($configuration) {
+                $query->wherePercent($configuration->percentage);
+            })
+            ->paginate($request->per_page ?? 5);
+
+        return SalesResource::collection($sales);
+    }
+
+    public function payoutUserSales()
+    {
+        $user          = Config::get('user');
+        $configuration = Configuration::first();
+        $sales         = $user->sales()->whereStatus(config('constants.sales.statuses.waiting'))->get();
+        $total_price   = 0;
 
         foreach ($sales as $sale) {
             $total_price += ($sale->lead->price / 100) * $sale->percent;
         }
 
-        if (!($total_price >= 30000)) {
+        if (!($total_price >= $configuration->min_payout)) {
             return response()->json([
                 'status'  => false,
                 'message' => 'The minimum total price for payout has not been reached',
@@ -149,13 +190,12 @@ class UserController__1 extends Controller
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
-    public function getUserPayouts(User $user)
+    public function getUserPayouts()
     {
-        return $user->role->code === config('constants.user.roles.admin')
-        ? PayoutsResource::collection(Payout::all())
-        : PayoutsResource::collection($user->payouts);
+        $user = Config::get('user');
+        return PayoutsResource::collection($user->payouts);
     }
-    public function getUserPayout(User $user, Payout $payout)
+    public function getUserPayout(Payout $payout)
     {
         return new PayoutsResource($payout);
     }
