@@ -151,13 +151,23 @@ class UserController__1 extends Controller
 
     public function getUserSales(Request $request)
     {
-        $sales = Sale::whereUserId(Config::get('user')->id)->paginate($request->per_page ?? 5);
+        $request_params = $request->all();
+        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $sales          = Sale::whereUserId(Config::get('user')->id)
+            ->when($filter_status, function ($query) use ($filter_status) {
+                $query->whereStatus($filter_status);
+            })->paginate($request->per_page ?? 5);
         return SalesResource::collection($sales);
     }
     public function getUserSalesDirects(Request $request)
     {
-        $configuration = Configuration::first();
-        $sales         = Sale::whereUserId(Config::get('user')->id)
+        $request_params = $request->all();
+        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $configuration  = Configuration::first();
+        $sales          = Sale::whereUserId(Config::get('user')->id)
+            ->when($filter_status, function ($query) use ($filter_status) {
+                $query->whereStatus($filter_status);
+            })
             ->wherePercent($configuration->percentage)
             ->paginate($request->per_page ?? 5);
 
@@ -165,8 +175,13 @@ class UserController__1 extends Controller
     }
     public function getUserSalesBonusses(Request $request)
     {
-        $configuration = Configuration::first();
-        $sales         = Sale::whereUserId(Config::get('user')->id)
+        $request_params = $request->all();
+        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $configuration  = Configuration::first();
+        $sales          = Sale::whereUserId(Config::get('user')->id)
+            ->when($filter_status, function ($query) use ($filter_status) {
+                $query->whereStatus($filter_status);
+            })
             ->whereNot(function ($query) use ($configuration) {
                 $query->wherePercent($configuration->percentage);
             })
@@ -209,7 +224,12 @@ class UserController__1 extends Controller
     }
     public function getUserPayouts(Request $request)
     {
-        $payouts = Payout::whereUserId(Config::get('user')->id)->paginate($request->per_page ?? 5);
+        $request_params = $request->all();
+        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $payouts        = Payout::whereUserId(Config::get('user')->id)
+            ->when($filter_status, function ($query) use ($filter_status) {
+                $query->whereStatus($filter_status);
+            })->paginate($request->per_page ?? 5);
         return PayoutsResource::collection($payouts);
     }
     public function getUserPayout(Payout $payout)
