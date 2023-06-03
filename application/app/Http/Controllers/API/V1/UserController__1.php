@@ -132,6 +132,23 @@ class UserController__1 extends Controller
     //     return new UsersSalesResource($user);
     // }
 
+    public function getUserIncome()
+    {
+        $user          = Config::get('user');
+        $configuration = Configuration::first();
+        $sales         = $user->sales()->whereStatus(config('constants.sales.statuses.waiting'))->get();
+        $total_price   = 0;
+
+        foreach ($sales as $sale) {
+            $total_price += ($sale->lead->price / 100) * $sale->percent;
+        }
+
+        return [
+            'min_payout'  => $configuration->min_payout,
+            'total_price' => floor($total_price),
+        ];
+    }
+
     public function getUserSales(Request $request)
     {
         $sales = Sale::whereUserId(Config::get('user')->id)->paginate($request->per_page ?? 5);
@@ -190,10 +207,10 @@ class UserController__1 extends Controller
 
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
-    public function getUserPayouts()
+    public function getUserPayouts(Request $request)
     {
-        $user = Config::get('user');
-        return PayoutsResource::collection($user->payouts);
+        $payouts = Payout::whereUserId(Config::get('user')->id)->paginate($request->per_page ?? 5);
+        return PayoutsResource::collection($payouts);
     }
     public function getUserPayout(Payout $payout)
     {

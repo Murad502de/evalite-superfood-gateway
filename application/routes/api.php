@@ -41,6 +41,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware(['user.token'])->group(function () {
             Route::get('/', [UserController__1::class, 'users']);
             Route::get('my', [UserController__1::class, 'my']);
+            Route::get('income', [UserController__1::class, 'getUserIncome']);
             Route::prefix('sales')->group(function () {
                 Route::get('/', [UserController__1::class, 'getUserSales']);
                 Route::get('directs', [UserController__1::class, 'getUserSalesDirects']);
