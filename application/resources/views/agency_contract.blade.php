@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    {{-- <link rel="stylesheet" href="{{ URL::asset('/css/reset.css') }}" /> --}}
+    <link rel="stylesheet" href="{{ URL::asset('/css/reset.css') }}" />
     <title>
         Агентский договор на поиск клиентов
     </title>
