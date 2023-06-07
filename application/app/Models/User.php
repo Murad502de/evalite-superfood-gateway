@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+
 //DELETE
 
 class User extends Model implements HasMedia
@@ -373,6 +374,7 @@ class User extends Model implements HasMedia
             'employment_type_instrumental'  => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуальный предприниматель' : ($this->gender === 'male' ? 'Самозанятым' : 'Самозанятой'),
             'employment_type_prepositional' => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуальный предприниматель' : ($this->gender === 'male' ? 'Самозанятом' : 'Самозанятой'),
             'personal_link'                 => 'https://evalite.io/superfood?utm_source=' . $this->individual_code,
+            'invite_code'                   => $this->invite_code,
             'email'                         => $this->email,
             'phone'                         => $this->phone,
             'pass_series'                   => $this->passport->series,
