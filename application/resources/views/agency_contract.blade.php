@@ -9,26 +9,6 @@
     </title>
 
     <style>
-        /* @font-face {
-            font-family: 'Calibri';
-            src: url({{ URL::asset('/fonts/calibri_eot.eot') }});
-            src: local("☺"),
-                url({{ URL::asset('/fonts/calibri_woff.woff') }}) format("woff"),
-                url({{ URL::asset('/fonts/calibri.ttf') }}) format("truetype");
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Calibri';
-            src: url({{ URL::asset('/fonts/calibri_bold_eot.eot') }});
-            src: local("☺"),
-                url({{ URL::asset('/fonts/calibri_bold_woff.woff') }}) format("woff"),
-                url({{ URL::asset('/fonts/calibri_bold.ttf') }}) format("truetype");
-            font-weight: 700;
-            font-style: normal;
-        } */
-
         body {
             font-family: 'DejaVu Sans';
             font-size: 12px;
