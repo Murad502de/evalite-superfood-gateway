@@ -3,12 +3,12 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="{{ URL::asset('/css/reset.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ URL::asset('/css/reset.css') }}" /> --}}
     <title>
         Агентский договор на поиск клиентов
     </title>
 
-    {{-- <style>
+    <style>
         body {
             font-family: 'DejaVu Sans';
             font-size: 12px;
@@ -106,7 +106,7 @@
         .italic {
             font-style: italic;
         }
-    </style> --}}
+    </style>
 </head>
 
 <body>
