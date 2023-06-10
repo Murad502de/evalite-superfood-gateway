@@ -163,12 +163,13 @@ class UserController__1 extends Controller
     {
         $request_params = $request->all();
         $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        $configuration  = Configuration::first();
+        // $configuration  = Configuration::first();
         $sales          = Sale::whereUserId(Config::get('user')->id)
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })
-            ->wherePercent($configuration->percentage)
+            // ->wherePercent($configuration->percentage)
+            ->whereIsDirect(true)
             ->paginate($request->per_page ?? 5);
 
         return SalesResource::collection($sales);
@@ -177,14 +178,15 @@ class UserController__1 extends Controller
     {
         $request_params = $request->all();
         $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        $configuration  = Configuration::first();
+        // $configuration  = Configuration::first();
         $sales          = Sale::whereUserId(Config::get('user')->id)
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })
-            ->whereNot(function ($query) use ($configuration) {
-                $query->wherePercent($configuration->percentage);
-            })
+            // ->whereNot(function ($query) use ($configuration) {
+            //     $query->wherePercent($configuration->percentage);
+            // })
+            ->whereIsDirect(false)
             ->paginate($request->per_page ?? 5);
 
         return SalesResource::collection($sales);
