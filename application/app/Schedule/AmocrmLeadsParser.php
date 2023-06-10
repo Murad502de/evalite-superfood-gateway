@@ -63,9 +63,10 @@ class AmocrmLeadsParser
                     ]);
 
                     Sale::create([
-                        'percent' => $percentage,
-                        'lead_id' => $lead->id,
-                        'user_id' => $user->id,
+                        'percent'   => $percentage,
+                        'lead_id'   => $lead->id,
+                        'user_id'   => $user->id,
+                        'is_direct' => true,
                     ]);
 
                     foreach ($percentage_levels as $percentage_level) {
