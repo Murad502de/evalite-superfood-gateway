@@ -15,6 +15,7 @@ use App\Http\Resources\API\V1\SalesResource;
 use App\Http\Resources\API\V1\UsersDetailResource;
 use App\Http\Resources\API\V1\UsersResource;
 use App\Models\Configuration;
+use App\Models\Lead;
 use App\Models\PasswordReset;
 use App\Models\Payout;
 use App\Models\Sale;
@@ -159,16 +160,30 @@ class UserController__1 extends Controller
             })->paginate($request->per_page ?? 5);
         return SalesResource::collection($sales);
     }
-    public function getUserSalesDirects(Request $request)
+    public function getUserSalesDirects(Request $request) //FIXME perform code splitting optimization
     {
         $request_params = $request->all();
         $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        // $configuration  = Configuration::first();
+        $filter_name    = isset($request_params['filter_name']) ? $request_params['filter_name'] : null;
         $sales          = Sale::whereUserId(Config::get('user')->id)
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })
-            // ->wherePercent($configuration->percentage)
+            ->when($filter_name, function ($query) use ($filter_name) {
+                $leads = Lead::where('name', 'LIKE', '%' . $filter_name . '%')->get();
+
+                if (!count($leads)) {
+                    $query->whereLeadId(null);
+                } else {
+                    foreach ($leads as $key => $lead) {
+                        if (!$key) {
+                            $query->whereLeadId($lead->id);
+                        } else {
+                            $query->orWhere('lead_id', $lead->id);
+                        }
+                    }
+                }
+            })
             ->whereIsDirect(true)
             ->paginate($request->per_page ?? 5);
 
@@ -179,13 +194,13 @@ class UserController__1 extends Controller
         $request_params = $request->all();
         $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
         // $configuration  = Configuration::first();
-        $sales          = Sale::whereUserId(Config::get('user')->id)
+        $sales = Sale::whereUserId(Config::get('user')->id)
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })
-            // ->whereNot(function ($query) use ($configuration) {
-            //     $query->wherePercent($configuration->percentage);
-            // })
+        // ->whereNot(function ($query) use ($configuration) {
+        //     $query->wherePercent($configuration->percentage);
+        // })
             ->whereIsDirect(false)
             ->paginate($request->per_page ?? 5);
 
