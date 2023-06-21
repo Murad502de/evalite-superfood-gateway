@@ -21,6 +21,7 @@ class UsersDetailResource extends JsonResource
         $paymentDetailsIndividualEntrepreneur = $this->paymentDetailsIndividualEntrepreneur ? new UsersPaymentDetailsIndividualEntrepreneurResource__1($this->paymentDetailsIndividualEntrepreneur) : null;
         $paymentDetailsSelfEmployed           = $this->paymentDetailsSelfEmployed ? new UsersPaymentDetailsSelfEmployedResource__1($this->paymentDetailsSelfEmployed) : null;
         $agencyContract                       = $this->agencyContract ? new UsersAgencyContractResource__1($this->agencyContract) : null;
+        $referral_link                        = $this->getReferralLink();
 
         return Arr::except(array_merge(parent::toArray($request), [
             'avatar'                                  => $avatar ? $avatar->getUrl() : null,
@@ -29,6 +30,7 @@ class UsersDetailResource extends JsonResource
             'payment_details_individual_entrepreneur' => $paymentDetailsIndividualEntrepreneur,
             'payment_details_self_employed'           => $paymentDetailsSelfEmployed,
             'agency_contract'                         => $agencyContract,
+            'referral_link'                           => $referral_link,
         ]), ['media']);
     }
 }

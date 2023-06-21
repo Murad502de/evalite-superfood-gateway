@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\UserRegisteredEvent;
 use App\Libs\PetrovichPhpMaster\Petrovich;
+use App\Models\Configuration;
 use App\Traits\GenerateUserTokenTrait;
 use App\Traits\GenerateUuidModelTrait;
 use App\Traits\ModelAddMediaTrait;
@@ -21,8 +22,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-
-//DELETE
 
 class User extends Model implements HasMedia
 {
@@ -407,6 +406,11 @@ class User extends Model implements HasMedia
     public function generateAgencyContract()
     {
         return $this->loadPdfFromView(self::AGENCY_CONTRACT_VIEW_NAME, $this->getAgencyContractData());
+    }
+    public function getReferralLink()
+    {
+        $configuration = Configuration::first();
+        return $configuration ? $configuration->personal_link_host . '?utm_source=' . $this->individual_code : null;
     }
 
     /* RELATIONS */
