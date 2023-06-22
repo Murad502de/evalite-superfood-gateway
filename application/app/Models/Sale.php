@@ -19,6 +19,7 @@ class Sale extends Model
         'user_id',
         'payout_id',
         'is_direct',
+        'level',
     ];
     protected $hidden = [
         'id',

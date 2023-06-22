@@ -82,6 +82,7 @@ class AmocrmLeadsParser
                             'percent' => $percentage_level['percentage'],
                             'lead_id' => $lead->id,
                             'user_id' => $user_parent_tmp->id,
+                            'level'   => $percentage_level['level'],
                         ]);
                     }
                 }
