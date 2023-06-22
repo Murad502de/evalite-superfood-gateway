@@ -208,6 +208,7 @@ class UserController__1 extends Controller
         $request_params   = $request->all();
         $filter_date_from = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
         $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
+        $filter_level     = isset($request_params['filter_level']) ? $request_params['filter_level'] : null;
         $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
         $filter_lead_name = isset($request_params['filter_lead_name']) ? $request_params['filter_lead_name'] : null;
         $sales            = Sale::whereUserId(Config::get('user')->id)
@@ -218,7 +219,7 @@ class UserController__1 extends Controller
                 $query->where('created_at', '<=', $filter_date_to);
             })
             ->when($filter_lead_name, function ($query) use ($filter_lead_name) {
-                $leads = Lead::where('name', 'LIKE', '%' . $filter_lead_name . '%')->get();
+                $leads = Lead::where('name', 'ILIKE', '%' . $filter_lead_name . '%')->get();
 
                 if (!count($leads)) {
                     $query->whereLeadId(null);
@@ -231,6 +232,9 @@ class UserController__1 extends Controller
                         }
                     }
                 }
+            })
+            ->when($filter_level, function ($query) use ($filter_level) {
+                $query->whereLevel($filter_level);
             })
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
