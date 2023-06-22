@@ -22,7 +22,6 @@ class Sale extends Model
     ];
     protected $hidden = [
         'id',
-        'created_at',
         'updated_at',
         'lead_id',
         'user_id',
