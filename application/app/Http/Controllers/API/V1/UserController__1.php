@@ -279,9 +279,17 @@ class UserController__1 extends Controller
     }
     public function getUserPayouts(Request $request)
     {
-        $request_params = $request->all();
-        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        $payouts        = Payout::whereUserId(Config::get('user')->id)
+        $request_params   = $request->all();
+        $filter_date_from = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
+        $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
+        $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $payouts          = Payout::whereUserId(Config::get('user')->id)
+            ->when($filter_date_from, function ($query) use ($filter_date_from) {
+                $query->where('created_at', '>=', $filter_date_from);
+            })
+            ->when($filter_date_to, function ($query) use ($filter_date_to) {
+                $query->where('created_at', '<=', $filter_date_to);
+            })
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })->paginate($request->per_page ?? 5);
