@@ -11,6 +11,7 @@ use App\Http\Requests\API\V1\UserPasswordResetRequest__1;
 use App\Http\Requests\API\V1\UserPasswordUpdateRequest__1;
 use App\Http\Requests\API\V1\UserStatusVerificationSetRequest__1;
 use App\Http\Resources\API\V1\PayoutsResource;
+use App\Http\Resources\API\V1\SalesBonussesResource;
 use App\Http\Resources\API\V1\SalesResource;
 use App\Http\Resources\API\V1\UsersDetailResource;
 use App\Http\Resources\API\V1\UsersResource;
@@ -237,7 +238,7 @@ class UserController__1 extends Controller
             ->whereIsDirect(false)
             ->paginate($request->per_page ?? 5);
 
-        return SalesResource::collection($sales);
+        return SalesBonussesResource::collection($sales);
     }
 
     public function payoutUserSales()
