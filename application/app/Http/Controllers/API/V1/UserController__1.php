@@ -21,6 +21,7 @@ use App\Models\Payout;
 use App\Models\Sale;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
@@ -160,17 +161,24 @@ class UserController__1 extends Controller
             })->paginate($request->per_page ?? 5);
         return SalesResource::collection($sales);
     }
-    public function getUserSalesDirects(Request $request) //FIXME perform code splitting optimization
+    public function getUserSalesDirects(Request $request)
     {
-        $request_params = $request->all();
-        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        $filter_name    = isset($request_params['filter_name']) ? $request_params['filter_name'] : null;
-        $sales          = Sale::whereUserId(Config::get('user')->id)
-            ->when($filter_status, function ($query) use ($filter_status) {
-                $query->whereStatus($filter_status);
+        //FIXME perform code splitting optimization
+
+        $request_params   = $request->all();
+        $filter_date_from = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
+        $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
+        $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $filter_lead_name = isset($request_params['filter_lead_name']) ? $request_params['filter_lead_name'] : null;
+        $sales            = Sale::whereUserId(Config::get('user')->id)
+            ->when($filter_date_from, function ($query) use ($filter_date_from) {
+                $query->where('created_at', '>=', $filter_date_from);
             })
-            ->when($filter_name, function ($query) use ($filter_name) {
-                $leads = Lead::where('name', 'LIKE', '%' . $filter_name . '%')->get();
+            ->when($filter_date_to, function ($query) use ($filter_date_to) {
+                $query->where('created_at', '<=', $filter_date_to);
+            })
+            ->when($filter_lead_name, function ($query) use ($filter_lead_name) {
+                $leads = Lead::where('name', 'LIKE', '%' . $filter_lead_name . '%')->get();
 
                 if (!count($leads)) {
                     $query->whereLeadId(null);
@@ -184,6 +192,9 @@ class UserController__1 extends Controller
                     }
                 }
             })
+            ->when($filter_status, function ($query) use ($filter_status) {
+                $query->whereStatus($filter_status);
+            })
             ->whereIsDirect(true)
             ->paginate($request->per_page ?? 5);
 
@@ -191,16 +202,38 @@ class UserController__1 extends Controller
     }
     public function getUserSalesBonusses(Request $request)
     {
-        $request_params = $request->all();
-        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        // $configuration  = Configuration::first();
-        $sales = Sale::whereUserId(Config::get('user')->id)
+        //FIXME perform code splitting optimization
+
+        $request_params   = $request->all();
+        $filter_date_from = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
+        $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
+        $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $filter_lead_name = isset($request_params['filter_lead_name']) ? $request_params['filter_lead_name'] : null;
+        $sales            = Sale::whereUserId(Config::get('user')->id)
+            ->when($filter_date_from, function ($query) use ($filter_date_from) {
+                $query->where('created_at', '>=', $filter_date_from);
+            })
+            ->when($filter_date_to, function ($query) use ($filter_date_to) {
+                $query->where('created_at', '<=', $filter_date_to);
+            })
+            ->when($filter_lead_name, function ($query) use ($filter_lead_name) {
+                $leads = Lead::where('name', 'LIKE', '%' . $filter_lead_name . '%')->get();
+
+                if (!count($leads)) {
+                    $query->whereLeadId(null);
+                } else {
+                    foreach ($leads as $key => $lead) {
+                        if (!$key) {
+                            $query->whereLeadId($lead->id);
+                        } else {
+                            $query->orWhere('lead_id', $lead->id);
+                        }
+                    }
+                }
+            })
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })
-        // ->whereNot(function ($query) use ($configuration) {
-        //     $query->wherePercent($configuration->percentage);
-        // })
             ->whereIsDirect(false)
             ->paginate($request->per_page ?? 5);
 
