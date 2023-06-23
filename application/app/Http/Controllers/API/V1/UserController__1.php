@@ -26,6 +26,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class UserController__1 extends Controller
 {
@@ -206,30 +207,58 @@ class UserController__1 extends Controller
     {
         //FIXME perform code splitting optimization
 
-        $request_params   = $request->all();
-        $filter_date_from = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
-        $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
-        $filter_level     = isset($request_params['filter_level']) ? $request_params['filter_level'] : null;
-        $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        $filter_lead_name = isset($request_params['filter_lead_name']) ? $request_params['filter_lead_name'] : null;
-        $sales            = Sale::whereUserId(Config::get('user')->id)
+        $request_params      = $request->all();
+        $filter_date_from    = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
+        $filter_date_to      = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
+        $filter_level        = isset($request_params['filter_level']) ? $request_params['filter_level'] : null;
+        $filter_status       = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $filter_lead_name    = isset($request_params['filter_lead_name']) ? $request_params['filter_lead_name'] : null;
+        $filter_partner_name = isset($request_params['filter_partner_name']) ? $request_params['filter_partner_name'] : null;
+        $order_by            = isset($request_params['order_by']) ? $request_params['order_by'] : 'created_at';
+        $ordering_rule       = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
+        $sales               = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
+            ->whereUserId(Config::get('user')->id)
+            ->whereIsDirect(false)
+            ->addSelect(DB::raw('*, (leads.price / 100) * cast(sales.percent as int) as sales_price'))
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
-                $query->where('created_at', '>=', $filter_date_from);
+                $query->where('salescreated_at', '>=', $filter_date_from);
             })
             ->when($filter_date_to, function ($query) use ($filter_date_to) {
-                $query->where('created_at', '<=', $filter_date_to);
+                $query->where('salescreated_at', '<=', $filter_date_to);
             })
             ->when($filter_lead_name, function ($query) use ($filter_lead_name) {
-                $leads = Lead::where('name', 'ILIKE', '%' . $filter_lead_name . '%')->get();
+                $query->where('leads.name', 'ILIKE', '%' . $filter_lead_name . '%');
+            })
+            ->when($filter_partner_name, function ($query) use ($filter_partner_name) {
+                $sales       = Sale::whereUserId(Config::get('user')->id)->whereIsDirect(false)->get();
+                $salesTarget = [];
+                // dump($sales); //DELETE
 
-                if (!count($leads)) {
-                    $query->whereLeadId(null);
+                foreach ($sales as $sale) {
+                    $sales_direct = $sale->lead->sales->where('is_direct', true);
+                    // dump($sales_direct); //DELETE
+
+                    foreach ($sales_direct as $sale_direct) {
+                        $user         = $sale_direct->user;
+                        $userFullName = $user->second_name . ' ' . $user->first_name . ' ' . $user->third_name;
+                        // dump($userFullName); //DELETE
+
+                        if (preg_match("/" . mb_strtolower($filter_partner_name) . "/i", mb_strtolower($userFullName))) {
+                            $salesTarget[] = $sale;
+                        }
+                    }
+                }
+
+                // dump($salesTarget); //DELETE
+
+                if (!count($salesTarget)) {
+                    $query->where('sales.id', null);
                 } else {
-                    foreach ($leads as $key => $lead) {
+                    foreach ($salesTarget as $key => $saleTarget) {
                         if (!$key) {
-                            $query->whereLeadId($lead->id);
+                            $query->where('sales.id', $saleTarget->id);
                         } else {
-                            $query->orWhere('lead_id', $lead->id);
+                            $query->orWhere('sales.id', $saleTarget->id);
                         }
                     }
                 }
@@ -240,8 +269,22 @@ class UserController__1 extends Controller
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })
-            ->whereIsDirect(false)
-            ->paginate($request->per_page ?? 5);
+            ->when($order_by === 'created_at', function ($query) use ($ordering_rule) {
+                $query->orderBy('sales.created_at', $ordering_rule);
+            })
+            ->when($order_by === 'name', function ($query) use ($ordering_rule) {
+                $query->orderBy('leads.name', $ordering_rule);
+            })
+            ->when($order_by === 'price', function ($query) use ($ordering_rule) {
+                $query->orderBy('sales_price', $ordering_rule);
+            })
+            ->when($order_by === 'level', function ($query) use ($ordering_rule) {
+                $query->orderBy('sales.level', $ordering_rule);
+            })
+            ->when($order_by === 'status', function ($query) use ($ordering_rule) {
+                $query->orderBy('sales.status', $ordering_rule);
+            })
+            ->paginate($request->per_page ?? 25);
 
         return SalesBonussesResource::collection($sales);
     }
