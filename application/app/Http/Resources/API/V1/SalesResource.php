@@ -15,7 +15,7 @@ class SalesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return array_merge(parent::toArray($request), [
-            'name'  => $this->lead->name,
+            // 'name'  => $this->lead->name,
             'price' => floor(($this->lead->price / 100) * $this->percent),
         ]);
     }

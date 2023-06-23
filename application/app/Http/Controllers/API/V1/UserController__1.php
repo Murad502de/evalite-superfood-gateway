@@ -171,33 +171,34 @@ class UserController__1 extends Controller
         $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
         $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
         $filter_lead_name = isset($request_params['filter_lead_name']) ? $request_params['filter_lead_name'] : null;
-        $sales            = Sale::whereUserId(Config::get('user')->id)
+        $order_by         = isset($request_params['order_by']) ? $request_params['order_by'] : 'created_at';
+        $ordering_rule    = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
+
+        $sales = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
+            ->whereUserId(Config::get('user')->id)
+            ->whereIsDirect(true)
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
-                $query->where('created_at', '>=', $filter_date_from);
+                $query->where('sales.created_at', '>=', $filter_date_from);
             })
             ->when($filter_date_to, function ($query) use ($filter_date_to) {
-                $query->where('created_at', '<=', $filter_date_to);
+                $query->where('sales.created_at', '<=', $filter_date_to);
             })
             ->when($filter_lead_name, function ($query) use ($filter_lead_name) {
-                $leads = Lead::where('name', 'LIKE', '%' . $filter_lead_name . '%')->get();
-
-                if (!count($leads)) {
-                    $query->whereLeadId(null);
-                } else {
-                    foreach ($leads as $key => $lead) {
-                        if (!$key) {
-                            $query->whereLeadId($lead->id);
-                        } else {
-                            $query->orWhere('lead_id', $lead->id);
-                        }
-                    }
-                }
+                $query->where('leads.name', 'ILIKE', '%' . $filter_lead_name . '%');
             })
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })
-            ->whereIsDirect(true)
-            ->paginate($request->per_page ?? 5);
+            ->when($order_by === 'created_at', function ($query) use ($ordering_rule) {
+                $query->orderBy('sales.created_at', $ordering_rule);
+            })
+            ->when($order_by === 'name', function ($query) use ($ordering_rule) {
+                $query->orderBy('leads.name', $ordering_rule);
+            })
+            ->when($order_by === 'status', function ($query) use ($ordering_rule) {
+                $query->orderBy('sales.status', $ordering_rule);
+            })
+            ->paginate($request->per_page ?? 25);
 
         return SalesResource::collection($sales);
     }
