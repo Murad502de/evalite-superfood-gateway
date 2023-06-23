@@ -60,6 +60,7 @@ class AmocrmLeadsParser
                         'name'       => $found_lead_name,
                         'price'      => $found_lead_price,
                         'utm_source' => $utm_source_value,
+                        'user_id'    => $user->id,
                     ]);
 
                     Sale::create([

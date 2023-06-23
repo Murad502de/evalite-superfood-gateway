@@ -35,7 +35,7 @@ class SalesBonussesResource extends JsonResource
         return Arr::except(array_merge(parent::toArray($request), [
             // 'name'         => $this->lead->name,
             'price'        => floor(($this->lead->price / 100) * $this->percent),
-            'partner_name' => $partner_name,
+            // 'partner_name' => $partner_name,
         ]), ['lead']);
     }
 }

@@ -17,6 +17,7 @@ class Lead extends Model
         'name',
         'price',
         'utm_source',
+        'user_id',
     ];
     protected $hidden = [
         'id',

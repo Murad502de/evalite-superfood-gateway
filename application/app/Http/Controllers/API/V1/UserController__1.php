@@ -23,6 +23,7 @@ use App\Models\Sale;
 use App\Models\User;
 use App\Traits\GenerateCodeTrait;
 use Carbon\Carbon;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
@@ -176,8 +177,9 @@ class UserController__1 extends Controller
         $ordering_rule    = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
 
         $sales = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
-            ->whereUserId(Config::get('user')->id)
+            ->where('sales.user_id', Config::get('user')->id)
             ->whereIsDirect(true)
+            ->addSelect(DB::raw("*, (leads.price / 100) * cast(sales.percent as int) as sales_price"))
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
                 $query->where('sales.created_at', '>=', $filter_date_from);
             })
@@ -195,6 +197,9 @@ class UserController__1 extends Controller
             })
             ->when($order_by === 'name', function ($query) use ($ordering_rule) {
                 $query->orderBy('leads.name', $ordering_rule);
+            })
+            ->when($order_by === 'price', function ($query) use ($ordering_rule) {
+                $query->orderBy('sales_price', $ordering_rule);
             })
             ->when($order_by === 'status', function ($query) use ($ordering_rule) {
                 $query->orderBy('sales.status', $ordering_rule);
@@ -216,10 +221,15 @@ class UserController__1 extends Controller
         $filter_partner_name = isset($request_params['filter_partner_name']) ? $request_params['filter_partner_name'] : null;
         $order_by            = isset($request_params['order_by']) ? $request_params['order_by'] : 'created_at';
         $ordering_rule       = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
-        $sales               = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
-            ->whereUserId(Config::get('user')->id)
+
+        $users = DB::table('users');
+        $sales = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
+            ->joinSub($users, 'users', function (JoinClause $join) {
+                $join->on('users.id', '=', 'leads.user_id');
+            })
+            ->where('sales.user_id', Config::get('user')->id)
             ->whereIsDirect(false)
-            ->addSelect(DB::raw('*, (leads.price / 100) * cast(sales.percent as int) as sales_price'))
+            ->addSelect(DB::raw("*, (leads.price / 100) * cast(sales.percent as int) as sales_price, concat(second_name, ' ', first_name, ' ', third_name) as partner_name"))
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
                 $query->where('salescreated_at', '>=', $filter_date_from);
             })
@@ -277,6 +287,9 @@ class UserController__1 extends Controller
             })
             ->when($order_by === 'price', function ($query) use ($ordering_rule) {
                 $query->orderBy('sales_price', $ordering_rule);
+            })
+            ->when($order_by === 'partner_name', function ($query) use ($ordering_rule) {
+                $query->orderBy('partner_name', $ordering_rule);
             })
             ->when($order_by === 'level', function ($query) use ($ordering_rule) {
                 $query->orderBy('sales.level', $ordering_rule);
