@@ -15,15 +15,16 @@ class PayoutsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $price = 0;
+        // $price = 0;
 
-        foreach ($this->sales as $sale) {
-            $price += ($sale->lead->price / 100) * $sale->percent;
-        }
+        // foreach ($this->sales as $sale) {
+        //     $price += ($sale->lead->price / 100) * $sale->percent;
+        // }
 
         return Arr::except(array_merge(parent::toArray($request), [
-            'price'      => floor($price),
+            'uuid' => $this->uuid,
             'created_at' => $this->created_at,
+            // 'price'      => floor($price),
             'user'       => new UsersDetailResource($this->user),
         ]), ['sales']);
     }

@@ -322,6 +322,7 @@ class UserController__1 extends Controller
 
         $payout = Payout::create([
             'user_id' => $user->id,
+            'price'   => floor($total_price),
             'status'  => config('constants.payouts.statuses.processing'),
         ]);
 
@@ -350,6 +351,7 @@ class UserController__1 extends Controller
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
             })->paginate($request->per_page ?? 5);
+
         return PayoutsResource::collection($payouts);
     }
     public function getUserPayout(Payout $payout)

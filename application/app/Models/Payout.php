@@ -15,6 +15,7 @@ class Payout extends Model
     protected $fillable = [
         'uuid',
         'user_id',
+        'price',
         'status',
     ];
     protected $hidden = [
