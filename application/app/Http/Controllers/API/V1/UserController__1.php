@@ -221,9 +221,8 @@ class UserController__1 extends Controller
         $filter_partner_name = isset($request_params['filter_partner_name']) ? $request_params['filter_partner_name'] : null;
         $order_by            = isset($request_params['order_by']) ? $request_params['order_by'] : 'created_at';
         $ordering_rule       = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
-
-        $users = DB::table('users');
-        $sales = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
+        $users               = DB::table('users');
+        $sales               = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
             ->joinSub($users, 'users', function (JoinClause $join) {
                 $join->on('users.id', '=', 'leads.user_id');
             })
@@ -341,6 +340,8 @@ class UserController__1 extends Controller
         $filter_date_from = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
         $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
         $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $order_by         = isset($request_params['order_by']) ? $request_params['order_by'] : 'created_at';
+        $ordering_rule    = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
         $payouts          = Payout::whereUserId(Config::get('user')->id)
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
                 $query->where('created_at', '>=', $filter_date_from);
@@ -350,7 +351,17 @@ class UserController__1 extends Controller
             })
             ->when($filter_status, function ($query) use ($filter_status) {
                 $query->whereStatus($filter_status);
-            })->paginate($request->per_page ?? 5);
+            })
+            ->when($order_by === 'created_at', function ($query) use ($ordering_rule) {
+                $query->orderBy('created_at', $ordering_rule);
+            })
+            ->when($order_by === 'price', function ($query) use ($ordering_rule) {
+                $query->orderBy('price', $ordering_rule);
+            })
+            ->when($order_by === 'status', function ($query) use ($ordering_rule) {
+                $query->orderBy('status', $ordering_rule);
+            })
+            ->paginate($request->per_page ?? 5);
 
         return PayoutsResource::collection($payouts);
     }
