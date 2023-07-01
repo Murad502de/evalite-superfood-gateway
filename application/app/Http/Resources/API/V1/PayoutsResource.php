@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\API\V1;
 
+use App\Models\Payout;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
@@ -21,12 +22,16 @@ class PayoutsResource extends JsonResource
         //     $price += ($sale->lead->price / 100) * $sale->percent;
         // }
 
+        $receipt = $this->getMedia(Payout::MEDIA_PREFIX_RECEIPT . $this->uuid)->first();
+
         return Arr::except(array_merge(parent::toArray($request), [
-            'uuid'       => $this->uuid,
+            'uuid'        => $this->uuid,
+            'receipt_url' => $receipt ? $receipt->getUrl() : null,
+            'user'        => new UsersDetailResource($this->user),
             // 'created_at' => $this->created_at,
             // 'price'      => floor($price),
-            'user'       => new UsersDetailResource($this->user),
         ]), [
+            'media',
             'sales',
             'role_id',
             'first_name',
