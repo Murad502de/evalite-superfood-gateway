@@ -22,10 +22,26 @@ class PayoutsResource extends JsonResource
         // }
 
         return Arr::except(array_merge(parent::toArray($request), [
-            'uuid' => $this->uuid,
-            'created_at' => $this->created_at,
+            'uuid'       => $this->uuid,
+            // 'created_at' => $this->created_at,
             // 'price'      => floor($price),
             'user'       => new UsersDetailResource($this->user),
-        ]), ['sales']);
+        ]), [
+            'sales',
+            'role_id',
+            'first_name',
+            'second_name',
+            'third_name',
+            'gender',
+            'birthday',
+            'employment_type',
+            'password',
+            'token',
+            'phone',
+            'invite_code',
+            'individual_code',
+            'promo_code',
+            'verification_status',
+        ]);
     }
 }

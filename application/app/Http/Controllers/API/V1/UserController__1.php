@@ -35,15 +35,67 @@ class UserController__1 extends Controller
 
     public function users(Request $request)
     {
-        $request_params = $request->all();
-        $filter_status  = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
-        $users          = User::whereHas('role', function ($query) {
+        $request_params   = $request->all();
+        $filter_status    = isset($request_params['filter_status']) ? $request_params['filter_status'] : null;
+        $filter_date_from = isset($request_params['filter_date_from']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_from'))->startOfDay()->toDateTimeString() : null;
+        $filter_date_to   = isset($request_params['filter_date_to']) ? Carbon::createFromFormat('d.m.Y', $request->get('filter_date_to'))->endOfDay()->toDateTimeString() : null;
+        $filter_email     = isset($request_params['filter_email']) ? $request_params['filter_email'] : null;
+        $filter_full_name = isset($request_params['filter_full_name']) ? $request_params['filter_full_name'] : null;
+        $order_by         = isset($request_params['order_by']) ? $request_params['order_by'] : 'created_at';
+        $ordering_rule    = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
+        $users            = User::whereHas('role', function ($query) {
             $query->whereNot(function ($query) {
                 $query->where('code', config('constants.user.roles.admin'));
             });
-        })->when($filter_status, function ($query) use ($filter_status) {
-            $query->whereVerificationStatus($filter_status);
-        })->paginate($request->per_page ?? 5);
+        })
+            ->when($filter_status, function ($query) use ($filter_status) {
+                $query->whereVerificationStatus($filter_status);
+            })
+            ->addSelect(DB::raw("*, concat(second_name, ' ', first_name, ' ', third_name) as full_name"))
+            ->when($filter_date_from, function ($query) use ($filter_date_from) {
+                $query->where('created_at', '>=', $filter_date_from);
+            })
+            ->when($filter_date_to, function ($query) use ($filter_date_to) {
+                $query->where('created_at', '<=', $filter_date_to);
+            })
+            ->when($filter_email, function ($query) use ($filter_email) {
+                $query->where('email', 'ILIKE', '%' . $filter_email . '%');
+            })
+            ->when($filter_full_name, function ($query) use ($filter_full_name, $filter_status) {
+                $users = User::whereHas('role', function ($query) {
+                    $query->whereNot(function ($query) {
+                        $query->where('code', config('constants.user.roles.admin'));
+                    });
+                })
+                    ->when($filter_status, function ($query) use ($filter_status) {
+                        $query->whereVerificationStatus($filter_status);
+                    })
+                    ->get();
+                $usersTarget = [];
+
+                foreach ($users as $user) {
+                    $userFullName = $user->second_name . ' ' . $user->first_name . ' ' . $user->third_name;
+                    if (preg_match("/" . mb_strtolower($filter_full_name) . "/i", mb_strtolower($userFullName))) {
+                        $usersTarget[] = $user;
+                    }
+                }
+
+                if (!count($usersTarget)) {
+                    $query->where('id', null);
+                } else {
+                    foreach ($usersTarget as $key => $userTarget) {
+                        if (!$key) {
+                            $query->where('id', $userTarget->id);
+                        } else {
+                            $query->orWhere('id', $userTarget->id);
+                        }
+                    }
+                }
+            })
+            ->when($order_by, function ($query) use ($order_by, $ordering_rule) {
+                $query->orderBy($order_by, $ordering_rule);
+            })
+            ->paginate($request->per_page ?? 5);
 
         return UsersResource::collection($users);
     }
@@ -230,10 +282,10 @@ class UserController__1 extends Controller
             ->whereIsDirect(false)
             ->addSelect(DB::raw("*, (leads.price / 100) * cast(sales.percent as int) as sales_price, concat(second_name, ' ', first_name, ' ', third_name) as partner_name"))
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
-                $query->where('salescreated_at', '>=', $filter_date_from);
+                $query->where('sales.created_at', '>=', $filter_date_from);
             })
             ->when($filter_date_to, function ($query) use ($filter_date_to) {
-                $query->where('salescreated_at', '<=', $filter_date_to);
+                $query->where('sales.created_at', '<=', $filter_date_to);
             })
             ->when($filter_lead_name, function ($query) use ($filter_lead_name) {
                 $query->where('leads.name', 'ILIKE', '%' . $filter_lead_name . '%');
@@ -241,24 +293,19 @@ class UserController__1 extends Controller
             ->when($filter_partner_name, function ($query) use ($filter_partner_name) {
                 $sales       = Sale::whereUserId(Config::get('user')->id)->whereIsDirect(false)->get();
                 $salesTarget = [];
-                // dump($sales); //DELETE
 
                 foreach ($sales as $sale) {
                     $sales_direct = $sale->lead->sales->where('is_direct', true);
-                    // dump($sales_direct); //DELETE
 
                     foreach ($sales_direct as $sale_direct) {
                         $user         = $sale_direct->user;
                         $userFullName = $user->second_name . ' ' . $user->first_name . ' ' . $user->third_name;
-                        // dump($userFullName); //DELETE
 
                         if (preg_match("/" . mb_strtolower($filter_partner_name) . "/i", mb_strtolower($userFullName))) {
                             $salesTarget[] = $sale;
                         }
                     }
                 }
-
-                // dump($salesTarget); //DELETE
 
                 if (!count($salesTarget)) {
                     $query->where('sales.id', null);
