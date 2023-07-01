@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Events\emailVerificationCodeRequested;
 use App\Events\passwordResetCodeRequested;
+use App\Events\PayoutApprovedEvent;
 use App\Events\UserApprovedEvent;
 use App\Events\UserRegisteredEvent;
+use App\Listeners\PayoutApprovedListener;
 use App\Listeners\sendEmailVerificationCode;
 use App\Listeners\sendPasswordResetCode;
 use App\Listeners\sendUserRegisteredMailListener;
@@ -32,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserApprovedEvent::class              => [
             UserApprovedListener::class,
+        ],
+        PayoutApprovedEvent::class            => [
+            PayoutApprovedListener::class,
         ],
     ];
 
