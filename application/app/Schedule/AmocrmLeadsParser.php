@@ -5,9 +5,9 @@ namespace App\Schedule;
 use App\Models\Amocrm;
 use App\Models\AmocrmLead;
 use App\Models\Configuration;
+use App\Models\User;
 use App\Models\Lead;
 use App\Models\Sale;
-use App\Models\User;
 use App\Services\amoAPI\amoAPIHub;
 use App\Traits\ServicesAmocrmTokenTrait;
 use Illuminate\Support\Facades\Log;
@@ -47,7 +47,13 @@ class AmocrmLeadsParser
             $found_lead_name          = $find_lead_by_id_response['body']['name'];
             $found_lead_price         = $find_lead_by_id_response['body']['price'];
             $utm_source_id            = $configuration->amocrm_utm_source_id;
+            $product_price_id         = $configuration->amocrm_utm_product_price_id;
             $utm_source_value         = $AMO_API->getLeadCustomFieldValueById($found_lead, $utm_source_id);
+            $product_price_value      = $AMO_API->getLeadCustomFieldValueById($found_lead, $product_price_id) ?? 0;
+
+            // Log::info(__METHOD__, ['product_price_id: ' . $product_price_id]); //DELETE
+            // Log::info(__METHOD__, ['product_price_value: ' . $product_price_value]); //DELETE
+            // Log::info(__METHOD__, [$product_price_value]); //DELETE
 
             if ($utm_source_value) {
                 $user = self::getUserByIndividualCode($utm_source_value);
@@ -58,7 +64,7 @@ class AmocrmLeadsParser
                     $lead = Lead::create([
                         'amo_id'     => $found_lead_id,
                         'name'       => $found_lead_name,
-                        'price'      => $found_lead_price,
+                        'price'      => $product_price_value,
                         'utm_source' => $utm_source_value,
                         'user_id'    => $user->id,
                     ]);
