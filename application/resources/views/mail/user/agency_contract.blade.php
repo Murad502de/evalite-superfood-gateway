@@ -1,12 +1,3 @@
 <x-mail::message>
-# Introduction
-
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
-
-Thanks,<br>
-{{ config('app.name') }}
+    Направляем Вам шаблон договора, который необходимо заполнить, подписать и предоставить через форму в личном кабинете реферальной системы.
 </x-mail::message>
