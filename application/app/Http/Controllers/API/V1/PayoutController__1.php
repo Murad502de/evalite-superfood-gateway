@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use App\Events\PayoutApprovedEvent;
 
 class PayoutController__1 extends Controller
 {
@@ -95,6 +96,8 @@ class PayoutController__1 extends Controller
             $payoutSalesUpdateResult = $payout->sales()->update([
                 'status' => config('constants.sales.statuses.closed'),
             ]);
+
+            event(new PayoutApprovedEvent($payout));
 
             return response()->json([
                 'status'  => $payoutUpdateResult && $payoutSalesUpdateResult,
