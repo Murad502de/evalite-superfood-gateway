@@ -27,6 +27,10 @@ class PayoutsResource extends JsonResource
         return Arr::except(array_merge(parent::toArray($request), [
             'uuid'        => $this->uuid,
             'receipt_url' => $receipt ? $receipt->getUrl() : null,
+
+            // 'tets_path'   => $receipt->getPath(), //DELETE
+            // 'test___mime_type' => $receipt->mime_type, //DELETE
+
             'user'        => new UsersDetailResource($this->user),
             // 'created_at' => $this->created_at,
             // 'price'      => floor($price),

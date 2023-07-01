@@ -12,13 +12,15 @@ class PayoutApprovedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $user;
     public $payout;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($payout)
+    public function __construct($user, $payout)
     {
+        $this->user = $user;
         $this->payout = $payout;
     }
 

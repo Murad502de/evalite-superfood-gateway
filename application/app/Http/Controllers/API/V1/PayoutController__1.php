@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Events\PayoutApprovedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\PayoutsResource;
 use App\Models\Payout;
@@ -10,7 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use App\Events\PayoutApprovedEvent;
 
 class PayoutController__1 extends Controller
 {
@@ -97,7 +97,7 @@ class PayoutController__1 extends Controller
                 'status' => config('constants.sales.statuses.closed'),
             ]);
 
-            event(new PayoutApprovedEvent($payout));
+            event(new PayoutApprovedEvent($payout->user, $payout));
 
             return response()->json([
                 'status'  => $payoutUpdateResult && $payoutSalesUpdateResult,
