@@ -76,18 +76,32 @@ class PayoutController__1 extends Controller
     {
         return new PayoutsResource($payout);
     }
-    public function payout(Payout $payout)
+    public function payout(Payout $payout, Request $request)
     {
-        $payoutUpdateResult = $payout->update([
-            'status' => config('constants.payouts.statuses.completed'),
-        ]);
-        $payoutSalesUpdateResult = $payout->sales()->update([
-            'status' => config('constants.sales.statuses.closed'),
-        ]);
+        if ($payout->status === config('constants.payouts.statuses.processing')) {
+            if ($request->file(Payout::MEDIA_NAME_RECEIPT)) {
+                $receipt = $payout->getMedia(Payout::MEDIA_PREFIX_RECEIPT . $payout->uuid)->first();
 
-        return response()->json([
-            'status'  => $payoutUpdateResult && $payoutSalesUpdateResult,
-            'message' => $payoutUpdateResult && $payoutSalesUpdateResult ? 'success' : 'error',
-        ], Response::HTTP_OK);
+                if ($receipt) {
+                    $receipt->delete();
+                }
+
+                $payout->modelAddMedia(Payout::MEDIA_NAME_RECEIPT, Payout::MEDIA_PREFIX_RECEIPT . $payout->uuid);
+            }
+
+            $payoutUpdateResult = $payout->update([
+                'status' => config('constants.payouts.statuses.completed'),
+            ]);
+            $payoutSalesUpdateResult = $payout->sales()->update([
+                'status' => config('constants.sales.statuses.closed'),
+            ]);
+
+            return response()->json([
+                'status'  => $payoutUpdateResult && $payoutSalesUpdateResult,
+                'message' => $payoutUpdateResult && $payoutSalesUpdateResult ? 'success' : 'error',
+            ], Response::HTTP_OK);
+        }
+
+        return response()->json(['message' => 'status should be processing'], Response::HTTP_BAD_REQUEST);
     }
 }

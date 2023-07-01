@@ -97,7 +97,7 @@ Route::prefix('v1')->group(function () {
             Route::get('/', [PayoutController__1::class, 'getPayouts']);
             Route::prefix('{payout:uuid}')->group(function () {
                 Route::get('/', [PayoutController__1::class, 'getPayout']);
-                Route::put('payout', [PayoutController__1::class, 'payout']);
+                Route::post('payout', [PayoutController__1::class, 'payout']);
             });
         });
         Route::prefix('configurations')->group(function () {
