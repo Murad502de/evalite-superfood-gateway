@@ -231,7 +231,7 @@ class UserController__1 extends Controller
         $sales = Sale::join('leads', 'sales.lead_id', '=', 'leads.id')
             ->where('sales.user_id', Config::get('user')->id)
             ->whereIsDirect(true)
-            ->addSelect(DB::raw("*, (leads.price / 100) * cast(sales.percent as int) as sales_price"))
+            ->addSelect(DB::raw("*, (leads.price / 100) * cast(sales.percent as int) as sales_price, leads.price as init_price, cast(sales.percent as int) as int_percent"))
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
                 $query->where('sales.created_at', '>=', $filter_date_from);
             })
@@ -252,6 +252,12 @@ class UserController__1 extends Controller
             })
             ->when($order_by === 'price', function ($query) use ($ordering_rule) {
                 $query->orderBy('sales_price', $ordering_rule);
+            })
+            ->when($order_by === 'init_price', function ($query) use ($ordering_rule) {
+                $query->orderBy('init_price', $ordering_rule);
+            })
+            ->when($order_by === 'percent', function ($query) use ($ordering_rule) {
+                $query->orderBy('int_percent', $ordering_rule); //FIXME: make int column
             })
             ->when($order_by === 'status', function ($query) use ($ordering_rule) {
                 $query->orderBy('sales.status', $ordering_rule);
@@ -280,7 +286,7 @@ class UserController__1 extends Controller
             })
             ->where('sales.user_id', Config::get('user')->id)
             ->whereIsDirect(false)
-            ->addSelect(DB::raw("*, (leads.price / 100) * cast(sales.percent as int) as sales_price, concat(second_name, ' ', first_name, ' ', third_name) as partner_name"))
+            ->addSelect(DB::raw("*, (leads.price / 100) * cast(sales.percent as int) as sales_price, leads.price as init_price, concat(second_name, ' ', first_name, ' ', third_name) as partner_name, cast(sales.percent as int) as int_percent"))
             ->when($filter_date_from, function ($query) use ($filter_date_from) {
                 $query->where('sales.created_at', '>=', $filter_date_from);
             })
@@ -333,6 +339,12 @@ class UserController__1 extends Controller
             })
             ->when($order_by === 'price', function ($query) use ($ordering_rule) {
                 $query->orderBy('sales_price', $ordering_rule);
+            })
+            ->when($order_by === 'init_price', function ($query) use ($ordering_rule) {
+                $query->orderBy('init_price', $ordering_rule);
+            })
+            ->when($order_by === 'percent', function ($query) use ($ordering_rule) {
+                $query->orderBy('int_percent', $ordering_rule); //FIXME: make int column
             })
             ->when($order_by === 'partner_name', function ($query) use ($ordering_rule) {
                 $query->orderBy('partner_name', $ordering_rule);
