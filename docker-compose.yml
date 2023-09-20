@@ -1,10 +1,10 @@
 version: '3.5'
 services:
-    nginx:
+    evalite-refsys-nginx:
         build: ./docker/images/nginx
         ports:
-            - "80:80"
-            - "443:443"
+            - "8001:80"
+            # - "443:443"
         volumes:
             - ./docker/images/nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./application:/var/www/html
@@ -13,25 +13,28 @@ services:
             - ./docker/images/certbot/www:/var/www/certbot
         restart: unless-stopped
         networks:
-            - host
+            - npm-nw
+            - evalite-refsys-network
         links:
-            - app
-    app:
+            - evalite-refsys-app
+
+    evalite-refsys-app:
         build: ./docker/images/php
         working_dir: /var/www/html
         links:
-            - postgresql
+            - evalite-refsys-db
         networks:
-            - host
+            - evalite-refsys-network
         volumes:
             - ./application:/var/www/html
         restart: unless-stopped
-    postgresql:
+
+    evalite-refsys-db:
         image: postgres:15.1
         ports:
             - "5432:5432"
         networks:
-            - host
+            - evalite-refsys-network
         volumes:
             - ./postgresqldb:/var/lib/postgresql/data
             - ./dumps:/dumps
@@ -40,24 +43,31 @@ services:
             POSTGRES_USER: evalite_user
             POSTGRES_PASSWORD: pQLkm8NOkS0gOBox
             POSTGRES_DB: evalite_db
+
     supervisor:
         build: ./docker/images/supervisor
         working_dir: /var/www/html
         depends_on:
-            - postgresql
+            - evalite-refsys-db
         links:
-            - postgresql
+            - evalite-refsys-db
         networks:
-            - host
+            - evalite-refsys-network
         volumes:
             - ./application:/var/www/html
             # - ./docker/images/supervisor/files:/etc/supervisor/conf.d/
         restart: unless-stopped
-    certbot:
-        image: certbot/certbot
-        volumes:
-            - ./docker/images/certbot/conf:/etc/letsencrypt
-            - ./docker/images/certbot/www:/var/www/certbot
+
+    # certbot:
+    #     image: certbot/certbot
+    #     volumes:
+    #         - ./docker/images/certbot/conf:/etc/letsencrypt
+    #         - ./docker/images/certbot/www:/var/www/certbot
+
 networks:
-    host:
-        driver: bridge
+    evalite-refsys-network:
+    npm-nw: 
+        external: true
+
+    # host:
+    #     driver: bridge
