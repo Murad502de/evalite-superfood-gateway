@@ -4,7 +4,6 @@ services:
         build: ./docker/images/nginx
         ports:
             - "8001:80"
-            # - "443:443"
         volumes:
             - ./docker/images/nginx/default.conf:/etc/nginx/conf.d/default.conf
             - ./application:/var/www/html
@@ -13,7 +12,6 @@ services:
             - ./docker/images/certbot/www:/var/www/certbot
         restart: unless-stopped
         networks:
-            - npm-nw
             - evalite-refsys-network
         links:
             - evalite-refsys-app
@@ -66,8 +64,4 @@ services:
 
 networks:
     evalite-refsys-network:
-    npm-nw: 
-        external: true
-
-    # host:
-    #     driver: bridge
+        driver: bridge
