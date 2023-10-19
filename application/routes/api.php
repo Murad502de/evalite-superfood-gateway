@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\V1\AdminAuthController__1;
+use App\Http\Controllers\API\V1\AuthController__1;
 use App\Http\Controllers\API\V1\ConfigurationController__1;
 use App\Http\Controllers\API\V1\ConfirmEmailController__1;
 use App\Http\Controllers\API\V1\PayoutController__1;
@@ -113,5 +114,9 @@ Route::prefix('v1')->group(function () {
                 });
             });
         });
+    });
+
+    Route::prefix('auth')->group(function () {
+        Route::post('signup', [AuthController__1::class, 'signup']);
     });
 });
