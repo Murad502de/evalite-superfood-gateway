@@ -33,10 +33,9 @@ class SignupService
         ]);
 
         if ($request->file(User::MEDIA_NAME_AVATAR)) {
-            $user->modelAddMedia(User::MEDIA_NAME_AVATAR, User::MEDIA_PREFIX_AVATAR . $user->uuid);
+            $user->addAvatarMedia();
         }
 
-        // event(new UserRegisteredEvent($user));
         return $user;
     }
 }

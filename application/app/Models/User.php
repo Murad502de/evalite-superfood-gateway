@@ -334,6 +334,10 @@ class User extends Model implements HasMedia
             AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
         );
     }
+    public function addAvatarMedia(): void
+    {
+        $this->modelAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $this->uuid);
+    }
 
     public function getAgencyContractData(): array
     {
