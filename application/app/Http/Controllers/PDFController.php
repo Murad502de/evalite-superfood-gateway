@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\ImgTrait;
 use App\Traits\PdfTrait;
 use PDF;
 
 class PDFController extends Controller
 {
-    use PdfTrait;
+    use PdfTrait, ImgTrait;
 
     public function preview()
     {
@@ -23,15 +24,10 @@ class PDFController extends Controller
 
     public function generatePDFv2()
     {
-        $path             = base_path('resources/img/signature.jpg');
-        $type             = pathinfo($path, PATHINFO_EXTENSION);
-        $data             = file_get_contents($path);
-        $signature_base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-
         $pdf_data = [
             'number'                             => '8-23/9-D-ru',
             'date'                               => '11.10.2023',
-            'signature_base64'                   => $signature_base64,
+            'signature_base64'                   => $this->imageToBase64(base_path('resources/img/signature.jpg')),
             'partner_full_name'                  => 'Эвалайт Эвалайт Эвалайт',
             'partner_registration_address'       => '352690, Россия, Краснодарский край, Апшеронский р-н, г Апшеронск, ул. Фрунзе, д 90',
             'partner_inn'                        => '236802411681',
