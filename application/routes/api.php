@@ -10,7 +10,7 @@ use App\Http\Controllers\API\V1\UserController__1;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->group(function () { //DELETE
         Route::post('signin', [AdminAuthController__1::class, 'signin']);
     });
     Route::prefix('users')->group(function () {
