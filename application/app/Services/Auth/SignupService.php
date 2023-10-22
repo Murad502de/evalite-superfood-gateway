@@ -15,7 +15,7 @@ class SignupService
     {
         $data = $request->all();
         $user = User::create([
-            'user_employment_type' => 'individual_entrepreneur',
+            'employment_type' => 'individual_entrepreneur',
             'role_id'              => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
             'first_name'           => $data['user_first_name'],
             'second_name'          => $data['user_second_name'],
