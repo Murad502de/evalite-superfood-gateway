@@ -15,14 +15,13 @@ class SignupService
     {
         $data = $request->all();
         $user = User::create([
-            'employment_type'     => 'individual_entrepreneur',
             'role_id'             => $data['user_role_uuid'] ?? Role::whereIsDefault(true)->first()->id,
             'first_name'          => $data['user_first_name'],
             'second_name'         => $data['user_second_name'],
             'third_name'          => $data['user_third_name'],
             'gender'              => $data['user_gender'],
             'birthday'            => Carbon::parse($data['user_birthday']),
-            'employment_type'     => $data['user_employment_type'],
+            'employment_type'     => $data['user_employment_type'] ?? 'individual_entrepreneur',
             'email'               => $data['user_email'],
             'password'            => User::passwordEncrypt($data['user_password']),
             'token'               => User::generateUserToken(),
