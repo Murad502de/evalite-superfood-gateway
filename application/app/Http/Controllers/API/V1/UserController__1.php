@@ -17,6 +17,7 @@ use App\Http\Resources\API\V1\UsersDetailResource;
 use App\Http\Resources\API\V1\UsersResource;
 use App\Models\Configuration;
 use App\Models\Lead;
+use App\Models\Role;
 use App\Models\PasswordReset;
 use App\Models\Payout;
 use App\Models\Sale;
@@ -45,7 +46,7 @@ class UserController__1 extends Controller
         $ordering_rule    = isset($request_params['ordering_rule']) ? $request_params['ordering_rule'] : 'desc';
         $users            = User::whereHas('role', function ($query) {
             $query->whereNot(function ($query) {
-                $query->where('code', config('constants.user.roles.admin'));
+                $query->where('code', Role::$ROLE_CODE_ADMIN);
             });
         })
             ->when($filter_status, function ($query) use ($filter_status) {
@@ -64,7 +65,7 @@ class UserController__1 extends Controller
             ->when($filter_full_name, function ($query) use ($filter_full_name, $filter_status) {
                 $users = User::whereHas('role', function ($query) {
                     $query->whereNot(function ($query) {
-                        $query->where('code', config('constants.user.roles.admin'));
+                        $query->where('code', Role::$ROLE_CODE_ADMIN);
                     });
                 })
                     ->when($filter_status, function ($query) use ($filter_status) {
