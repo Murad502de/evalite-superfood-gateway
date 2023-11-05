@@ -18,13 +18,14 @@ return [
             ],
         ],
     ],
-    'payouts' => [
+
+    'payouts' => [ //FIXME move to model Payout
         'statuses' => [
             'processing' => 'processing',
             'completed'  => 'completed',
         ],
     ],
-    'sales'   => [
+    'sales'   => [ //FIXME move to model Sale
         'statuses' => [
             'waiting'    => 'waiting',
             'processing' => 'processing',
@@ -32,12 +33,12 @@ return [
         ],
     ],
     'user'    => [
-        'verification_statuses' => [
+        'verification_statuses' => [ //FIXME move to model User
             'waiting'    => 'waiting',
             'processing' => 'processing',
             'completed'  => 'completed',
         ],
-        'roles'                 => [
+        'roles'                 => [ //FIXME move to model Role
             'admin'    => 'admin',
             'referral' => 'referral',
         ],

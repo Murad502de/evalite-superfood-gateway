@@ -11,6 +11,9 @@ class Role extends Model
 {
     use HasFactory, GenerateUuidModelTrait;
 
+    public static $ROLE_CODE_ADMIN = 'admin';
+    public static $ROLE_CODE_PARTNER  = 'partner';
+
     protected $fillable = [
         'uuid',
         'code',
