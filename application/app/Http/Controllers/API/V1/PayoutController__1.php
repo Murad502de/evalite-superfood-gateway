@@ -6,6 +6,7 @@ use App\Events\PayoutApprovedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\API\V1\PayoutsResource;
 use App\Models\Payout;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class PayoutController__1 extends Controller
             ->when($filter_partner_full_name, function ($query) use ($filter_partner_full_name) {
                 $users = User::whereHas('role', function ($query) {
                     $query->whereNot(function ($query) {
-                        $query->where('code', config('constants.user.roles.admin'));
+                        $query->where('code', Role::$ROLE_CODE_ADMIN);
                         $query->whereVerificationStatus(config('constants.user.verification_statuses.completed'));
                     });
                 })->get();
