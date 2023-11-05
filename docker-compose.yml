@@ -42,19 +42,19 @@ services:
             POSTGRES_PASSWORD: pQLkm8NOkS0gOBox
             POSTGRES_DB: evalite_db
 
-    # supervisor:
-    #     build: ./docker/images/supervisor
-    #     working_dir: /var/www/html
-    #     depends_on:
-    #         - evalite-refsys-db
-    #     links:
-    #         - evalite-refsys-db
-    #     networks:
-    #         - evalite-refsys-network
-    #     volumes:
-    #         - ./application:/var/www/html
-    #         # - ./docker/images/supervisor/files:/etc/supervisor/conf.d/
-    #     restart: unless-stopped
+    supervisor:
+        build: ./docker/images/supervisor
+        working_dir: /var/www/html
+        depends_on:
+            - evalite-refsys-db
+        links:
+            - evalite-refsys-db
+        networks:
+            - evalite-refsys-network
+        volumes:
+            - ./application:/var/www/html
+            # - ./docker/images/supervisor/files:/etc/supervisor/conf.d/
+        restart: unless-stopped
 
     # certbot:
     #     image: certbot/certbot
