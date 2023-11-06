@@ -34,10 +34,15 @@ class User extends Model implements HasMedia
     SharedEmploymentTypesTrait,
         PdfTrait;
 
-    public const MEDIA_NAME_AVATAR         = 'user_avatar';
-    public const MEDIA_PREFIX_AVATAR       = 'user_avatar/';
-    public const AGENCY_CONTRACT_VIEW_NAME = 'agency_contract';
-    public const AGENCY_CONTRACT_FILE_NAME = 'Агентский договор на поиск клиентов.pdf';
+    public const MEDIA_NAME_AVATAR                     = 'user_avatar';
+    public const MEDIA_PREFIX_AVATAR                   = 'user_avatar/';
+    public const AGENCY_CONTRACT_VIEW_NAME             = 'agency_contract';
+    public const AGENCY_CONTRACT_FILE_NAME             = 'Агентский договор на поиск клиентов.pdf';
+    public const VERIFICATION_STATUS_CODE_VERIFIED     = 'verified';
+    public const VERIFICATION_STATUS_CODE_NOT_VERIFIED = 'not_verified';
+    public const VERIFICATION_STATUS_CODE_WAITING      = 'waiting';
+    public const VERIFICATION_STATUS_CODE_REJECTED     = 'rejected';
+    public const VERIFICATION_STATUS_CODE_TO_UPDATE    = 'to_update';
 
     protected $fillable = [
         'uuid',
