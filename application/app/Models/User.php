@@ -43,6 +43,7 @@ class User extends Model implements HasMedia
     public const VERIFICATION_STATUS_CODE_WAITING      = 'waiting';
     public const VERIFICATION_STATUS_CODE_REJECTED     = 'rejected';
     public const VERIFICATION_STATUS_CODE_TO_UPDATE    = 'to_update';
+    public const EMPLOYMENT_TYPE_IE                    = 'individual_entrepreneur';
 
     protected $fillable = [
         'uuid',
