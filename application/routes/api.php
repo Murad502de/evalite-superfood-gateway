@@ -65,6 +65,7 @@ Route::prefix('v1')->group(function () {
                         Route::post('/', [UserController__1::class, 'addAgencyContract']);
                     });
                 });
+
                 // Route::prefix('sales')->group(function () { //DELETE//FIXME
                 //     Route::get('/', [UserController__1::class, 'getUserSales']);
                 //     Route::get('directs', [UserController__1::class, 'getUserSalesDirect']);
