@@ -17,11 +17,12 @@ use App\Http\Resources\API\V1\UsersDetailResource;
 use App\Http\Resources\API\V1\UsersResource;
 use App\Models\Configuration;
 use App\Models\Lead;
-use App\Models\Role;
 use App\Models\PasswordReset;
 use App\Models\Payout;
+use App\Models\Role;
 use App\Models\Sale;
 use App\Models\User;
+use App\Services\User\UserUpdateService;
 use App\Traits\GenerateCodeTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Query\JoinClause;
@@ -107,7 +108,8 @@ class UserController__1 extends Controller
     }
     public function update(User $user, Request $request)
     {
-        $user->updateUser($request);
+        // $user->updateUser($request);
+        (new UserUpdateService)($user, $request);
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
     public function my()
