@@ -2,6 +2,7 @@
 
 namespace App\Helpers\User;
 
+use App\Models\Passport;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,50 +36,78 @@ class UserUpdateHelper
             }
         }
     }
+    public function updatePassportMainSpread(Request $request, User $user)
+    {
+        if (isset($request->passport_main_spread)) {
+            $passportMainSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_MAIN_SPREAD . $user->passport->uuid)->first();
+
+            if ($passportMainSpread) {
+                $passportMainSpread->delete();
+            }
+
+            $user->passport->addMainSpreadMedia();
+        }
+    }
+    public function updatePassportRegistrationSpread(Request $request, User $user)
+    {
+        if (isset($request->passport_registration_spread)) {
+            $passportRegistrationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_REGISTRATION_SPREAD . $user->passport->uuid)->first();
+
+            if ($passportRegistrationSpread) {
+                $passportRegistrationSpread->delete();
+            }
+
+            $user->passport->addRegistrationSpreadMedia();
+        }
+    }
+    public function updatePassportVerificationSpread(Request $request, User $user)
+    {
+        if (isset($request->passport_verification_spread)) {
+            $passportVerificationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_VERIFICATION_SPREAD . $user->passport->uuid)->first();
+
+            if ($passportVerificationSpread) {
+                $passportVerificationSpread->delete();
+            }
+
+            $user->passport->addVerificationSpreadMedia();
+        }
+    }
+    public function updatePassportInfo(Request $request, User $user)
+    {
+        $user->passport->update([
+            'full_name'            => $request->pass_full_name ?? $user->passport->full_name,
+            'series'               => $request->pass_series ?? $user->passport->series,
+            'number'               => $request->pass_number ?? $user->passport->number,
+            'issue_date'           => $request->pass_issue_date ? Carbon::parse($request->pass_issue_date) : $user->passport->issue_date,
+            'registration_address' => $request->pass_registration_address ?? $user->passport->registration_address,
+            'issue_by'             => $request->pass_issue_by ?? $user->passport->issue_by,
+            'department_code'      => $request->pass_department_code ?? $user->passport->department_code,
+        ]);
+    }
     public function updatePassport(Request $request, User $user)
     {
-        dump(__METHOD__); //DELETE
-
-        // if ($user->passport) {
-        //     $user->passport->update([
-        //         'full_name'            => $data['pass_full_name'] ?? $user->passport->full_name,
-        //         'series'               => $data['pass_series'] ?? $user->passport->series,
-        //         'number'               => $data['pass_number'] ?? $user->passport->number,
-        //         'issue_date'           => $data['pass_issue_date'] ? Carbon::parse($data['pass_issue_date']) : $user->passport->issue_date,
-        //         'registration_address' => $data['pass_registration_address'] ?? $user->passport->registration_address,
-        //         'issue_by'             => $data['pass_issue_by'] ?? $user->passport->issue_by,
-        //         'department_code'      => $data['pass_department_code'] ?? $user->passport->department_code,
-        //     ]);
-
-        //     if (isset($data['passport_main_spread'])) {
-        //         $passportMainSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_MAIN_SPREAD . $user->passport->uuid)->first();
-
-        //         if ($passportMainSpread) {
-        //             $passportMainSpread->delete();
-        //         }
-
-        //         $user->passport->addMainSpreadMedia();
-        //     }
-
-        //     if (isset($data['passport_registration_spread'])) {
-        //         $passportRegistrationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_REGISTRATION_SPREAD . $user->passport->uuid)->first();
-
-        //         if ($passportRegistrationSpread) {
-        //             $passportRegistrationSpread->delete();
-        //         }
-
-        //         $user->passport->addRegistrationSpreadMedia();
-        //     }
-
-        //     if (isset($data['passport_verification_spread'])) {
-        //         $passportVerificationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_VERIFICATION_SPREAD . $user->passport->uuid)->first();
-
-        //         if ($passportVerificationSpread) {
-        //             $passportVerificationSpread->delete();
-        //         }
-
-        //         $user->passport->addVerificationSpreadMedia();
-        //     }
-        // }
+        if ($user->passport()->exists()) {
+            $this->updatePassportInfo($request, $user);
+            $this->updatePassportMainSpread($request, $user);
+            $this->updatePassportRegistrationSpread($request, $user);
+            $this->updatePassportVerificationSpread($request, $user);
+        } else {
+            $this->createPassport($request, $user);
+        }
+    }
+    public function createPassport(Request $request, User $user)
+    {
+        $user->passport()->create([
+            'full_name'            => $request->pass_full_name,
+            'series'               => $request->pass_series,
+            'number'               => $request->pass_number,
+            'issue_date'           => Carbon::parse($request->pass_issue_date),
+            'registration_address' => $request->pass_registration_address,
+            'issue_by'             => $request->pass_issue_by,
+            'department_code'      => $request->pass_department_code,
+        ]);
+        $user->passport->addMainSpreadMedia();
+        $user->passport->addRegistrationSpreadMedia();
+        $user->passport->addVerificationSpreadMedia();
     }
 }
