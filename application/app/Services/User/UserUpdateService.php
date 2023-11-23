@@ -23,50 +23,9 @@ class UserUpdateService
     public function __invoke(User $user, Request $request): void
     {
         $data = $request->all();
-        $this->helper->update($user, $data);
-        $this->helper->updateAvatar($request, $user);
-
-        // if ($user->passport) {
-        //     $user->passport->update([
-        //         'full_name'            => $data['pass_full_name'] ?? $user->passport->full_name,
-        //         'series'               => $data['pass_series'] ?? $user->passport->series,
-        //         'number'               => $data['pass_number'] ?? $user->passport->number,
-        //         'issue_date'           => $data['pass_issue_date'] ? Carbon::parse($data['pass_issue_date']) : $user->passport->issue_date,
-        //         'registration_address' => $data['pass_registration_address'] ?? $user->passport->registration_address,
-        //         'issue_by'             => $data['pass_issue_by'] ?? $user->passport->issue_by,
-        //         'department_code'      => $data['pass_department_code'] ?? $user->passport->department_code,
-        //     ]);
-
-        //     if (isset($data['passport_main_spread'])) {
-        //         $passportMainSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_MAIN_SPREAD . $user->passport->uuid)->first();
-
-        //         if ($passportMainSpread) {
-        //             $passportMainSpread->delete();
-        //         }
-
-        //         $user->passport->addMainSpreadMedia();
-        //     }
-
-        //     if (isset($data['passport_registration_spread'])) {
-        //         $passportRegistrationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_REGISTRATION_SPREAD . $user->passport->uuid)->first();
-
-        //         if ($passportRegistrationSpread) {
-        //             $passportRegistrationSpread->delete();
-        //         }
-
-        //         $user->passport->addRegistrationSpreadMedia();
-        //     }
-
-        //     if (isset($data['passport_verification_spread'])) {
-        //         $passportVerificationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_VERIFICATION_SPREAD . $user->passport->uuid)->first();
-
-        //         if ($passportVerificationSpread) {
-        //             $passportVerificationSpread->delete();
-        //         }
-
-        //         $user->passport->addVerificationSpreadMedia();
-        //     }
-        // }
+        // $this->helper->update($user, $data); //TODO
+        // $this->helper->updateAvatar($request, $user); //TODO
+        $this->helper->updatePassport($request, $user);
 
         // if ($user->paymentDetailsIndividualEntrepreneur) {
         //     $user->paymentDetailsIndividualEntrepreneur->update([
