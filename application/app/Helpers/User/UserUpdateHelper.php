@@ -170,4 +170,60 @@ class UserUpdateHelper
         //     }
         // }
     }
+    public function updateAgencyContract(Request $request, User $user)
+    {
+        dump(__METHOD__); //DELETE
+
+        //FIXME must refactored
+        // if (isset($data[AgencyContract::MEDIA_NAME_AGENCY_CONTRACT])) {
+        //     Log::info(__METHOD__, ['MEDIA_NAME_AGENCY_CONTRACT']); //DELETE
+        //     Log::info(__METHOD__, [$data[AgencyContract::MEDIA_NAME_AGENCY_CONTRACT]]); //DELETE
+
+        //     if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT) === null) {
+        //         Log::info(__METHOD__, ['Delete AGENCY_CONTRACT']); //DELETE
+
+        //         if ($user->agencyContract) {
+        //             $user->agencyContract->delete();
+        //         }
+        //     } else {
+        //         Log::info(__METHOD__, ['Update or Create AGENCY_CONTRACT']); //DELETE
+
+        //         if ($user->agencyContract) {
+        //             Log::info(__METHOD__, ['Update AGENCY_CONTRACT']); //DELETE
+
+        //             $agencyContractMedia = $user->agencyContract->getMedia(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid)->first();
+
+        //             // dump($agencyContractMedia); //DELETE
+
+        //             if ($agencyContractMedia) {
+        //                 $agencyContractMedia->delete();
+        //             }
+
+        //             if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT)) {
+        //                 $user->agencyContract->modelAddMedia(
+        //                     AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
+        //                     AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid
+        //                 );
+        //             }
+        //         } else {
+        //             // dump('create'); //DELETE
+
+        //             Log::info(__METHOD__, ['Create AGENCY_CONTRACT']); //DELETE
+
+        //             $agencyContract = $user->agencyContract()->create();
+        //             $agencyContract->modelAddMedia(
+        //                 AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
+        //                 AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
+        //             );
+        //         }
+        //     }
+
+        // } else {
+        //     // dump('delete'); //DELETE
+
+        //     // if ($user->agencyContract) {
+        //     //     $user->agencyContract->delete();
+        //     // }
+        // }
+    }
 }
