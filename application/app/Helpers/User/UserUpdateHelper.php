@@ -87,17 +87,6 @@ class UserUpdateHelper
             'department_code'      => $request->pass_department_code ?? $user->passport->department_code,
         ]);
     }
-    public function updatePassport(Request $request, User $user)
-    {
-        if ($user->passport()->exists()) {
-            $this->updatePassportInfo($request, $user);
-            $this->updatePassportMainSpread($request, $user);
-            $this->updatePassportRegistrationSpread($request, $user);
-            $this->updatePassportVerificationSpread($request, $user);
-        } else {
-            $this->createPassport($request, $user);
-        }
-    }
     public function createPassport(Request $request, User $user)
     {
         $user->passport()->create([
@@ -112,6 +101,17 @@ class UserUpdateHelper
         $user->passport->addMainSpreadMedia();
         $user->passport->addRegistrationSpreadMedia();
         $user->passport->addVerificationSpreadMedia();
+    }
+    public function updatePassport(Request $request, User $user)
+    {
+        if ($user->passport()->exists()) {
+            $this->updatePassportInfo($request, $user);
+            $this->updatePassportMainSpread($request, $user);
+            $this->updatePassportRegistrationSpread($request, $user);
+            $this->updatePassportVerificationSpread($request, $user);
+        } else {
+            $this->createPassport($request, $user);
+        }
     }
 
     public function createPaymentDetailsIE(Request $request, User $user)
