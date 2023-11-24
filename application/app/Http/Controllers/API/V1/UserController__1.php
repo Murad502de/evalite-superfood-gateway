@@ -108,7 +108,6 @@ class UserController__1 extends Controller
     }
     public function update(User $user, Request $request)
     {
-        // $user->updateUser($request);
         (new UserUpdateService)($user, $request);
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
