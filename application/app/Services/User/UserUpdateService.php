@@ -22,10 +22,10 @@ class UserUpdateService
 
     public function __invoke(User $user, Request $request): void
     {
-        $this->helper->update($request, $user); //TODO
-        $this->helper->updateAvatar($request, $user); //TODO
-        $this->helper->updatePassport($request, $user); //TODO
-        $this->helper->updatePaymentDetails($request, $user); //TODO
-        $this->helper->handleAgencyContract($request, $user); //TODO
+        $this->helper->update($request, $user);
+        $this->helper->updateAvatar($request, $user);
+        $this->helper->updatePassport($request, $user);
+        $this->helper->updatePaymentDetails($request, $user);
+        $this->helper->handleAgencyContract($request, $user);
     }
 }
