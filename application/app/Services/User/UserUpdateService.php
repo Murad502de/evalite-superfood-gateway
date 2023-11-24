@@ -2,12 +2,7 @@
 
 namespace App\Services\User;
 
-// use App\Models\AgencyContract;
-// use App\Models\Passport;
-// use App\Models\PaymentDetailsIndividualEntrepreneur;
-// use App\Models\PaymentDetailsSelfEmployed;
 use App\Helpers\User\UserUpdateHelper;
-// use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 
