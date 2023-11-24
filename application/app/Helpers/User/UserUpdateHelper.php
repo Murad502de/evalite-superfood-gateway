@@ -26,16 +26,13 @@ class UserUpdateHelper
     }
     public function updateAvatar(Request $request, User $user)
     {
-        if (!!$request->user_avatar) {
-            $avatar = $user->getMedia(User::MEDIA_PREFIX_AVATAR . $user->uuid)->first();
-
-            if ($avatar) {
-                $avatar->delete();
-            }
-
+        if ($request->user_avatar) {
             if ($request->file(User::MEDIA_NAME_AVATAR)) {
-                $user->modelAddMedia(User::MEDIA_NAME_AVATAR, User::MEDIA_PREFIX_AVATAR . $user->uuid);
+                $user->deleteAvatarMedia();
+                $user->addAvatarMedia();
             }
+        } else {
+            $user->deleteAvatarMedia();
         }
     }
 

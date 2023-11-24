@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class User extends Model implements HasMedia
 {
@@ -340,9 +341,20 @@ class User extends Model implements HasMedia
             AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
         );
     }
+
+    public function getAvatarMedia(): ?Media
+    {
+        return $this->getMedia(self::MEDIA_PREFIX_AVATAR . $this->uuid)->first();
+    }
     public function addAvatarMedia(): void
     {
         $this->modelAddMedia(self::MEDIA_NAME_AVATAR, self::MEDIA_PREFIX_AVATAR . $this->uuid);
+    }
+    public function deleteAvatarMedia(): void
+    {
+        if ($avatarMedia = $this->getAvatarMedia()) {
+            $avatarMedia->delete();
+        }
     }
 
     public function getAgencyContractData(): array

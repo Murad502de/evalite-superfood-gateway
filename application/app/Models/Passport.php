@@ -61,7 +61,6 @@ class Passport extends Model implements HasMedia
             $passportMainSpread->delete();
         }
     }
-
     public function getRegistrationSpreadMedia(): ?Media
     {
         return $this->getMedia(self::MEDIA_PREFIX_REGISTRATION_SPREAD . $this->uuid)->first();
@@ -76,7 +75,6 @@ class Passport extends Model implements HasMedia
             $registrationSpreadMedia->delete();
         }
     }
-
     public function getVerificationSpreadMedia(): ?Media
     {
         return $this->getMedia(Passport::MEDIA_PREFIX_VERIFICATION_SPREAD . $this->uuid)->first();
