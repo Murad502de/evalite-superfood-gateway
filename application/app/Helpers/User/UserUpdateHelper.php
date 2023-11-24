@@ -3,6 +3,7 @@
 namespace App\Helpers\User;
 
 use App\Models\Passport;
+use App\Models\PaymentDetailsIndividualEntrepreneur;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -110,38 +111,67 @@ class UserUpdateHelper
         $user->passport->addRegistrationSpreadMedia();
         $user->passport->addVerificationSpreadMedia();
     }
+    public function createPaymentDetailsIE(Request $request, User $user)
+    {
+        dump(__METHOD__); //DELETE
+        $user->paymentDetailsIndividualEntrepreneur()->create([
+            'full_name'                  => $request->ie_full_name,
+            'organization_legal_address' => $request->ie_organization_legal_address,
+            'inn'                        => $request->ie_inn,
+            'ogrn'                       => $request->ie_ogrn,
+            'transaction_account'        => $request->ie_transaction_account,
+            'bank'                       => $request->ie_bank,
+            'bank_inn'                   => $request->ie_bank_inn,
+            'bank_bic'                   => $request->ie_bank_bic,
+            'bank_correspondent_account' => $request->ie_bank_correspondent_account,
+            'bank_legal_address'         => $request->ie_bank_legal_address,
+        ]);
+        $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+            PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+            PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
+        );
+    }
+    public function updatePaymentDetailsIE(Request $request, User $user)
+    {
+        dump(__METHOD__); //DELETE
+        dump($user->paymentDetailsIndividualEntrepreneur()->exists()); //DELETE
+
+        if ($user->paymentDetailsIndividualEntrepreneur()->exists()) {
+            dump(__METHOD__ . '/exists'); //DELETE
+            // $user->paymentDetailsIndividualEntrepreneur->update([
+            //     'full_name'                  => $data['ie_full_name'] ?? $user->full_name,
+            //     'organization_legal_address' => $data['ie_organization_legal_address'] ?? $user->organization_legal_address,
+            //     'inn'                        => $data['ie_inn'] ?? $user->inn,
+            //     'ogrn'                       => $data['ie_ogrn'] ?? $user->ogrn,
+            //     'transaction_account'        => $data['ie_transaction_account'] ?? $user->transaction_account,
+            //     'bank'                       => $data['ie_bank'] ?? $user->bank,
+            //     'bank_inn'                   => $data['ie_bank_inn'] ?? $user->bank_inn,
+            //     'bank_bic'                   => $data['ie_bank_bic'] ?? $user->bank_bic,
+            //     'bank_correspondent_account' => $data['ie_bank_correspondent_account'] ?? $user->bank_correspondent_account,
+            //     'bank_legal_address'         => $data['ie_bank_legal_address'] ?? $user->bank_legal_address,
+            // ]);
+
+            // if (isset($data['ie_confirm_doc'])) {
+            //     $confirmDocIE = $user->paymentDetailsIndividualEntrepreneur->getMedia(PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid)->first();
+
+            //     if ($confirmDocIE) {
+            //         $confirmDocIE->delete();
+            //     }
+
+            //     $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+            //         PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+            //         PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
+            //     );
+            // }
+        } else {
+            dump(__METHOD__ . '/not-exists'); //DELETE
+            $this->createPaymentDetailsIE($request, $user);
+        }
+    }
     public function updatePaymentDetails(Request $request, User $user)
     {
         dump(__METHOD__); //DELETE
-
-        // if ($user->paymentDetailsIndividualEntrepreneur) {
-        //     $user->paymentDetailsIndividualEntrepreneur->update([
-        //         'full_name'                  => $data['ie_full_name'] ?? $user->full_name,
-        //         'organization_legal_address' => $data['ie_organization_legal_address'] ?? $user->organization_legal_address,
-        //         'inn'                        => $data['ie_inn'] ?? $user->inn,
-        //         'ogrn'                       => $data['ie_ogrn'] ?? $user->ogrn,
-        //         'transaction_account'        => $data['ie_transaction_account'] ?? $user->transaction_account,
-        //         'bank'                       => $data['ie_bank'] ?? $user->bank,
-        //         'bank_inn'                   => $data['ie_bank_inn'] ?? $user->bank_inn,
-        //         'bank_bic'                   => $data['ie_bank_bic'] ?? $user->bank_bic,
-        //         'bank_correspondent_account' => $data['ie_bank_correspondent_account'] ?? $user->bank_correspondent_account,
-        //         'bank_legal_address'         => $data['ie_bank_legal_address'] ?? $user->bank_legal_address,
-        //     ]);
-
-        //     if (isset($data['ie_confirm_doc'])) {
-        //         $confirmDocIE = $user->paymentDetailsIndividualEntrepreneur->getMedia(PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid)->first();
-
-        //         if ($confirmDocIE) {
-        //             $confirmDocIE->delete();
-        //         }
-
-        //         $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
-        //             PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
-        //             PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
-        //         );
-        //     }
-        // }
-
+        $this->updatePaymentDetailsIE($request, $user);
         // if ($user->paymentDetailsSelfEmployed) {
         //     $user->paymentDetailsSelfEmployed->update([
         //         'full_name'             => $data['se_full_name'] ?? $user->full_name,
