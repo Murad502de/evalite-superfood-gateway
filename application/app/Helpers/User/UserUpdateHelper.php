@@ -2,6 +2,7 @@
 
 namespace App\Helpers\User;
 
+use App\Models\AgencyContract;
 use App\Models\Passport;
 use App\Models\PaymentDetailsIndividualEntrepreneur;
 use App\Models\User;
@@ -37,6 +38,7 @@ class UserUpdateHelper
             }
         }
     }
+
     public function updatePassportMainSpread(Request $request, User $user)
     {
         if (isset($request->passport_main_spread)) {
@@ -111,6 +113,7 @@ class UserUpdateHelper
         $user->passport->addRegistrationSpreadMedia();
         $user->passport->addVerificationSpreadMedia();
     }
+
     public function createPaymentDetailsIE(Request $request, User $user)
     {
         $user->paymentDetailsIndividualEntrepreneur()->create([
@@ -176,60 +179,60 @@ class UserUpdateHelper
     {
         $this->updatePaymentDetailsIE($request, $user);
     }
-    public function updateAgencyContract(Request $request, User $user)
+
+    public function createAgencyContract(User $user)
+    {
+        dump(__METHOD__); //DELETE
+        $agencyContract = $user->agencyContract()->create();
+        $agencyContract->modelAddMedia(
+            AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
+            AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
+        );
+    }
+    public function deleteAgencyContract(User $user)
     {
         dump(__METHOD__); //DELETE
 
-        //FIXME must refactored
-        // if (isset($data[AgencyContract::MEDIA_NAME_AGENCY_CONTRACT])) {
-        //     Log::info(__METHOD__, ['MEDIA_NAME_AGENCY_CONTRACT']); //DELETE
-        //     Log::info(__METHOD__, [$data[AgencyContract::MEDIA_NAME_AGENCY_CONTRACT]]); //DELETE
+        if ($user->agencyContract()->exists()) {
+            dump(__METHOD__ . '/delete'); //DELETE
+            $user->agencyContract->delete();
+        }
+    }
+    public function updateAgencyContractDoc(User $user)
+    {
+        dump(__METHOD__); //DELETE
 
-        //     if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT) === null) {
-        //         Log::info(__METHOD__, ['Delete AGENCY_CONTRACT']); //DELETE
+        $agencyContractMedia = $user->agencyContract
+            ->getMedia(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid)
+            ->first();
 
-        //         if ($user->agencyContract) {
-        //             $user->agencyContract->delete();
-        //         }
-        //     } else {
-        //         Log::info(__METHOD__, ['Update or Create AGENCY_CONTRACT']); //DELETE
+        if ($agencyContractMedia) {
+            $agencyContractMedia->delete();
+        }
 
-        //         if ($user->agencyContract) {
-        //             Log::info(__METHOD__, ['Update AGENCY_CONTRACT']); //DELETE
+        $user->agencyContract->modelAddMedia(
+            AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
+            AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid
+        );
+    }
+    public function updateAgencyContract(User $user)
+    {
+        dump(__METHOD__); //DELETE
 
-        //             $agencyContractMedia = $user->agencyContract->getMedia(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid)->first();
+        if ($user->agencyContract()->exists()) {
+            $this->updateAgencyContractDoc($user);
+        } else {
+            $this->createAgencyContract($user);
+        }
+    }
+    public function handleAgencyContract(Request $request, User $user)
+    {
+        dump(__METHOD__); //DELETE
 
-        //             // dump($agencyContractMedia); //DELETE
-
-        //             if ($agencyContractMedia) {
-        //                 $agencyContractMedia->delete();
-        //             }
-
-        //             if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT)) {
-        //                 $user->agencyContract->modelAddMedia(
-        //                     AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
-        //                     AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid
-        //                 );
-        //             }
-        //         } else {
-        //             // dump('create'); //DELETE
-
-        //             Log::info(__METHOD__, ['Create AGENCY_CONTRACT']); //DELETE
-
-        //             $agencyContract = $user->agencyContract()->create();
-        //             $agencyContract->modelAddMedia(
-        //                 AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
-        //                 AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
-        //             );
-        //         }
-        //     }
-
-        // } else {
-        //     // dump('delete'); //DELETE
-
-        //     // if ($user->agencyContract) {
-        //     //     $user->agencyContract->delete();
-        //     // }
-        // }
+        if ($request->agency_contract) {
+            $this->updateAgencyContract($user);
+        } else {
+            $this->deleteAgencyContract($user);
+        }
     }
 }

@@ -27,6 +27,6 @@ class UserUpdateService
         // $this->helper->updateAvatar($request, $user); //TODO
         // $this->helper->updatePassport($request, $user); //TODO
         // $this->helper->updatePaymentDetails($request, $user); //TODO
-        $this->helper->updateAgencyContract($request, $user); //TODO
+        $this->helper->handleAgencyContract($request, $user); //TODO
     }
 }
