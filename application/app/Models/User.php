@@ -327,19 +327,16 @@ class User extends Model implements HasMedia
             // }
         }
     }
-    public function addAgencyContract(Request $request)
+    public function addAgencyContract()
     {
-        if ($this->agencyContract) {
+        $agencyContract = $this->agencyContract()->create();
+        $agencyContract->addAgencyContractMedia();
+    }
+    public function deleteAgencyContract()
+    {
+        if ($this->agencyContract()->exists()) {
             $this->agencyContract->delete();
         }
-
-        Log::info(__METHOD__, ['Create AGENCY_CONTRACT']); //DELETE
-
-        $agencyContract = $this->agencyContract()->create();
-        $agencyContract->modelAddMedia(
-            AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
-            AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
-        );
     }
 
     public function getAvatarMedia(): ?Media

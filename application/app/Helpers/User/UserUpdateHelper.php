@@ -185,49 +185,27 @@ class UserUpdateHelper
         $this->updatePaymentDetailsIE($request, $user);
     }
 
-    public function createAgencyContract(User $user)
-    {
-        $agencyContract = $user->agencyContract()->create();
-        $agencyContract->modelAddMedia(
-            AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
-            AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $agencyContract->uuid
-        );
-    }
-    public function deleteAgencyContract(User $user)
-    {
-        if ($user->agencyContract()->exists()) {
-            $user->agencyContract->delete();
-        }
-    }
     public function updateAgencyContractMedia(User $user)
     {
-        $agencyContractMedia = $user->agencyContract
-            ->getMedia(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid)
-            ->first();
-
-        if ($agencyContractMedia) {
-            $agencyContractMedia->delete();
-        }
-
-        $user->agencyContract->modelAddMedia(
-            AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
-            AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid
-        );
+        $user->agencyContract->deleteAgencyContractMedia();
+        $user->agencyContract->addAgencyContractMedia();
     }
     public function updateAgencyContract(User $user)
     {
         if ($user->agencyContract()->exists()) {
             $this->updateAgencyContractMedia($user);
         } else {
-            $this->createAgencyContract($user);
+            $user->addAgencyContract();
         }
     }
     public function handleAgencyContract(Request $request, User $user)
     {
         if ($request->agency_contract) {
-            $this->updateAgencyContract($user);
+            if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT)) {
+                $this->updateAgencyContract($user);
+            }
         } else {
-            $this->deleteAgencyContract($user);
+            $user->deleteAgencyContract();
         }
     }
 }
