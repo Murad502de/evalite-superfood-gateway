@@ -148,28 +148,44 @@ class UserUpdateHelper
             'bank_legal_address'         => $request->ie_bank_legal_address ?? $user->bank_legal_address,
         ]);
     }
-    public function updatePaymentDetailsIEDoc(Request $request, User $user)
+    public function addPaymentDetailsIEMedia(User $user)
     {
-        if (isset($request->ie_confirm_doc)) {
-            $confirmDocIE = $user->paymentDetailsIndividualEntrepreneur
-                ->getMedia(PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid)
-                ->first();
+        dump(__METHOD__); //DELETE
+        $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+            PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+            PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
+        );
+    }
+    public function deletePaymentDetailsIEMedia(User $user)
+    {
+        dump(__METHOD__); //DELETE
+        $confirmDocIEMedia = $user->paymentDetailsIndividualEntrepreneur
+            ->getMedia(PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid)
+            ->first();
 
-            if ($confirmDocIE) {
-                $confirmDocIE->delete();
+        if ($confirmDocIEMedia) {
+            $confirmDocIEMedia->delete();
+        }
+    }
+    public function updatePaymentDetailsIEMedia(Request $request, User $user)
+    {
+        dump(__METHOD__); //DELETE
+        if ($request->ie_confirm_doc) {
+            dump(__METHOD__ . '/update'); //DELETE
+            if ($request->file(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
+                $this->deletePaymentDetailsIEMedia($user);
+                $this->addPaymentDetailsIEMedia($user);
             }
-
-            $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
-                PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
-                PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
-            );
+        } else {
+            dump(__METHOD__ . '/delete'); //DELETE
+            $this->deletePaymentDetailsIEMedia($user);
         }
     }
     public function updatePaymentDetailsIE(Request $request, User $user)
     {
         if ($user->paymentDetailsIndividualEntrepreneur()->exists()) {
             $this->updatePaymentDetailsIEInfo($request, $user);
-            $this->updatePaymentDetailsIEDoc($request, $user);
+            $this->updatePaymentDetailsIEMedia($request, $user);
 
         } else {
             $this->createPaymentDetailsIE($request, $user);
