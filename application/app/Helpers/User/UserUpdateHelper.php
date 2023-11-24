@@ -35,7 +35,6 @@ class UserUpdateHelper
             $user->deleteAvatarMedia();
         }
     }
-
     public function updatePassportMainSpread(Request $request, User $user)
     {
         if ($request->passport_main_spread) {
@@ -107,7 +106,6 @@ class UserUpdateHelper
             $this->createPassport($request, $user);
         }
     }
-
     public function createPaymentDetailsIE(Request $request, User $user)
     {
         $user->paymentDetailsIndividualEntrepreneur()->create([
@@ -184,7 +182,6 @@ class UserUpdateHelper
     {
         $this->updatePaymentDetailsIE($request, $user);
     }
-
     public function updateAgencyContractMedia(User $user)
     {
         $user->agencyContract->deleteAgencyContractMedia();

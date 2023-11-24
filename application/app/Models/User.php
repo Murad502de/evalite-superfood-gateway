@@ -150,7 +150,6 @@ class User extends Model implements HasMedia
         event(new UserRegisteredEvent($user));
         return $user;
     }
-
     public function updateUser(Request $request)
     {
         $data = $request->all();
@@ -338,7 +337,6 @@ class User extends Model implements HasMedia
             $this->agencyContract->delete();
         }
     }
-
     public function getAvatarMedia(): ?Media
     {
         return $this->getMedia(self::MEDIA_PREFIX_AVATAR . $this->uuid)->first();
@@ -353,7 +351,6 @@ class User extends Model implements HasMedia
             $avatarMedia->delete();
         }
     }
-
     public function getAgencyContractData(): array
     {
         $petrovich = new Petrovich(Petrovich::GENDER_MALE);

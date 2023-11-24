@@ -42,6 +42,7 @@ class Passport extends Model implements HasMedia
         'updated_at',
     ];
 
+    /* RELATIONS */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

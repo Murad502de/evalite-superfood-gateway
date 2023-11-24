@@ -32,6 +32,7 @@ class AgencyContract extends Model implements HasMedia
         'updated_at',
     ];
 
+    /* RELATIONS */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -43,7 +44,6 @@ class AgencyContract extends Model implements HasMedia
             ->setPaper('a4')
             ->download('Агентский договор на поиск клиентов.pdf');
     }
-
     public function getAgencyContractMedia(): ?Media
     {
         return $this->getMedia(self::MEDIA_PREFIX_AGENCY_CONTRACT . $this->uuid)->first();
