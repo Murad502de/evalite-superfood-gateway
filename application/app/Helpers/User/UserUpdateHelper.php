@@ -11,17 +11,17 @@ use Illuminate\Http\Request;
 
 class UserUpdateHelper
 {
-    public function update(User $user, array $data)
+    public function update(Request $request, User $user)
     {
         $user->update([
-            'first_name'      => $data['user_first_name'] ?? $user->first_name,
-            'second_name'     => $data['user_second_name'] ?? $user->second_name,
-            'third_name'      => $data['user_third_name'] ?? $user->third_name,
-            'gender'          => $data['user_gender'] ?? $user->gender,
-            'birthday'        => $data['user_birthday'] ? Carbon::parse($data['user_birthday']) : $user->birthday,
-            'employment_type' => $data['user_employment_type'] ?? $user->employment_type,
-            'email'           => $data['user_email'] ?? $user->email,
-            'phone'           => $data['user_phone'] ?? $user->phone,
+            'first_name'      => $request->user_first_name ?? $user->first_name,
+            'second_name'     => $request->user_second_name ?? $user->second_name,
+            'third_name'      => $request->user_third_name ?? $user->third_name,
+            'gender'          => $request->user_gender ?? $user->gender,
+            'birthday'        => $request->user_birthday ? Carbon::parse($request->user_birthday) : $user->birthday,
+            'employment_type' => $request->user_employment_type ?? $user->employment_type,
+            'email'           => $request->user_email ?? $user->email,
+            'phone'           => $request->user_phone ?? $user->phone,
         ]);
     }
     public function updateAvatar(Request $request, User $user)
