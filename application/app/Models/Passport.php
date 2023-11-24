@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Passport extends Model implements HasMedia
 {
@@ -46,9 +47,19 @@ class Passport extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function getMainSpreadMedia(): ?Media
+    {
+        return $this->getMedia(self::MEDIA_PREFIX_MAIN_SPREAD . $this->uuid)->first();
+    }
     public function addMainSpreadMedia(): void
     {
         $this->modelAddMedia(self::MEDIA_NAME_MAIN_SPREAD, self::MEDIA_PREFIX_MAIN_SPREAD . $this->uuid);
+    }
+    public function deleteMainSpreadMedia(): void
+    {
+        if ($passportMainSpread = $this->getMainSpreadMedia()) {
+            $passportMainSpread->delete();
+        }
     }
     public function addRegistrationSpreadMedia(): void
     {

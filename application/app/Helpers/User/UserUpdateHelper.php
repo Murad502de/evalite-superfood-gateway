@@ -39,18 +39,10 @@ class UserUpdateHelper
         }
     }
 
-    public function deletePassportMainSpread(User $user)
-    {
-        $passportMainSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_MAIN_SPREAD . $user->passport->uuid)->first();
-
-        if ($passportMainSpread) {
-            $passportMainSpread->delete();
-        }
-    }
     public function updatePassportMainSpread(Request $request, User $user)
     {
         if (isset($request->passport_main_spread)) {
-            $this->deletePassportMainSpread($user);
+            $user->passport->deleteMainSpreadMedia();
             $user->passport->addMainSpreadMedia();
         }
     }
@@ -108,10 +100,10 @@ class UserUpdateHelper
     public function updatePassport(Request $request, User $user)
     {
         if ($user->passport()->exists()) {
-            $this->updatePassportInfo($request, $user);
+            // $this->updatePassportInfo($request, $user); //TODO
             $this->updatePassportMainSpread($request, $user);
-            $this->updatePassportRegistrationSpread($request, $user);
-            $this->updatePassportVerificationSpread($request, $user);
+            // $this->updatePassportRegistrationSpread($request, $user); //TODO
+            // $this->updatePassportVerificationSpread($request, $user); //TODO
         } else {
             $this->createPassport($request, $user);
         }
