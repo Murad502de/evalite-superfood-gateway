@@ -39,15 +39,18 @@ class UserUpdateHelper
         }
     }
 
+    public function deletePassportMainSpread(User $user)
+    {
+        $passportMainSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_MAIN_SPREAD . $user->passport->uuid)->first();
+
+        if ($passportMainSpread) {
+            $passportMainSpread->delete();
+        }
+    }
     public function updatePassportMainSpread(Request $request, User $user)
     {
         if (isset($request->passport_main_spread)) {
-            $passportMainSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_MAIN_SPREAD . $user->passport->uuid)->first();
-
-            if ($passportMainSpread) {
-                $passportMainSpread->delete();
-            }
-
+            $this->deletePassportMainSpread($user);
             $user->passport->addMainSpreadMedia();
         }
     }
