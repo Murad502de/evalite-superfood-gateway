@@ -199,7 +199,7 @@ class UserUpdateHelper
             $user->agencyContract->delete();
         }
     }
-    public function updateAgencyContractDoc(User $user)
+    public function updateAgencyContractMedia(User $user)
     {
         $agencyContractMedia = $user->agencyContract
             ->getMedia(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid)
@@ -217,7 +217,7 @@ class UserUpdateHelper
     public function updateAgencyContract(User $user)
     {
         if ($user->agencyContract()->exists()) {
-            $this->updateAgencyContractDoc($user);
+            $this->updateAgencyContractMedia($user);
         } else {
             $this->createAgencyContract($user);
         }
