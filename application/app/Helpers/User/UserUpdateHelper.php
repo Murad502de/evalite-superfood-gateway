@@ -175,33 +175,6 @@ class UserUpdateHelper
     public function updatePaymentDetails(Request $request, User $user)
     {
         $this->updatePaymentDetailsIE($request, $user);
-        // if ($user->paymentDetailsSelfEmployed) {
-        //     $user->paymentDetailsSelfEmployed->update([
-        //         'full_name'             => $data['se_full_name'] ?? $user->full_name,
-        //         'transaction_account'   => $data['se_transaction_account'] ?? $user->transaction_account,
-        //         'inn'                   => $data['se_inn'] ?? $user->inn,
-        //         'swift'                 => $data['se_swift'] ?? $user->swift,
-        //         'mailing_address'       => $data['se_mailing_address'] ?? $user->mailing_address,
-        //         'bank'                  => $data['se_bank'] ?? $user->bank,
-        //         'bic'                   => $data['se_bic'] ?? $user->bic,
-        //         'correspondent_account' => $data['se_correspondent_account'] ?? $user->correspondent_account,
-        //         'bank_inn'              => $data['se_bank_inn'] ?? $user->bank_inn,
-        //         'bank_kpp'              => $data['se_bank_kpp'] ?? $user->bank_kpp,
-        //     ]);
-
-        //     if (isset($data['se_confirm_doc'])) {
-        //         $confirmDocSE = $user->paymentDetailsSelfEmployed->getMedia(PaymentDetailsSelfEmployed::MEDIA_PREFIX . $user->paymentDetailsSelfEmployed->uuid)->first();
-
-        //         if ($confirmDocSE) {
-        //             $confirmDocSE->delete();
-        //         }
-
-        //         $user->paymentDetailsSelfEmployed->modelAddMedia(
-        //             PaymentDetailsSelfEmployed::MEDIA_NAME,
-        //             PaymentDetailsSelfEmployed::MEDIA_PREFIX . $user->paymentDetailsSelfEmployed->uuid
-        //         );
-        //     }
-        // }
     }
     public function updateAgencyContract(Request $request, User $user)
     {
