@@ -49,24 +49,14 @@ class UserUpdateHelper
     public function updatePassportRegistrationSpread(Request $request, User $user)
     {
         if (isset($request->passport_registration_spread)) {
-            $passportRegistrationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_REGISTRATION_SPREAD . $user->passport->uuid)->first();
-
-            if ($passportRegistrationSpread) {
-                $passportRegistrationSpread->delete();
-            }
-
+            $user->passport->deleteRegistrationSpreadMedia();
             $user->passport->addRegistrationSpreadMedia();
         }
     }
     public function updatePassportVerificationSpread(Request $request, User $user)
     {
         if (isset($request->passport_verification_spread)) {
-            $passportVerificationSpread = $user->passport->getMedia(Passport::MEDIA_PREFIX_VERIFICATION_SPREAD . $user->passport->uuid)->first();
-
-            if ($passportVerificationSpread) {
-                $passportVerificationSpread->delete();
-            }
-
+            $user->passport->deleteVerificationSpreadMedia();
             $user->passport->addVerificationSpreadMedia();
         }
     }
@@ -101,7 +91,7 @@ class UserUpdateHelper
     {
         if ($user->passport()->exists()) {
             // $this->updatePassportInfo($request, $user); //TODO
-            $this->updatePassportMainSpread($request, $user);
+            $this->updatePassportMainSpread($request, $user); //TODO
             // $this->updatePassportRegistrationSpread($request, $user); //TODO
             // $this->updatePassportVerificationSpread($request, $user); //TODO
         } else {
