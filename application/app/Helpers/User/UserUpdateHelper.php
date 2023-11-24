@@ -41,23 +41,35 @@ class UserUpdateHelper
 
     public function updatePassportMainSpread(Request $request, User $user)
     {
-        if (isset($request->passport_main_spread)) {
+        if ($request->passport_main_spread) {
+            if ($request->file(Passport::MEDIA_NAME_MAIN_SPREAD)) {
+                $user->passport->deleteMainSpreadMedia();
+                $user->passport->addMainSpreadMedia();
+            }
+        } else {
             $user->passport->deleteMainSpreadMedia();
-            $user->passport->addMainSpreadMedia();
         }
     }
     public function updatePassportRegistrationSpread(Request $request, User $user)
     {
-        if (isset($request->passport_registration_spread)) {
+        if ($request->passport_registration_spread) {
+            if ($request->file(Passport::MEDIA_NAME_REGISTRATION_SPREAD)) {
+                $user->passport->deleteRegistrationSpreadMedia();
+                $user->passport->addRegistrationSpreadMedia();
+            }
+        } else {
             $user->passport->deleteRegistrationSpreadMedia();
-            $user->passport->addRegistrationSpreadMedia();
         }
     }
     public function updatePassportVerificationSpread(Request $request, User $user)
     {
-        if (isset($request->passport_verification_spread)) {
+        if ($request->passport_verification_spread) {
+            if ($request->file(Passport::MEDIA_NAME_VERIFICATION_SPREAD)) {
+                $user->passport->deleteVerificationSpreadMedia();
+                $user->passport->addVerificationSpreadMedia();
+            }
+        } else {
             $user->passport->deleteVerificationSpreadMedia();
-            $user->passport->addVerificationSpreadMedia();
         }
     }
     public function updatePassportInfo(Request $request, User $user)
@@ -90,10 +102,10 @@ class UserUpdateHelper
     public function updatePassport(Request $request, User $user)
     {
         if ($user->passport()->exists()) {
-            // $this->updatePassportInfo($request, $user); //TODO
-            $this->updatePassportMainSpread($request, $user); //TODO
-            // $this->updatePassportRegistrationSpread($request, $user); //TODO
-            // $this->updatePassportVerificationSpread($request, $user); //TODO
+            $this->updatePassportInfo($request, $user);
+            $this->updatePassportMainSpread($request, $user);
+            $this->updatePassportRegistrationSpread($request, $user);
+            $this->updatePassportVerificationSpread($request, $user);
         } else {
             $this->createPassport($request, $user);
         }
@@ -135,7 +147,6 @@ class UserUpdateHelper
     }
     public function addPaymentDetailsIEMedia(User $user)
     {
-        dump(__METHOD__); //DELETE
         $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
             PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
             PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
@@ -143,7 +154,6 @@ class UserUpdateHelper
     }
     public function deletePaymentDetailsIEMedia(User $user)
     {
-        dump(__METHOD__); //DELETE
         $confirmDocIEMedia = $user->paymentDetailsIndividualEntrepreneur
             ->getMedia(PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid)
             ->first();
@@ -154,15 +164,12 @@ class UserUpdateHelper
     }
     public function updatePaymentDetailsIEMedia(Request $request, User $user)
     {
-        dump(__METHOD__); //DELETE
         if ($request->ie_confirm_doc) {
-            dump(__METHOD__ . '/update'); //DELETE
             if ($request->file(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
                 $this->deletePaymentDetailsIEMedia($user);
                 $this->addPaymentDetailsIEMedia($user);
             }
         } else {
-            dump(__METHOD__ . '/delete'); //DELETE
             $this->deletePaymentDetailsIEMedia($user);
         }
     }
@@ -183,7 +190,6 @@ class UserUpdateHelper
 
     public function createAgencyContract(User $user)
     {
-        dump(__METHOD__); //DELETE
         $agencyContract = $user->agencyContract()->create();
         $agencyContract->modelAddMedia(
             AgencyContract::MEDIA_NAME_AGENCY_CONTRACT,
@@ -192,17 +198,12 @@ class UserUpdateHelper
     }
     public function deleteAgencyContract(User $user)
     {
-        dump(__METHOD__); //DELETE
-
         if ($user->agencyContract()->exists()) {
-            dump(__METHOD__ . '/delete'); //DELETE
             $user->agencyContract->delete();
         }
     }
     public function updateAgencyContractDoc(User $user)
     {
-        dump(__METHOD__); //DELETE
-
         $agencyContractMedia = $user->agencyContract
             ->getMedia(AgencyContract::MEDIA_PREFIX_AGENCY_CONTRACT . $user->agencyContract->uuid)
             ->first();
@@ -218,8 +219,6 @@ class UserUpdateHelper
     }
     public function updateAgencyContract(User $user)
     {
-        dump(__METHOD__); //DELETE
-
         if ($user->agencyContract()->exists()) {
             $this->updateAgencyContractDoc($user);
         } else {
@@ -228,8 +227,6 @@ class UserUpdateHelper
     }
     public function handleAgencyContract(Request $request, User $user)
     {
-        dump(__METHOD__); //DELETE
-
         if ($request->agency_contract) {
             $this->updateAgencyContract($user);
         } else {
