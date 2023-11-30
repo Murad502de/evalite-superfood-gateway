@@ -13,8 +13,6 @@ class UserUpdateHelper
 {
     public function update(Request $request, User $user)
     {
-        dump(__METHOD__); //DELETE
-
         $user->update([
             'first_name'      => $request->user_first_name ?? $user->first_name,
             'second_name'     => $request->user_second_name ?? $user->second_name,
