@@ -94,13 +94,24 @@ class UserUpdateHelper
     }
     public function updatePassportVerificationSpread(Request $request, User $user)
     {
-        if ($request->passport_verification_spread) {
+        // if ($request->passport_verification_spread) {
+        //     if ($request->file(Passport::MEDIA_NAME_VERIFICATION_SPREAD)) {
+        //         $user->passport->deleteVerificationSpreadMedia();
+        //         $user->passport->addVerificationSpreadMedia();
+        //     }
+        // } else {
+        //     $user->passport->deleteVerificationSpreadMedia();
+        // }
+
+        if (isset($request->passport_verification_spread)) {
+            if ($request->passport_verification_spread === '__null') {
+                $user->passport->deleteVerificationSpreadMedia();
+            }
+
             if ($request->file(Passport::MEDIA_NAME_VERIFICATION_SPREAD)) {
                 $user->passport->deleteVerificationSpreadMedia();
                 $user->passport->addVerificationSpreadMedia();
             }
-        } else {
-            $user->passport->deleteVerificationSpreadMedia();
         }
     }
     public function updatePassportInfo(Request $request, User $user)
