@@ -205,13 +205,24 @@ class UserUpdateHelper
     }
     public function updatePaymentDetailsIEMedia(Request $request, User $user)
     {
-        if ($request->ie_confirm_doc) {
+        // if ($request->ie_confirm_doc) {
+        //     if ($request->file(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
+        //         $this->deletePaymentDetailsIEMedia($user);
+        //         $this->addPaymentDetailsIEMedia($user);
+        //     }
+        // } else {
+        //     $this->deletePaymentDetailsIEMedia($user);
+        // }
+
+        if (isset($request->ie_confirm_doc)) {
+            if ($request->ie_confirm_doc === '__null') {
+                $this->deletePaymentDetailsIEMedia($user);
+            }
+
             if ($request->file(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
                 $this->deletePaymentDetailsIEMedia($user);
                 $this->addPaymentDetailsIEMedia($user);
             }
-        } else {
-            $this->deletePaymentDetailsIEMedia($user);
         }
     }
     public function updatePaymentDetailsIE(Request $request, User $user)
