@@ -50,24 +50,46 @@ class UserUpdateHelper
     }
     public function updatePassportMainSpread(Request $request, User $user)
     {
-        if ($request->passport_main_spread) {
+        // if ($request->passport_main_spread) {
+        //     if ($request->file(Passport::MEDIA_NAME_MAIN_SPREAD)) {
+        //         $user->passport->deleteMainSpreadMedia();
+        //         $user->passport->addMainSpreadMedia();
+        //     }
+        // } else {
+        //     $user->passport->deleteMainSpreadMedia();
+        // }
+
+        if (isset($request->passport_main_spread)) {
+            if ($request->passport_main_spread === '__null') {
+                $user->passport->deleteMainSpreadMedia();
+            }
+
             if ($request->file(Passport::MEDIA_NAME_MAIN_SPREAD)) {
                 $user->passport->deleteMainSpreadMedia();
                 $user->passport->addMainSpreadMedia();
             }
-        } else {
-            $user->passport->deleteMainSpreadMedia();
         }
     }
     public function updatePassportRegistrationSpread(Request $request, User $user)
     {
-        if ($request->passport_registration_spread) {
+        // if ($request->passport_registration_spread) {
+        //     if ($request->file(Passport::MEDIA_NAME_REGISTRATION_SPREAD)) {
+        //         $user->passport->deleteRegistrationSpreadMedia();
+        //         $user->passport->addRegistrationSpreadMedia();
+        //     }
+        // } else {
+        //     $user->passport->deleteRegistrationSpreadMedia();
+        // }
+
+        if (isset($request->passport_registration_spread)) {
+            if ($request->passport_registration_spread === '__null') {
+                $user->passport->deleteRegistrationSpreadMedia();
+            }
+
             if ($request->file(Passport::MEDIA_NAME_REGISTRATION_SPREAD)) {
                 $user->passport->deleteRegistrationSpreadMedia();
                 $user->passport->addRegistrationSpreadMedia();
             }
-        } else {
-            $user->passport->deleteRegistrationSpreadMedia();
         }
     }
     public function updatePassportVerificationSpread(Request $request, User $user)
