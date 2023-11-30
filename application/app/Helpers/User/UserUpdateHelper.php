@@ -28,6 +28,15 @@ class UserUpdateHelper
     }
     public function updateAvatar(Request $request, User $user)
     {
+        // if ($request->user_avatar) {
+        //     if ($request->file(User::MEDIA_NAME_AVATAR)) {
+        //         $user->deleteAvatarMedia();
+        //         $user->addAvatarMedia();
+        //     }
+        // } else {
+        //     $user->deleteAvatarMedia();
+        // }
+
         if (isset($request->user_avatar)) {
             if ($request->user_avatar === '__null') {
                 $user->deleteAvatarMedia();
