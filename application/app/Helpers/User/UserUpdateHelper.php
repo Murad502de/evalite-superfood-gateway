@@ -254,12 +254,22 @@ class UserUpdateHelper
     }
     public function handleAgencyContract(Request $request, User $user)
     {
-        if ($request->agency_contract) {
+        // if ($request->agency_contract) {
+        //     if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT)) {
+        //         $this->updateAgencyContract($user);
+        //     }
+        // } else {
+        //     $user->deleteAgencyContract();
+        // }
+
+        if (isset($request->agency_contract)) {
+            if ($request->agency_contract === '__null') {
+                $user->deleteAgencyContract();
+            }
+
             if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT)) {
                 $this->updateAgencyContract($user);
             }
-        } else {
-            $user->deleteAgencyContract();
         }
     }
 }
