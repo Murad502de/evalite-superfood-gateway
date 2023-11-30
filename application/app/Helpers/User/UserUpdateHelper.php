@@ -13,6 +13,8 @@ class UserUpdateHelper
 {
     public function update(Request $request, User $user)
     {
+        dump(__METHOD__); //DELETE
+
         $user->update([
             'first_name'      => $request->user_first_name ?? $user->first_name,
             'second_name'     => $request->user_second_name ?? $user->second_name,
@@ -26,13 +28,21 @@ class UserUpdateHelper
     }
     public function updateAvatar(Request $request, User $user)
     {
-        if ($request->user_avatar) {
+        dump(__METHOD__); //DELETE
+
+        if (isset($request->user_avatar)) {
+            dump(__METHOD__ . '/handle'); //DELETE
+
+            if ($request->user_avatar === '__null') {
+                dump(__METHOD__ . '/delete'); //DELETE
+                $user->deleteAvatarMedia();
+            }
+
             if ($request->file(User::MEDIA_NAME_AVATAR)) {
+                dump(__METHOD__ . '/update'); //DELETE
                 $user->deleteAvatarMedia();
                 $user->addAvatarMedia();
             }
-        } else {
-            $user->deleteAvatarMedia();
         }
     }
     public function updatePassportMainSpread(Request $request, User $user)
