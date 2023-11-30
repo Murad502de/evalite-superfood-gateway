@@ -28,18 +28,12 @@ class UserUpdateHelper
     }
     public function updateAvatar(Request $request, User $user)
     {
-        dump(__METHOD__); //DELETE
-
         if (isset($request->user_avatar)) {
-            dump(__METHOD__ . '/handle'); //DELETE
-
             if ($request->user_avatar === '__null') {
-                dump(__METHOD__ . '/delete'); //DELETE
                 $user->deleteAvatarMedia();
             }
 
             if ($request->file(User::MEDIA_NAME_AVATAR)) {
-                dump(__METHOD__ . '/update'); //DELETE
                 $user->deleteAvatarMedia();
                 $user->addAvatarMedia();
             }
