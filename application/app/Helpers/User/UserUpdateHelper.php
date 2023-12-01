@@ -26,15 +26,6 @@ class UserUpdateHelper
     }
     public function updateAvatar(Request $request, User $user)
     {
-        // if ($request->user_avatar) {
-        //     if ($request->file(User::MEDIA_NAME_AVATAR)) {
-        //         $user->deleteAvatarMedia();
-        //         $user->addAvatarMedia();
-        //     }
-        // } else {
-        //     $user->deleteAvatarMedia();
-        // }
-
         if (isset($request->user_avatar)) {
             if ($request->user_avatar === '__null') {
                 $user->deleteAvatarMedia();
@@ -48,15 +39,6 @@ class UserUpdateHelper
     }
     public function updatePassportMainSpread(Request $request, User $user)
     {
-        // if ($request->passport_main_spread) {
-        //     if ($request->file(Passport::MEDIA_NAME_MAIN_SPREAD)) {
-        //         $user->passport->deleteMainSpreadMedia();
-        //         $user->passport->addMainSpreadMedia();
-        //     }
-        // } else {
-        //     $user->passport->deleteMainSpreadMedia();
-        // }
-
         if (isset($request->passport_main_spread)) {
             if ($request->passport_main_spread === '__null') {
                 $user->passport->deleteMainSpreadMedia();
@@ -70,15 +52,6 @@ class UserUpdateHelper
     }
     public function updatePassportRegistrationSpread(Request $request, User $user)
     {
-        // if ($request->passport_registration_spread) {
-        //     if ($request->file(Passport::MEDIA_NAME_REGISTRATION_SPREAD)) {
-        //         $user->passport->deleteRegistrationSpreadMedia();
-        //         $user->passport->addRegistrationSpreadMedia();
-        //     }
-        // } else {
-        //     $user->passport->deleteRegistrationSpreadMedia();
-        // }
-
         if (isset($request->passport_registration_spread)) {
             if ($request->passport_registration_spread === '__null') {
                 $user->passport->deleteRegistrationSpreadMedia();
@@ -92,15 +65,6 @@ class UserUpdateHelper
     }
     public function updatePassportVerificationSpread(Request $request, User $user)
     {
-        // if ($request->passport_verification_spread) {
-        //     if ($request->file(Passport::MEDIA_NAME_VERIFICATION_SPREAD)) {
-        //         $user->passport->deleteVerificationSpreadMedia();
-        //         $user->passport->addVerificationSpreadMedia();
-        //     }
-        // } else {
-        //     $user->passport->deleteVerificationSpreadMedia();
-        // }
-
         if (isset($request->passport_verification_spread)) {
             if ($request->passport_verification_spread === '__null') {
                 $user->passport->deleteVerificationSpreadMedia();
@@ -203,15 +167,6 @@ class UserUpdateHelper
     }
     public function updatePaymentDetailsIEMedia(Request $request, User $user)
     {
-        // if ($request->ie_confirm_doc) {
-        //     if ($request->file(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
-        //         $this->deletePaymentDetailsIEMedia($user);
-        //         $this->addPaymentDetailsIEMedia($user);
-        //     }
-        // } else {
-        //     $this->deletePaymentDetailsIEMedia($user);
-        // }
-
         if (isset($request->ie_confirm_doc)) {
             if ($request->ie_confirm_doc === '__null') {
                 $this->deletePaymentDetailsIEMedia($user);
@@ -252,14 +207,6 @@ class UserUpdateHelper
     }
     public function handleAgencyContract(Request $request, User $user)
     {
-        // if ($request->agency_contract) {
-        //     if ($request->file(AgencyContract::MEDIA_NAME_AGENCY_CONTRACT)) {
-        //         $this->updateAgencyContract($user);
-        //     }
-        // } else {
-        //     $user->deleteAgencyContract();
-        // }
-
         if (isset($request->agency_contract)) {
             if ($request->agency_contract === '__null') {
                 $user->deleteAgencyContract();
