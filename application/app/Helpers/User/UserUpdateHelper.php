@@ -99,9 +99,16 @@ class UserUpdateHelper
             'issue_by'             => $request->pass_issue_by,
             'department_code'      => $request->pass_department_code,
         ]);
-        $user->passport->addMainSpreadMedia();
-        $user->passport->addRegistrationSpreadMedia();
-        $user->passport->addVerificationSpreadMedia();
+
+        if ($request->hasFile(Passport::MEDIA_NAME_MAIN_SPREAD)) {
+            $user->passport->addMainSpreadMedia();
+        }
+        if ($request->hasFile(Passport::MEDIA_NAME_REGISTRATION_SPREAD)) {
+            $user->passport->addRegistrationSpreadMedia();
+        }
+        if ($request->hasFile(Passport::MEDIA_NAME_VERIFICATION_SPREAD)) {
+            $user->passport->addVerificationSpreadMedia();
+        }
     }
     public function updatePassport(Request $request, User $user)
     {
@@ -128,10 +135,13 @@ class UserUpdateHelper
             'bank_correspondent_account' => $request->ie_bank_correspondent_account,
             'bank_legal_address'         => $request->ie_bank_legal_address,
         ]);
-        $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
-            PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
-            PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
-        );
+
+        if ($request->hasFile(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
+            $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+                PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+                PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
+            );
+        }
     }
     public function updatePaymentDetailsIEInfo(Request $request, User $user)
     {
