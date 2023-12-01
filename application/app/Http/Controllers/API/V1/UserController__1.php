@@ -128,11 +128,17 @@ class UserController__1 extends Controller
         if ($user->passport) {
             $user->passport->delete();
         }
+
         if ($user->paymentDetailsIndividualEntrepreneur) {
             $user->paymentDetailsIndividualEntrepreneur->delete();
         }
+
         if ($user->paymentDetailsSelfEmployed) {
             $user->paymentDetailsSelfEmployed->delete();
+        }
+
+        if ($user->agencyContract) {
+            $user->agencyContract->delete();
         }
 
         $user->delete();

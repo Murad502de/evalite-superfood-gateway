@@ -118,7 +118,7 @@ class UserUpdateHelper
             $this->updatePassportRegistrationSpread($request, $user);
             $this->updatePassportVerificationSpread($request, $user);
         } else {
-            $this->createPassport($request, $user);
+            $this->createPassport($request, $user); //FIXME
         }
     }
     public function createPaymentDetailsIE(Request $request, User $user)
@@ -195,7 +195,7 @@ class UserUpdateHelper
             $this->updatePaymentDetailsIEMedia($request, $user);
 
         } else {
-            $this->createPaymentDetailsIE($request, $user);
+            $this->createPaymentDetailsIE($request, $user); //FIXME
         }
     }
     public function updatePaymentDetails(Request $request, User $user)
