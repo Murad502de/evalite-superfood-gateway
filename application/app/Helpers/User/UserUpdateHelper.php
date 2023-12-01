@@ -90,24 +90,39 @@ class UserUpdateHelper
     }
     public function createPassport(Request $request, User $user)
     {
-        $user->passport()->create([
-            'full_name'            => $request->pass_full_name,
-            'series'               => $request->pass_series,
-            'number'               => $request->pass_number,
-            'issue_date'           => Carbon::parse($request->pass_issue_date),
-            'registration_address' => $request->pass_registration_address,
-            'issue_by'             => $request->pass_issue_by,
-            'department_code'      => $request->pass_department_code,
-        ]);
+        if (
+            $request->pass_full_name &&
+            $request->pass_series &&
+            $request->pass_number &&
+            Carbon::parse($request->pass_issue_date) &&
+            $request->pass_registration_address &&
+            $request->pass_issue_by &&
+            $request->pass_department_code &&
+            $request->hasFile(Passport::MEDIA_NAME_MAIN_SPREAD) &&
+            $request->hasFile(Passport::MEDIA_NAME_REGISTRATION_SPREAD) &&
+            $request->hasFile(Passport::MEDIA_NAME_VERIFICATION_SPREAD)
+        ) {
+            $user->passport()->create([
+                'full_name'            => $request->pass_full_name,
+                'series'               => $request->pass_series,
+                'number'               => $request->pass_number,
+                'issue_date'           => Carbon::parse($request->pass_issue_date),
+                'registration_address' => $request->pass_registration_address,
+                'issue_by'             => $request->pass_issue_by,
+                'department_code'      => $request->pass_department_code,
+            ]);
 
-        if ($request->hasFile(Passport::MEDIA_NAME_MAIN_SPREAD)) {
-            $user->passport->addMainSpreadMedia();
-        }
-        if ($request->hasFile(Passport::MEDIA_NAME_REGISTRATION_SPREAD)) {
-            $user->passport->addRegistrationSpreadMedia();
-        }
-        if ($request->hasFile(Passport::MEDIA_NAME_VERIFICATION_SPREAD)) {
-            $user->passport->addVerificationSpreadMedia();
+            if ($request->hasFile(Passport::MEDIA_NAME_MAIN_SPREAD)) {
+                $user->passport->addMainSpreadMedia();
+            }
+
+            if ($request->hasFile(Passport::MEDIA_NAME_REGISTRATION_SPREAD)) {
+                $user->passport->addRegistrationSpreadMedia();
+            }
+
+            if ($request->hasFile(Passport::MEDIA_NAME_VERIFICATION_SPREAD)) {
+                $user->passport->addVerificationSpreadMedia();
+            }
         }
     }
     public function updatePassport(Request $request, User $user)
@@ -123,24 +138,38 @@ class UserUpdateHelper
     }
     public function createPaymentDetailsIE(Request $request, User $user)
     {
-        $user->paymentDetailsIndividualEntrepreneur()->create([
-            'full_name'                  => $request->ie_full_name,
-            'organization_legal_address' => $request->ie_organization_legal_address,
-            'inn'                        => $request->ie_inn,
-            'ogrn'                       => $request->ie_ogrn,
-            'transaction_account'        => $request->ie_transaction_account,
-            'bank'                       => $request->ie_bank,
-            'bank_inn'                   => $request->ie_bank_inn,
-            'bank_bic'                   => $request->ie_bank_bic,
-            'bank_correspondent_account' => $request->ie_bank_correspondent_account,
-            'bank_legal_address'         => $request->ie_bank_legal_address,
-        ]);
+        if (
+            $request->ie_full_name &&
+            $request->ie_organization_legal_address &&
+            $request->ie_inn &&
+            $request->ie_ogrn &&
+            $request->ie_transaction_account &&
+            $request->ie_bank &&
+            $request->ie_bank_inn &&
+            $request->ie_bank_bic &&
+            $request->ie_bank_correspondent_account &&
+            $request->ie_bank_legal_address &&
+            $request->hasFile(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)
+        ) {
+            $user->paymentDetailsIndividualEntrepreneur()->create([
+                'full_name'                  => $request->ie_full_name,
+                'organization_legal_address' => $request->ie_organization_legal_address,
+                'inn'                        => $request->ie_inn,
+                'ogrn'                       => $request->ie_ogrn,
+                'transaction_account'        => $request->ie_transaction_account,
+                'bank'                       => $request->ie_bank,
+                'bank_inn'                   => $request->ie_bank_inn,
+                'bank_bic'                   => $request->ie_bank_bic,
+                'bank_correspondent_account' => $request->ie_bank_correspondent_account,
+                'bank_legal_address'         => $request->ie_bank_legal_address,
+            ]);
 
-        if ($request->hasFile(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
-            $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
-                PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
-                PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
-            );
+            if ($request->hasFile(PaymentDetailsIndividualEntrepreneur::MEDIA_NAME)) {
+                $user->paymentDetailsIndividualEntrepreneur->modelAddMedia(
+                    PaymentDetailsIndividualEntrepreneur::MEDIA_NAME,
+                    PaymentDetailsIndividualEntrepreneur::MEDIA_PREFIX . $user->paymentDetailsIndividualEntrepreneur->uuid
+                );
+            }
         }
     }
     public function updatePaymentDetailsIEInfo(Request $request, User $user)
