@@ -421,7 +421,8 @@ class User extends Model implements HasMedia
     }
     public function generateAgencyContract()
     {
-        return $this->loadPdfFromView(self::AGENCY_CONTRACT_VIEW_NAME, $this->getAgencyContractData());
+        // return $this->loadPdfFromView(self::AGENCY_CONTRACT_VIEW_NAME, $this->getAgencyContractData());
+        return AgencyContract::generateContract();
     }
     public function getReferralLink()
     {

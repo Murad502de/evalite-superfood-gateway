@@ -14,14 +14,15 @@ class UserUpdateHelper
     public function update(Request $request, User $user)
     {
         $user->update([
-            'first_name'      => $request->user_first_name ?? $user->first_name,
-            'second_name'     => $request->user_second_name ?? $user->second_name,
-            'third_name'      => $request->user_third_name ?? $user->third_name,
-            'gender'          => $request->user_gender ?? $user->gender,
-            'birthday'        => $request->user_birthday ? Carbon::parse($request->user_birthday) : $user->birthday,
-            'employment_type' => $request->user_employment_type ?? $user->employment_type,
-            'email'           => $request->user_email ?? $user->email,
-            'phone'           => $request->user_phone ?? $user->phone,
+            'first_name'          => $request->user_first_name ?? $user->first_name,
+            'second_name'         => $request->user_second_name ?? $user->second_name,
+            'third_name'          => $request->user_third_name ?? $user->third_name,
+            'gender'              => $request->user_gender ?? $user->gender,
+            'birthday'            => $request->user_birthday ? Carbon::parse($request->user_birthday) : $user->birthday,
+            'employment_type'     => $request->user_employment_type ?? $user->employment_type,
+            'email'               => $request->user_email ?? $user->email,
+            'phone'               => $request->user_phone ?? $user->phone,
+            'verification_status' => $request->user_verification_status ?? $user->verification_status,
         ]);
     }
     public function updateAvatar(Request $request, User $user)
@@ -175,16 +176,16 @@ class UserUpdateHelper
     public function updatePaymentDetailsIEInfo(Request $request, User $user)
     {
         $user->paymentDetailsIndividualEntrepreneur->update([
-            'full_name'                  => $request->ie_full_name ?? $user->full_name,
-            'organization_legal_address' => $request->ie_organization_legal_address ?? $user->organization_legal_address,
-            'inn'                        => $request->ie_inn ?? $user->inn,
-            'ogrn'                       => $request->ie_ogrn ?? $user->ogrn,
-            'transaction_account'        => $request->ie_transaction_account ?? $user->transaction_account,
-            'bank'                       => $request->ie_bank ?? $user->bank,
-            'bank_inn'                   => $request->ie_bank_inn ?? $user->bank_inn,
-            'bank_bic'                   => $request->ie_bank_bic ?? $user->bank_bic,
-            'bank_correspondent_account' => $request->ie_bank_correspondent_account ?? $user->bank_correspondent_account,
-            'bank_legal_address'         => $request->ie_bank_legal_address ?? $user->bank_legal_address,
+            'full_name'                  => $request->ie_full_name ?? $user->paymentDetailsIndividualEntrepreneur->full_name,
+            'organization_legal_address' => $request->ie_organization_legal_address ?? $user->paymentDetailsIndividualEntrepreneur->organization_legal_address,
+            'inn'                        => $request->ie_inn ?? $user->paymentDetailsIndividualEntrepreneur->inn,
+            'ogrn'                       => $request->ie_ogrn ?? $user->paymentDetailsIndividualEntrepreneur->ogrn,
+            'transaction_account'        => $request->ie_transaction_account ?? $user->paymentDetailsIndividualEntrepreneur->transaction_account,
+            'bank'                       => $request->ie_bank ?? $user->paymentDetailsIndividualEntrepreneur->bank,
+            'bank_inn'                   => $request->ie_bank_inn ?? $user->paymentDetailsIndividualEntrepreneur->bank_inn,
+            'bank_bic'                   => $request->ie_bank_bic ?? $user->paymentDetailsIndividualEntrepreneur->bank_bic,
+            'bank_correspondent_account' => $request->ie_bank_correspondent_account ?? $user->paymentDetailsIndividualEntrepreneur->bank_correspondent_account,
+            'bank_legal_address'         => $request->ie_bank_legal_address ?? $user->paymentDetailsIndividualEntrepreneur->bank_legal_address,
         ]);
     }
     public function addPaymentDetailsIEMedia(User $user)
