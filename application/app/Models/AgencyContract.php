@@ -48,25 +48,9 @@ class AgencyContract extends Model implements HasMedia
     //         ->download('Агентский договор на поиск клиентов.pdf');
     // }
 
-    public static function generateContract()
+    public static function generateContract($data)
     {
-        $pdf_data = [
-            'number'                             => '8-23/9-D-ru',
-            'date'                               => '11.10.2023',
-            'signature_base64'                   => self::imageToBase64(base_path('resources/img/signature.jpg')),
-            'partner_full_name'                  => 'Эвалайт Эвалайт Эвалайт',
-            'partner_registration_address'       => '352690, Россия, Краснодарский край, Апшеронский р-н, г Апшеронск, ул. Фрунзе, д 90',
-            'partner_inn'                        => '236802411681',
-            'partner_ogrnip'                     => '316236800058347',
-            'partner_checking_account'           => '40802810200003601872',
-            'partner_bank'                       => 'АО "ТИНЬКОФФ БАНК"',
-            'partner_bank_inn'                   => '7710140679',
-            'partner_bank_bic'                   => '044525974',
-            'partner_bank_correspondent_account' => '30101810145250000974',
-            'partner_bank_legal_address'         => 'Москва, 127287, ул. Хуторская 2-я, д. 38А, стр. 26',
-        ];
-
-        return self::loadPdfFromView('agency_contract_v2', $pdf_data, "8-23/9-D-ru");
+        return self::loadPdfFromView('agency_contract_v2', $data);
     }
     public function getAgencyContractMedia(): ?Media
     {

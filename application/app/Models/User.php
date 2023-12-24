@@ -7,6 +7,7 @@ use App\Libs\PetrovichPhpMaster\Petrovich;
 use App\Models\Configuration;
 use App\Traits\GenerateUserTokenTrait;
 use App\Traits\GenerateUuidModelTrait;
+use App\Traits\ImgTrait;
 use App\Traits\ModelAddMediaTrait;
 use App\Traits\PasswordEncryptTrait;
 use App\Traits\PdfTrait;
@@ -33,6 +34,7 @@ class User extends Model implements HasMedia
     PasswordEncryptTrait,
     ModelAddMediaTrait,
     SharedEmploymentTypesTrait,
+    ImgTrait,
         PdfTrait;
 
     public const MEDIA_NAME_AVATAR                     = 'user_avatar';
@@ -419,10 +421,96 @@ class User extends Model implements HasMedia
             'se_bank_kpp'                   => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->bank_kpp : null,
         ];
     }
+
+    public function getPartnerContractData(): array
+    {
+        // $petrovich = new Petrovich(Petrovich::GENDER_MALE);
+
+        return [
+            'number'                             => AgencyContract::all()->count() + 1 . '-' . getdate()['year'] . '/' . getdate()['mon'] . '-D-ru',
+            'date'                               => getdate()['mday'] . '.' . getdate()['mon'] . '.' . getdate()['year'],
+            'signature_base64'                   => self::imageToBase64(base_path('resources/img/signature.jpg')),
+            'partner_full_name'                  => "$this->second_name $this->first_name $this->third_name",
+            'partner_registration_address'       => $this->passport->registration_address,
+            'partner_inn'                        => $this->paymentDetailsIndividualEntrepreneur->inn,
+            'partner_ogrnip'                     => $this->paymentDetailsIndividualEntrepreneur->ogrn,
+            'partner_checking_account'           => $this->paymentDetailsIndividualEntrepreneur->transaction_account,
+            'partner_bank'                       => $this->paymentDetailsIndividualEntrepreneur->bank,
+            'partner_bank_inn'                   => $this->paymentDetailsIndividualEntrepreneur->bank_inn,
+            'partner_bank_bic'                   => $this->paymentDetailsIndividualEntrepreneur->bank_bic,
+            'partner_bank_correspondent_account' => $this->paymentDetailsIndividualEntrepreneur->bank_correspondent_account,
+            'partner_bank_legal_address'         => $this->paymentDetailsIndividualEntrepreneur->bank_legal_address,
+        ];
+
+        // return [
+        //     'number'                        => AgencyContract::all()->count() + 1,
+        //     'contract_creation_date'        => '"' . getdate()['mday'] . '"' . ' ' . config('constants.months.ru.ordinals')[5] . ' ' . getdate()['year'],
+        //     'contract_expiration_date'      => '"' . getdate()['mday'] . '"' . ' ' . config('constants.months.ru.ordinals')[5] . ' ' . getdate()['year'] + 1,
+        //     'remuneration_percentage'       => 30,
+        //     'first_name_nominative'         => $petrovich->firstname($this->first_name, Petrovich::CASE_NOMENATIVE),
+        //     'second_name_nominative'        => $petrovich->lastname($this->second_name, Petrovich::CASE_NOMENATIVE),
+        //     'third_name_nominative'         => $petrovich->middlename($this->third_name, Petrovich::CASE_NOMENATIVE),
+        //     'first_name_genitive'           => $petrovich->firstname($this->first_name, Petrovich::CASE_GENITIVE),
+        //     'second_name_genitive'          => $petrovich->lastname($this->second_name, Petrovich::CASE_GENITIVE),
+        //     'third_name_genitive'           => $petrovich->middlename($this->third_name, Petrovich::CASE_GENITIVE),
+        //     'first_name_accusative'         => $petrovich->firstname($this->first_name, Petrovich::CASE_ACCUSATIVE),
+        //     'second_name_accusative'        => $petrovich->lastname($this->second_name, Petrovich::CASE_ACCUSATIVE),
+        //     'third_name_accusative'         => $petrovich->middlename($this->third_name, Petrovich::CASE_ACCUSATIVE),
+        //     'first_name_dative'             => $petrovich->firstname($this->first_name, Petrovich::CASE_DATIVE),
+        //     'second_name_dative'            => $petrovich->lastname($this->second_name, Petrovich::CASE_DATIVE),
+        //     'third_name_dative'             => $petrovich->middlename($this->third_name, Petrovich::CASE_DATIVE),
+        //     'first_name_instrumental'       => $petrovich->firstname($this->first_name, Petrovich::CASE_INSTRUMENTAL),
+        //     'second_name_instrumental'      => $petrovich->lastname($this->second_name, Petrovich::CASE_INSTRUMENTAL),
+        //     'third_name_instrumental'       => $petrovich->middlename($this->third_name, Petrovich::CASE_INSTRUMENTAL),
+        //     'first_name_prepositional'      => $petrovich->firstname($this->first_name, Petrovich::CASE_PREPOSITIONAL),
+        //     'second_name_prepositional'     => $petrovich->lastname($this->second_name, Petrovich::CASE_PREPOSITIONAL),
+        //     'third_name_prepositional'      => $petrovich->middlename($this->third_name, Petrovich::CASE_PREPOSITIONAL),
+        //     'full_name'                     => $this->passport->full_name,
+        //     'short_name'                    => $this->second_name . ' ' . mb_substr($this->first_name, 0, 1) . '.' . ' ' . mb_substr($this->third_name, 0, 1) . '.',
+        //     'gender'                        => $this->gender,
+        //     'employment_type'               => $this->employment_type,
+        //     'employment_type_nominative'    => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуальный предприниматель' : ($this->gender === 'male' ? 'Самозанятый' : 'Самозанятая'),
+        //     'employment_type_genitive'      => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуальный предприниматель' : ($this->gender === 'male' ? 'Самозанятого' : 'Самозанятой'),
+        //     'employment_type_accusative'    => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуального предпринимателя' : ($this->gender === 'male' ? 'Самозанятого' : 'Самозанятую'),
+        //     'employment_type_dative'        => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуальный предприниматель' : ($this->gender === 'male' ? 'Самозанятому' : 'Самозанятой'),
+        //     'employment_type_instrumental'  => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуальный предприниматель' : ($this->gender === 'male' ? 'Самозанятым' : 'Самозанятой'),
+        //     'employment_type_prepositional' => $this->employment_type === 'individual_entrepreneur' ? 'Индивидуальный предприниматель' : ($this->gender === 'male' ? 'Самозанятом' : 'Самозанятой'),
+        //     'personal_link'                 => 'https://evalite.io/superfood?utm_source=' . $this->individual_code,
+        //     'invite_code'                   => $this->invite_code,
+        //     'email'                         => $this->email,
+        //     'phone'                         => $this->phone,
+        //     'pass_series'                   => $this->passport->series,
+        //     'pass_number'                   => $this->passport->number,
+        //     'pass_issue_by'                 => $this->passport->issue_by,
+        //     'pass_department_code'          => $this->passport->department_code,
+        //     'pass_registration_address'     => $this->passport->registration_address,
+        //     'ie_full_name'                  => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->full_name : null,
+        //     'ie_organization_legal_address' => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->organization_legal_address : null,
+        //     'ie_inn'                        => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->inn : null,
+        //     'ie_ogrn'                       => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->ogrn : null,
+        //     'ie_transaction_account'        => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->transaction_account : null,
+        //     'ie_bank'                       => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->bank : null,
+        //     'ie_bank_inn'                   => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->bank_inn : null,
+        //     'ie_bank_bic'                   => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->bank_bic : null,
+        //     'ie_bank_correspondent_account' => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->bank_correspondent_account : null,
+        //     'ie_bank_legal_address'         => !!$this->paymentDetailsIndividualEntrepreneur ? $this->paymentDetailsIndividualEntrepreneur->bank_legal_address : null,
+        //     'se_full_name'                  => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->full_name : null,
+        //     'se_transaction_account'        => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->transaction_account : null,
+        //     'se_inn'                        => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->inn : null,
+        //     'se_swift'                      => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->swift : null,
+        //     'se_mailing_address'            => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->mailing_address : null,
+        //     'se_bank'                       => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->bank : null,
+        //     'se_bic'                        => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->bic : null,
+        //     'se_correspondent_account'      => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->correspondent_account : null,
+        //     'se_bank_inn'                   => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->bank_inn : null,
+        //     'se_bank_kpp'                   => !!$this->paymentDetailsSelfEmployed ? $this->paymentDetailsSelfEmployed->bank_kpp : null,
+        // ];
+    }
+
     public function generateAgencyContract()
     {
         // return $this->loadPdfFromView(self::AGENCY_CONTRACT_VIEW_NAME, $this->getAgencyContractData());
-        return AgencyContract::generateContract();
+        return AgencyContract::generateContract($this->getPartnerContractData());
     }
     public function getReferralLink()
     {

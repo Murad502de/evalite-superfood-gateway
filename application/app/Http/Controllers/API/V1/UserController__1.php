@@ -175,6 +175,13 @@ class UserController__1 extends Controller
     }
     public function getAgencyContract(User $user)
     {
+        if (
+            !$user->passport()->exists() &&
+            !$user->paymentDetailsIndividualEntrepreneur()->exists()
+        ) {
+            return response()->json(['message' => 'error'], Response::HTTP_BAD_REQUEST);
+        }
+
         return $user->generateAgencyContract()->output();
     }
     public function addAgencyContract(User $user, Request $request)
