@@ -19,9 +19,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'], //TODO dev
+    // 'allowed_origins' => ['*'], //TODO dev
 
-    // 'allowed_origins' => [],
+    'allowed_origins' => [],
 
     'allowed_origins_patterns' => [],
 
