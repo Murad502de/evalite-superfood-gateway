@@ -22,6 +22,7 @@ class UserUpdateHelper
             'employment_type'     => $request->user_employment_type ?? $user->employment_type,
             'email'               => $request->user_email ?? $user->email,
             'phone'               => $request->user_phone ?? $user->phone,
+            'password'            => $request->user_password ? User::passwordEncrypt($request->user_password) : $user->password,
             'verification_status' => $request->user_verification_status ?? $user->verification_status,
         ]);
     }
