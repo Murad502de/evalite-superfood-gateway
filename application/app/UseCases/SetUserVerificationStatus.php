@@ -11,19 +11,13 @@ class SetUserVerificationStatus
 {
     public function __invoke(User $user, Request $request): bool
     {
-        dump(__METHOD__); //DELETE
         $STATUS = $request->user_verification_status;
-        //TODO set status
-        $updateUserVerificationStatusRes = (new UpdateUserVerificationStatus)($user, $STATUS);
 
-        if (!$updateUserVerificationStatusRes) {
+        if (!(new UpdateUserVerificationStatus)($user, $STATUS)) {
             return false;
         }
 
-        //TODO send notification by status
-        $sendStatusNotificationRes = (new SendStatusNotification)($user, $STATUS);
-
-        if (!$sendStatusNotificationRes) {
+        if (!(new SendStatusNotification)($user, $STATUS)) {
             return false;
         }
 

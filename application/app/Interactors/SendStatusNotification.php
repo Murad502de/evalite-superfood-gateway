@@ -9,8 +9,6 @@ class SendStatusNotification
 {
     public function __invoke(User $user, string $status): bool
     {
-        dump(__METHOD__); //DELETE
-
         switch ($status) {
             case User::VERIFICATION_STATUS_CODE_VERIFIED:
                 event(new UserApprovedEvent($user));

@@ -27,10 +27,6 @@ class UserUpdateService
 
     public static function update(User $user, array $data): void
     {
-        dump(__METHOD__); //DELETE
-        dump($user); //DELETE
-        dump($data); //DELETE
-
         $user->update([
             'first_name'          => isset($data['first_name']) ? $data['first_name'] : $user->first_name,
             'second_name'         => isset($data['second_name']) ? $data['second_name'] : $user->second_name,
