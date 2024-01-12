@@ -23,4 +23,11 @@ class UserUpdateService
         $this->helper->updatePaymentDetails($request, $user);
         $this->helper->handleAgencyContract($request, $user);
     }
+
+    public function update(User $user, array $data): void
+    {
+        dump(__METHOD__); //DELETE
+        dump($user); //DELETE
+        dump($data); //DELETE
+    }
 }
