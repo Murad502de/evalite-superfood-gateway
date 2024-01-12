@@ -108,6 +108,9 @@ Route::prefix('v1')->group(function () {
             Route::put('/', [ConfigurationController__1::class, 'update']);
             Route::delete('/', [ConfigurationController__1::class, 'delete']);
         });
+    });
+
+    Route::middleware(['user.token', 'user.admin_or_self'])->group(function () {
         Route::prefix('users')->group(function () {
             Route::prefix('{user:uuid}')->group(function () {
                 Route::prefix('status')->group(function () {

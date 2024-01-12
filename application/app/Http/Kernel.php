@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\API\V1\UserAdminOrSelfMiddleware__1;
 use App\Http\Middleware\API\V1\UserRoleAdminMiddleware__1;
 use App\Http\Middleware\API\V1\UserTokenMiddleware__1;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -55,17 +56,18 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'auth'             => \App\Http\Middleware\Authenticate::class,
-        'auth.basic'       => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'auth.session'     => \Illuminate\Session\Middleware\AuthenticateSession::class,
-        'cache.headers'    => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can'              => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest'            => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'signed'           => \App\Http\Middleware\ValidateSignature::class,
-        'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'user.token'       => UserTokenMiddleware__1::class,
-        'user.role.admin'  => UserRoleAdminMiddleware__1::class,
+        'auth'               => \App\Http\Middleware\Authenticate::class,
+        'auth.basic'         => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth.session'       => \Illuminate\Session\Middleware\AuthenticateSession::class,
+        'cache.headers'      => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can'                => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'              => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'password.confirm'   => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'signed'             => \App\Http\Middleware\ValidateSignature::class,
+        'throttle'           => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified'           => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'user.token'         => UserTokenMiddleware__1::class,
+        'user.role.admin'    => UserRoleAdminMiddleware__1::class,
+        'user.admin_or_self' => UserAdminOrSelfMiddleware__1::class,
     ];
 }
