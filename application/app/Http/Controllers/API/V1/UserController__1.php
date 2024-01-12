@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Events\passwordResetCodeRequested;
-use App\Events\UserApprovedEvent;
+// use App\Events\UserApprovedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\UserCreateRequest__1;
 use App\Http\Requests\API\V1\UserPasswordResetConfirmRequest__1;
@@ -24,6 +24,7 @@ use App\Models\Sale;
 use App\Models\User;
 use App\Services\User\UserUpdateService;
 use App\Traits\GenerateCodeTrait;
+use App\UseCases\SetUserVerificationStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -445,13 +446,16 @@ class UserController__1 extends Controller
     }
     public function setUserStatusVerification(User $user, UserStatusVerificationSetRequest__1 $request)
     {
-        $user->update(['verification_status' => $request->verification_status]);
-        $isApproved = $request->verification_status === config('constants.user.verification_statuses.completed');
+        // $user->update(['verification_status' => $request->verification_status]);
+        // $isApproved = $request->verification_status === config('constants.user.verification_statuses.completed');
 
-        if ($isApproved) {
-            event(new UserApprovedEvent($user));
-        }
+        // if ($isApproved) {
+        //     event(new UserApprovedEvent($user));
+        // }
 
+        // return response()->json(['message' => 'success'], Response::HTTP_OK);
+
+        (new SetUserVerificationStatus)($user, $request);
         return response()->json(['message' => 'success'], Response::HTTP_OK);
     }
 }

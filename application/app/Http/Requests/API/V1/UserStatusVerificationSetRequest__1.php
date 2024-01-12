@@ -25,7 +25,7 @@ class UserStatusVerificationSetRequest__1 extends FormRequest
     public function rules(): array
     {
         return [
-            'verification_status' => 'required',
+            'user_verification_status' => 'required',
         ];
     }
     protected function failedValidation(Validator $validator)
