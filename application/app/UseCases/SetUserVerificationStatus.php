@@ -16,5 +16,7 @@ class SetUserVerificationStatus
 
         //TODO send notification
         if (!$updateUserVerificationStatusRes) return false;
+
+        return true;
     }
 }
