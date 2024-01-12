@@ -14,9 +14,11 @@ class SetUserVerificationStatus
         //TODO set status
         $updateUserVerificationStatusRes = (new UpdateUserVerificationStatus)($user, $request->user_verification_status);
 
-        //TODO send notification
-        if (!$updateUserVerificationStatusRes) return false;
+        if (!$updateUserVerificationStatusRes) {
+            return false;
+        }
 
+        //TODO send notification
         return true;
     }
 }
