@@ -18,7 +18,7 @@ class SetUserVerificationStatus
             return false;
         }
 
-        //TODO send notification
+        //TODO send notification by status
         return true;
     }
 }

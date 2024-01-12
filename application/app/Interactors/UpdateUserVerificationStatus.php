@@ -4,6 +4,7 @@ namespace App\Interactors;
 
 use App\Helpers\User\UserVerificationStatusHelper;
 use App\Models\User;
+use App\Services\User\UserUpdateService;
 
 class UpdateUserVerificationStatus
 {
@@ -14,8 +15,14 @@ class UpdateUserVerificationStatus
         dump($status); //DELETE
 
         //TODO check status
-        dump(UserVerificationStatusHelper::isStatusExist($status));
+        if (!UserVerificationStatusHelper::isStatusExist($status)) {
+            return false;
+        }
+
         //TODO update user throw service
+        UserUpdateService::update($user, [
+            'verification_status' => $status,
+        ]);
 
         return true;
     }

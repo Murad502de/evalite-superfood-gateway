@@ -25,7 +25,7 @@ class UserUpdateService
         $this->helper->handleAgencyContract($request, $user);
     }
 
-    public function update(User $user, array $data): void
+    public static function update(User $user, array $data): void
     {
         dump(__METHOD__); //DELETE
         dump($user); //DELETE
