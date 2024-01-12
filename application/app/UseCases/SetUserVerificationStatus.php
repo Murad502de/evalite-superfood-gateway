@@ -2,6 +2,7 @@
 
 namespace App\UseCases;
 
+use App\Interactors\UpdateUserVerificationStatus;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,10 +11,8 @@ class SetUserVerificationStatus
     public function __invoke(User $user, Request $request): void
     {
         dump(__METHOD__); //DELETE
-        // dump($user); //DELETE
-        // dump($request); //DELETE
-
         //TODO set status
+        $updateUserVerificationStatusRes = (new UpdateUserVerificationStatus)($user, $request->user_verification_status);
         //TODO send notification
     }
 }
