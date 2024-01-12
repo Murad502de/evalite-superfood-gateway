@@ -12,5 +12,8 @@ class SetUserVerificationStatus
         dump(__METHOD__); //DELETE
         // dump($user); //DELETE
         // dump($request); //DELETE
+
+        //TODO set status
+        //TODO send notification
     }
 }
