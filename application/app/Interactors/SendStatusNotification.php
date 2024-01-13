@@ -4,6 +4,7 @@ namespace App\Interactors;
 
 use App\Events\UserApprovedEvent;
 use App\Events\UserRejectedEvent;
+use App\Events\UserWaitingEvent;
 use App\Models\User;
 
 class SendStatusNotification
@@ -17,6 +18,7 @@ class SendStatusNotification
             case User::VERIFICATION_STATUS_CODE_NOT_VERIFIED:
                 return true;
             case User::VERIFICATION_STATUS_CODE_WAITING:
+                event(new UserWaitingEvent($user));
                 return true;
             case User::VERIFICATION_STATUS_CODE_REJECTED:
                 event(new UserRejectedEvent($user));

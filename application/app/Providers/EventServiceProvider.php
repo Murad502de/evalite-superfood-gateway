@@ -8,12 +8,14 @@ use App\Events\PayoutApprovedEvent;
 use App\Events\UserApprovedEvent;
 use App\Events\UserRegisteredEvent;
 use App\Events\UserRejectedEvent;
+use App\Events\UserWaitingEvent;
 use App\Listeners\PayoutApprovedListener;
 use App\Listeners\sendEmailVerificationCode;
 use App\Listeners\sendPasswordResetCode;
 use App\Listeners\sendUserRegisteredMailListener;
 use App\Listeners\UserApprovedListener;
 use App\Listeners\UserRejectedListener;
+use App\Listeners\UserWaitingListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -39,6 +41,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserRejectedEvent::class              => [
             UserRejectedListener::class,
+        ],
+        UserWaitingEvent::class               => [
+            UserWaitingListener::class,
         ],
         PayoutApprovedEvent::class            => [
             PayoutApprovedListener::class,
